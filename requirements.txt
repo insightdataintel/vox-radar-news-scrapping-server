@@ -1,6 +1,7 @@
 async-generator==1.10
 atomicwrites==1.4.0
 attrs==21.4.0
+beautifulsoup4==4.11.1
 boto3==1.23.2
 botocore==1.26.2
 certifi==2021.10.8
