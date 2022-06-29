@@ -197,3 +197,10 @@ class Utils:
   def subtract_day_from_datetime(datetime:datetime, days:int) -> datetime:
     _days = timedelta(days)
     return datetime - _days
+
+
+  #@classmethod
+  #def remove_string(text, string_vector ) -> str:
+  #  create function with remove and a list of strings to remove from the text
+  #  _days = timedelta(days)
+  #  return datetime - _days
