@@ -5,8 +5,8 @@ import argparse
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from logzero import logger
-from src.domain.estadao_select_news_service import EstadaoSelectNewsService
-from ..domain.estadao_scrapper_news_service import EstadaoScrapperNewsService
+from src.domain.select_news_estadao_service import SelectNewsEstadaoService
+from ..domain.scrapping_news_estadao_service import ScrappingNewsEstadaoService
 from src.domain.folha_scrapper_news_service import FolhaScrapperNewsService
 from src.domain.folha_select_news_service import FolhaSelectNewsService
 from src.domain.valor_scrapper_news_service import ValorScrapperNewsService
@@ -42,18 +42,18 @@ class RouteApp():
             ExampleService().exec(json.dumps(request.get_json()))
             return "I'm ok"
 
-        @app.route("/estadao-select-news")
-        def estadao_select_news():
+        @app.route("/select-news-estadao")
+        def select_news_estadao():
             logger.info("/estadao")
             #1 extract links
-            EstadaoSelectNewsService().exec()
+            SelectNewsEstadaoService().exec()
             return "I'm ok"
 
-        @app.route("/estadao-scrapper-news",methods=['POST'])
-        def estadao_scrapper_news():
+        @app.route("/scrapping-news-estadao",methods=['POST'])
+        def scrapping_news_estadao():
             logger.info("/estadao")
             #2 scrapper news
-            EstadaoScrapperNewsService().exec(json.dumps(request.get_json()))
+            ScrappingNewsEstadaoService().exec(json.dumps(request.get_json()))
             return "I'm ok"
 
         @app.route("/valor-select-news")

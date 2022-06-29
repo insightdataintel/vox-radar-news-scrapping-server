@@ -10,7 +10,10 @@ load_dotenv()
 file = open('src/config/queues.json')
 data = json.load(file)
 
-sigarp_cidadania_scrapping = data['SIGARP_CIDADANIA_SCRAPPING'] + Utils.get_queue_suffix_by_environment(os.environ.get('ENVIRONMENT'))
+voxradar_news_scrapping_estadao = data['VOXRADAR_NEWS_SCRAPPING_ESTADAO'] + Utils.get_queue_suffix_by_environment(os.environ.get('ENVIRONMENT'))
+voxradar_news_scrapping_folha = data['VOXRADAR_NEWS_SCRAPPING_FOLHA'] + Utils.get_queue_suffix_by_environment(os.environ.get('ENVIRONMENT'))
+voxradar_news_scrapping_valor = data['VOXRADAR_NEWS_SCRAPPING_VALOR'] + Utils.get_queue_suffix_by_environment(os.environ.get('ENVIRONMENT'))
+voxradar_news_save_data = data['VOXRADAR_NEWS_SAVE_DATA'] + Utils.get_queue_suffix_by_environment(os.environ.get('ENVIRONMENT'))
 
 file.close()
 
@@ -44,7 +47,10 @@ class Envs:
       "REGION": os.environ.get('AWS_SQS_REGION'),
       "URL": os.environ.get('AWS_SQS_URL'),
       "QUEUE": {
-        "SIGARP_CIDADANIA_SCRAPPING": sigarp_cidadania_scrapping
+        "VOXRADAR_NEWS_SCRAPPING_ESTADAO": voxradar_news_scrapping_estadao,
+        "VOXRADAR_NEWS_SCRAPPING_FOLHA": voxradar_news_scrapping_folha,
+        "VOXRADAR_NEWS_SCRAPPING_VALOR": voxradar_news_scrapping_valor,
+        "VOXRADAR_NEWS_SAVE_DATA": voxradar_news_save_data
       }
     },
     "S3": {

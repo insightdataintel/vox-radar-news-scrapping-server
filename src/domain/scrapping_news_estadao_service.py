@@ -1,5 +1,6 @@
 import json
 import datetime
+from flask import request
 import pandas as pd
 import datetime
 from src.config.enum import Log
@@ -8,6 +9,7 @@ from src.integration.s3.s3 import S3
 from src.integration.sqs.sqs import Sqs
 from src.repository.adapters.postgres.view_estadao_log_repository import ViewEstadaoLogRepository
 from src.types.sigarp_save_data_estadao_queue_dto import SigarpSaveDataEstadaoQueueDTO
+from src.types.voxradar_news_save_data_queue_dto import VoxradarNewsSaveDataQueueDTO
 from src.types.voxradar_news_scrapping_estadao_queue_dto import VoxradarNewsScrappingEstadaoQueueDTO
 
 from ..config.envs import Envs
@@ -34,36 +36,6 @@ import pickle
 import time
 import os
 
-logging.basicConfig(filename='arquivos/logger.log', level=logging.INFO, filemode='a', 
-    format='%(asctime)s.%(msecs)03d %(levelname)s %(module)s - %(funcName)s: %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S')
-logger = logging.getLogger()
-
-def requests_wrapper_text(url):
-
-    try:
-        page = requests.get(url).text
-        return page
-    # Set of try of identify erros case doesn't get a request
-    # Realizando um conjunto de tentativas de identificar errors caso não consiga fazer o Requests
-    except requests.exceptions.Timeout:
-        # Tentando mais uma vez entrar no site caso tenha dado Timeout
-        # Trying one more time to get in the site case doesn't has timeout
-        try:
-            page = requests.get(url).text
-            return page
-        except requests.exceptions.Timeout:
-            logger.error(f"Time out error: {url}") 
-            return False
-    except requests.exceptions.TooManyRedirects:
-        logger.error(f"Too manyredirects: {url}")
-        return False
-    except requests.exceptions.ConnectionError as errc:
-        logger.error(f"Connection Error: {errc} | no link: {url}")
-        return False                         
-    except requests.exceptions.RequestException as e:
-        logger.error(f"Request Exception, link: {url} | {e}")
-        return False   
 
 def month_convert(data_text):  
     data_text = data_text.lower()
@@ -104,37 +76,17 @@ def month_convert(data_text):
     
     return data_text
 
-
-
-class EstadaoScrapperNewsService(BaseService):
+class ScrappingNewsEstadaoService(BaseService):
     # s3: S3
     sqs: Sqs
-    selenium:Selenium = None
-    # state_dict = {
-    #     'AC': 1, 'AL': 2, 'AM': 3, 'AP': 4,
-    #     'BA': 5, 'CE': 6, 'DF': 7, 'ES': 8,
-    #     'GO': 9, 'MA': 10, 'MG': 11, 'MS': 12,
-    #     'MT': 13, 'PA': 14, 'PB': 15, 'PE': 16,
-    #     'PI': 17, 'PR': 18, 'RJ': 19, 'RN': 20,
-    #     'RO': 21, 'RR': 22, 'RS': 23, 'SC': 24,
-    #     'SE': 25, 'SP': 26, 'TO': 27
-    # }
-
-    #Configuração do Logger: Nível Informação, dando append nelas com data padronizada, o nome da função que se refere a informação
-    #E também a mensagem de erro.
-
-
 
     def __init__(self):
         super().__init__()
         # self.log_repository = ViewEstadaoLogRepository()
-        # self.selenium = Selenium('estadao')
         # self.s3 = S3()
-        # self.sqs = Sqs()
+        self.sqs = Sqs()
 
-
-
-    def exec(self,body:str) -> ReturnService:
+    def exec(self, body:str) -> ReturnService:
         print(f'\n----- Scrapper | Init - {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S %z")} -----\n')
         estadao_dict = {'title': [], 'data': [], 'body_news': [], 'link': [],'category': [],'image': []}
         
@@ -143,7 +95,7 @@ class EstadaoScrapperNewsService(BaseService):
         url_news = voxradar_news_scrapping_estadao_queue_dto.url
 
         # for url in url_news:    
-        page = requests_wrapper_text(url_news)
+        page = requests.get(url_news).text
         # if page is False:
         #     continue        
         soup = BeautifulSoup(page, 'html.parser')         
@@ -151,7 +103,7 @@ class EstadaoScrapperNewsService(BaseService):
         try:
             title = soup.find_all("h1")[0].text.replace('"', '').replace("'", "")
         except Exception as e:
-            logger.error(f"Não foi possível recuperar alguma informação do site Estadão, o erro encontrado foi | {e}")
+            self.logger.error(f"Não foi possível recuperar alguma informação do site Estadão, o erro encontrado foi | {e}")
             title = " "
             pass                 
         #
@@ -234,8 +186,8 @@ class EstadaoScrapperNewsService(BaseService):
 
         print(estadao_dict)
 
+        self.__send_queue(title, 'domain', 'source', body_new, data, category_news, image_new, url_news)
     
-
         #"transform to dataframe"
 
         ##scrapper title | body | news | date:time | category -- 
@@ -247,46 +199,12 @@ class EstadaoScrapperNewsService(BaseService):
     def __parse_body(self, body:str) -> VoxradarNewsScrappingEstadaoQueueDTO:
         body = json.loads(body)
         return VoxradarNewsScrappingEstadaoQueueDTO(body.get('url'))
-
-
-    def __save_json(self, df, state, city, year, file):
-        total = len(df)
-
-        print(f'----- Count rows {total} -----')
-
-        file_name = f'estadao/estadao_{state}_{city}_{year}_{datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S_%z")}'.lower()
-        self.s3.upload_file(file, Constants.S3['BUCKET']['SIGARP'], f'{file_name}_full.xlsx')
-
-        result = df.to_json(orient='records')
-        dataParsed = json.loads(result)
-        count = 1
-        list_chunk = 1
-        files_list = []
-        list_line = []
-        chunk_num = 1
-
-        for line in dataParsed:
-            list_line.append(line)
-
-            if(list_chunk == Constants.CHUNK[0]['JSON'] or count == total):
-                print(f'Saving data {list_chunk}')
-                chunk_file_name = f'{file_name}_{chunk_num}.json'
-                self.s3.upload_file(json.dumps(list_line, ensure_ascii=False), Constants.S3['BUCKET']['SIGARP'], chunk_file_name)
-                files_list.append(chunk_file_name)
-                list_line = []
-                list_chunk = 1
-                chunk_num += 1
-
-            count += 1
-            list_chunk += 1
-        
-        return files_list
     
-    def __send_queue(self, files_download:list):
-        sigarp_save_data_estadao_dto:SigarpSaveDataEstadaoQueueDTO = SigarpSaveDataEstadaoQueueDTO(files_download)
+    def __send_queue(self, title: str, domain: str, source: str, content: str, date: str, category: str, image: str, url: str):
+        message_queue:VoxradarNewsSaveDataQueueDTO = VoxradarNewsSaveDataQueueDTO(title, domain, source, content, date, category, image, url)
         
-        self.log(None, 'Send to queue {} | {}'.format(Envs.AWS['SQS']['QUEUE']['SIGARP_SAVE_DATA_ESTADAO'], sigarp_save_data_estadao_dto.to_json()), Log.INFO)
+        #self.log(None, 'Send to queue {} | {}'.format(Envs.AWS['SQS']['QUEUE']['SIGARP_SAVE_DATA_ESTADAO'], message_queue.to_json()), Log.INFO)
 
-        self.sqs.send_message_queue(Envs.AWS['SQS']['QUEUE']['SIGARP_SAVE_DATA_ESTADAO'], sigarp_save_data_estadao_dto.to_json())
+        self.sqs.send_message_queue(Envs.AWS['SQS']['QUEUE']['VOXRADAR_NEWS_SAVE_DATA'], message_queue.__str__())
 
 

@@ -1,5 +1,6 @@
 import json
 import datetime
+from flask import request
 import pandas as pd
 import datetime
 from src.config.enum import Log
@@ -34,36 +35,6 @@ import pickle
 import time
 import os
 
-logging.basicConfig(filename='arquivos/logger.log', level=logging.INFO, filemode='a', 
-    format='%(asctime)s.%(msecs)03d %(levelname)s %(module)s - %(funcName)s: %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S')
-logger = logging.getLogger()
-
-def requests_wrapper_text(url):
-
-    try:
-        page = requests.get(url).text
-        return page
-    # Set of try of identify erros case doesn't get a request
-    # Realizando um conjunto de tentativas de identificar errors caso não consiga fazer o Requests
-    except requests.exceptions.Timeout:
-        # Tentando mais uma vez entrar no site caso tenha dado Timeout
-        # Trying one more time to get in the site case doesn't has timeout
-        try:
-            page = requests.get(url).text
-            return page
-        except requests.exceptions.Timeout:
-            logger.error(f"Time out error: {url}") 
-            return False
-    except requests.exceptions.TooManyRedirects:
-        logger.error(f"Too manyredirects: {url}")
-        return False
-    except requests.exceptions.ConnectionError as errc:
-        logger.error(f"Connection Error: {errc} | no link: {url}")
-        return False                         
-    except requests.exceptions.RequestException as e:
-        logger.error(f"Request Exception, link: {url} | {e}")
-        return False   
 
 def month_convert(data_text):  
     data_text = data_text.lower()
@@ -143,7 +114,7 @@ class FolhaScrapperNewsService(BaseService):
         url_news = voxradar_news_scrapping_folha_queue_dto.url
 
         # for url in url_news:    
-        page = requests_wrapper_text(url_news)
+        page = request(url_news)
         # if page is False:
         #     continue        
         soup = BeautifulSoup(page, 'html.parser')         
