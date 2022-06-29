@@ -1,5 +1,6 @@
 
-from smtplib import SMTP 
+from smtplib import SMTP
+from typing import List 
 from src.config.envs import Envs
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -7,7 +8,7 @@ import os
 
 class SMTPBase:
 
-  def send_email(self, subject:str, to_email:list[str], body_content) -> bool:
+  def send_email(self, subject:str, to_email:List[str], body_content) -> bool:
     try:
       smtp = SMTP(Envs.SMTP[0]['HOST'], Envs.SMTP[0]['PORT'])
       smtp.starttls()

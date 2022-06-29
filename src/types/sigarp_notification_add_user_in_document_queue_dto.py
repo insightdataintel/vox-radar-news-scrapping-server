@@ -1,12 +1,13 @@
 import json
+from typing import List
 
 class SigarpNotificationAddUserInDocumentQueueDTO:
-  users_share_email:list[str]
+  users_share_email:List[str]
   user_sender_name:str
   url_document:str
   description:str
 
-  def __init__(self, users_share_email:list[str], user_sender_name:str, url_document:str, description:str):
+  def __init__(self, users_share_email:List[str], user_sender_name:str, url_document:str, description:str):
     self.users_share_email = users_share_email
     self.user_sender_name = user_sender_name
     self.url_document = url_document
