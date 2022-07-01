@@ -26,7 +26,7 @@ class ScrappingNewsFolhaService(BaseService):
 
     def exec(self, body:str) -> ReturnService:
         self.logger.info(f'\n----- Scrapping News Folha Service | Init - {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S %z")} -----\n')
-        folha_dict = {'title': [], 'domain':[],'source':[],'data': [], 'body_news': [], 'link': [],'category': [],'image': []}
+        folha_dict = {'title': [], 'domain':[],'source':[],'date': [], 'body_news': [], 'link': [],'category': [],'image': []}
         voxradar_news_scrapping_folha_queue_dto:VoxradarNewsScrappingFolhaQueueDTO = self.__parse_body(body)
         url_news = voxradar_news_scrapping_folha_queue_dto.url
         page = requests.get(url_news).text
@@ -38,26 +38,26 @@ class ScrappingNewsFolhaService(BaseService):
         title = str(title).split("content=")[1].split("property=")[0].replace('"','')
         title = title.encode('iso-8859-1').decode('utf-8')
         if (title==""):
-            self.logger.error(f"It is cannot possible to retrieve data from Valor")
+            self.logger.error(f"It is cannot possible to retrieve date from Valor")
             title = " "
             pass                 
         #
         #Stardandizing Date
         try:
-            data = soup.find("meta", attrs={'name': 'date'})
-            data = str(data).split("content=")[1].split(" ")[0].replace('"','')
-            data = data.replace("T", " ")
+            date = soup.find("meta", attrs={'name': 'date'})
+            date = str(date).split("content=")[1].split(" ")[0].replace('"','')
+            date = date.replace("T", " ")
         except:
             try:
-                data = soup.find("script", type="application/ld+json")
-                data = str(data).split('datePublished":')[1].split(",")[0].replace(':"','').replace('"','').replace(' ','')
-                data = data.replace('T', ' ')   
-                data = datetime.datetime.strptime(data, "%Y-%m-%d %H:%M:%SZ")
-                data = "%s:%.3f-3:00"%(str(data.strftime('%Y-%m-%d %H:%M:%S')),float("%.3f" % (data.second + data.microsecond / 1e6)))
+                date = soup.find("script", type="application/ld+json")
+                date = str(date).split('datePublished":')[1].split(",")[0].replace(':"','').replace('"','').replace(' ','')
+                date = date.replace('T', ' ')   
+                date = datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%SZ")
+                date = "%s:%.3f-3:00"%(str(date.strftime('%Y-%m-%d %H:%M:%S')),float("%.3f" % (date.second + date.microsecond / 1e6)))
             except:
-                data = soup.find("meta", property="article:published_time")
-                data = str(data).split("content=")[1].split(" property")[0].replace('"','\'').replace("'","")
-                data = data+'-03:00'
+                date = soup.find("meta", property="article:published_time")
+                date = str(date).split("content=")[1].split(" property")[0].replace('"','\'').replace("'","")
+                date = date+'-03:00'
         #
         #Pick body's news
 
@@ -117,7 +117,7 @@ class ScrappingNewsFolhaService(BaseService):
         folha_dict["title"].append(title)
         folha_dict["domain"].append(domain)
         folha_dict["source"].append(source)
-        folha_dict["data"].append(data)
+        folha_dict["date"].append(date)
         folha_dict["body_news"].append(body_new)
         folha_dict["link"].append(url_news)
         folha_dict["category"].append(category_news)
@@ -126,6 +126,7 @@ class ScrappingNewsFolhaService(BaseService):
 
         print(folha_dict)
 
+        self.__send_queue(title, domain, source, body_new, date, category_news, image_new, url_news)
 
         return ReturnService(True, 'Sucess')
 

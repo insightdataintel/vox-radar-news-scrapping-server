@@ -221,7 +221,8 @@ class Utils:
                 "eu-e":"me and",
                 "inovacao":"inovation",
                 "internacional":"international",
-                "nacional":"national"
+                "nacional":"national",
+                "economia":"economy"
                 }
 
     return (translate.get(word))

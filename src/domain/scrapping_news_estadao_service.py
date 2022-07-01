@@ -26,7 +26,7 @@ class ScrappingNewsEstadaoService(BaseService):
 
     def exec(self, body:str) -> ReturnService:
         self.logger.info(f'\n----- Scrapping News Estadao Service | Init - {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S %z")} -----\n')
-        estadao_dict = {'title': [], 'domain':[],'source':[],'data': [], 'body_news': [], 'link': [],'category': [],'image': []}
+        estadao_dict = {'title': [], 'domain':[],'source':[],'date': [], 'body_news': [], 'link': [],'category': [],'image': []}
         voxradar_news_scrapping_estadao_queue_dto:VoxradarNewsScrappingEstadaoQueueDTO = self.__parse_body(body)
         url_news = voxradar_news_scrapping_estadao_queue_dto.url
         page = requests.get(url_news).text
@@ -43,13 +43,13 @@ class ScrappingNewsEstadaoService(BaseService):
         #
         #Stardandizing Date
         try:
-            data = soup.find("meta", attrs={'name': 'date'})
-            data = str(data).split("content=")[1].split(" ")[0].replace('"','')
-            data = data.replace("T", " ")
+            date = soup.find("meta", attrs={'name': 'date'})
+            date = str(date).split("content=")[1].split(" ")[0].replace('"','')
+            date = date.replace("T", " ")
         except:
-            data = soup.find("script", type="application/ld+json")
-            data = str(data).split("datePublished")[1].split(",")[0].replace('":','').replace('"','').replace(' ','')
-            data = data.replace('T', ' ')    
+            date = soup.find("script", type="application/ld+json")
+            date = str(date).split("datePublished")[1].split(",")[0].replace('":','').replace('"','').replace(' ','')
+            date = date.replace('T', ' ')    
         #
         #Pick body's news
         try:
@@ -111,7 +111,7 @@ class ScrappingNewsEstadaoService(BaseService):
         estadao_dict["title"].append(title)
         estadao_dict["domain"].append(domain)
         estadao_dict["source"].append(source)
-        estadao_dict["data"].append(data)
+        estadao_dict["date"].append(date)
         estadao_dict["body_news"].append(body_new)
         estadao_dict["link"].append(url_news)
         estadao_dict["category"].append(category_news)
@@ -120,7 +120,7 @@ class ScrappingNewsEstadaoService(BaseService):
 
         print(estadao_dict)
 
-        self.__send_queue(title, 'domain', 'source', body_new, data, category_news, image_new, url_news)
+        self.__send_queue(title, domain, source, body_new, date, category_news, image_new, url_news)
     
 
         return ReturnService(True, 'Sucess')

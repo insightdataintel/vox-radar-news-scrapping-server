@@ -27,7 +27,7 @@ class ScrappingNewsValorService(BaseService):
 
     def exec(self, body:str) -> ReturnService:
         self.logger.info(f'\n----- Scrapping News Valor Service | Init - {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S %z")} -----\n')
-        valor_dict = {'title': [], 'domain':[],'source':[],'data': [], 'body_news': [], 'link': [],'category': [],'image': []}
+        valor_dict = {'title': [], 'domain':[],'source':[],'date': [], 'body_news': [], 'link': [],'category': [],'image': []}
         voxradar_news_scrapping_valor_queue_dto:VoxradarNewsScrappingValorQueueDTO = self.__parse_body(body)
         url_news = voxradar_news_scrapping_valor_queue_dto.url
         page = requests.get(url_news).text
@@ -44,17 +44,17 @@ class ScrappingNewsValorService(BaseService):
         #
         #Stardandizing Date
         try:
-            data = soup.find("meta", attrs={'name': 'date'})
-            data = str(data).split("content=")[1].split(" ")[0].replace('"','')
-            data = data.replace("T", " ")
+            date = soup.find("meta", attrs={'name': 'date'})
+            date = str(date).split("content=")[1].split(" ")[0].replace('"','')
+            date = date.replace("T", " ")
         except:
-            data = soup.find_all("script")
-            data = str(data).split("ISSUED:")[1].split(",")[0].replace(':"','').replace('"','').replace(' ','')
-            data = data.replace('T', ' ')   
-            data = datetime.datetime.strptime(data, "%Y-%m-%d %H:%M:%S.%fZ")
+            date = soup.find_all("script")
+            date = str(date).split("ISSUED:")[1].split(",")[0].replace(':"','').replace('"','').replace(' ','')
+            date = date.replace('T', ' ')   
+            date = datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S.%fZ")
             delta = datetime.timedelta(hours=3)
-            data = data - delta
-            data = "%s:%.3f-3:00"%(str(data.strftime('%Y-%m-%d %H:%M')),float("%.3f" % (data.second + data.microsecond / 1e6)))  
+            date = date - delta
+            date = "%s:%.3f-3:00"%(str(date.strftime('%Y-%m-%d %H:%M')),float("%.3f" % (date.second + date.microsecond / 1e6)))  
         #
         #Pick body's news
             
@@ -104,14 +104,17 @@ class ScrappingNewsValorService(BaseService):
         valor_dict["title"].append(title)
         valor_dict["domain"].append(domain)
         valor_dict["source"].append(source)
-        valor_dict["data"].append(data)
+        valor_dict["date"].append(date)
         valor_dict["body_news"].append(body_new)
         valor_dict["link"].append(url_news)
         valor_dict["category"].append(category_news)
         valor_dict["image"].append(image_new)
 
 
-   
+        print(valor_dict)
+
+        self.__send_queue(title, domain, source, body_new, date, category_news, image_new, url_news)
+
 
         return ReturnService(True, 'Sucess')
 
