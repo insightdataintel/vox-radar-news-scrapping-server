@@ -3,9 +3,7 @@ from src.config.constants import Constants
 import requests
 from urllib.parse import urlparse
 import pytz
-from dateutil.tz.tz import tzoffset
 from datetime import datetime, timedelta
-import pandas
 import os.path
 import unicodedata
 import regex
@@ -198,7 +196,36 @@ class Utils:
     _days = timedelta(days)
     return datetime - _days
 
+  @classmethod
+  def translate_portuguese_english(self, word:str)->str:
+    word = word.lower()
+        
+    translate = {"poder":"power", 
+                "opinião":"opinion",
+                "educação":"education",
+                "maternar":"maternity",
+                "televisao":"television",
+                "painel":"panel",
+                "ilustrada":"illustrated",
+                "cotidiano":"daily",
+                "mundo":"world",
+                "mercado":"market",
+                "empresas":"companies",
+                "mercados":"market",
+                "financas":"finance",
+                "carreira":"career",
+                "brasil":"brazil",
+                "politica":"politics",
+                "política":"politics", 
+                "legislacao":"law",
+                "eu-e":"me and",
+                "inovacao":"inovation",
+                "internacional":"international",
+                "nacional":"national"
+                }
 
+    return (translate.get(word))
+  
   #@classmethod
   #def remove_string(text, string_vector ) -> str:
   #  create function with remove and a list of strings to remove from the text

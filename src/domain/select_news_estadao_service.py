@@ -1,12 +1,9 @@
 import datetime
-
 from src.integration.sqs.sqs import Sqs
 from src.types.voxradar_news_scrapping_estadao_queue_dto import VoxradarNewsScrappingEstadaoQueueDTO
-
 from ..config.envs import Envs
 from .base.base_service import BaseService
 from ..types.return_service import ReturnService
-
 from bs4 import BeautifulSoup
 import numpy as np
 import requests

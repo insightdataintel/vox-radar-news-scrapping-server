@@ -7,10 +7,10 @@ from flask_cors import CORS
 from logzero import logger
 from src.domain.select_news_estadao_service import SelectNewsEstadaoService
 from ..domain.scrapping_news_estadao_service import ScrappingNewsEstadaoService
-from src.domain.folha_scrapper_news_service import FolhaScrapperNewsService
-from src.domain.folha_select_news_service import FolhaSelectNewsService
-from src.domain.valor_scrapper_news_service import ValorScrapperNewsService
-from src.domain.valor_select_news_service import ValorSelectNewsService
+from src.domain.scrapping_news_folha_service import ScrappingNewsFolhaService
+from src.domain.select_news_folha_service import SelectNewsFolhaService
+from src.domain.scrapping_news_valor_service import ScrappingNewsValorService
+from src.domain.select_news_valor_service import SelectNewsValorService
 
 from src.types.return_service import ReturnService
 from ..domain.example import ExampleService
@@ -45,43 +45,37 @@ class RouteApp():
         @app.route("/select-news-estadao")
         def select_news_estadao():
             logger.info("/estadao")
-            #1 extract links
             SelectNewsEstadaoService().exec()
             return "I'm ok"
 
         @app.route("/scrapping-news-estadao",methods=['POST'])
         def scrapping_news_estadao():
             logger.info("/estadao")
-            #2 scrapper news
             ScrappingNewsEstadaoService().exec(json.dumps(request.get_json()))
             return "I'm ok"
 
-        @app.route("/valor-select-news")
-        def valor_select_news():
+        @app.route("/select-news-valor")
+        def select_news_valor():
             logger.info("/valor")
-            #1 extract links
-            ValorSelectNewsService().exec()
+            SelectNewsValorService().exec()
             return "I'm ok"
 
-        @app.route("/valor-scrapper-news",methods=['POST'])
-        def valor_scrapper_news():
+        @app.route("/scrapping-news-valor",methods=['POST'])
+        def scrapping_news_valor():
             logger.info("/valor")
-            #2 scrapper news
-            ValorScrapperNewsService().exec(json.dumps(request.get_json()))
+            ScrappingNewsValorService().exec(json.dumps(request.get_json()))
             return "I'm ok"
 
-        @app.route("/folha-select-news")
-        def folha_select_news():
+        @app.route("/select-news-folha")
+        def select_news_folha():
             logger.info("/folha")
-            #1 extract links
-            FolhaSelectNewsService().exec()
+            SelectNewsFolhaService().exec()
             return "I'm ok"
 
-        @app.route("/folha-scrapper-news",methods=['POST'])
-        def folha_scrapper_news():
+        @app.route("/scrapping-news-folha",methods=['POST'])
+        def scrapping_news_folha():
             logger.info("/folha")
-            #2 scrapper news
-            FolhaScrapperNewsService().exec(json.dumps(request.get_json()))
+            ScrappingNewsFolhaService().exec(json.dumps(request.get_json()))
             return "I'm ok"
             
         return app
