@@ -110,8 +110,8 @@ class ScrappingNewsFolhaService(BaseService):
         image_new = str(ass).split("content=")[1].split(" ")[0].replace('"','')
         #
         #
-        domain = url_news.split("://")[1].split(".")[0]
-        source = url_news.split("://")[1].split("/")[0]
+        domain = url_news.split("://")[1].split("/")[0]
+        source = url_news.split("://")[1].split(".")[1]
         #
         #
         folha_dict["title"].append(title)

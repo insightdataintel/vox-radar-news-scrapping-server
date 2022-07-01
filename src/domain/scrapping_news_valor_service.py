@@ -97,8 +97,8 @@ class ScrappingNewsValorService(BaseService):
         #
         # Pick domain
         #
-        domain = url_news.split("://")[1].split(".")[0] 
-        source = url_news.split("://")[1].split("/")[0]
+        domain = url_news.split("://")[1].split("/")[0]
+        source = url_news.split("://")[1].split(".")[1]
         #
         #
         valor_dict["title"].append(title)
