@@ -13,6 +13,7 @@ data = json.load(file)
 voxradar_news_scrapping_estadao = data['VOXRADAR_NEWS_SCRAPPING_ESTADAO'] + Utils.get_queue_suffix_by_environment(os.environ.get('ENVIRONMENT'))
 voxradar_news_scrapping_folha = data['VOXRADAR_NEWS_SCRAPPING_FOLHA'] + Utils.get_queue_suffix_by_environment(os.environ.get('ENVIRONMENT'))
 voxradar_news_scrapping_valor = data['VOXRADAR_NEWS_SCRAPPING_VALOR'] + Utils.get_queue_suffix_by_environment(os.environ.get('ENVIRONMENT'))
+voxradar_news_scrapping_folha_emcimadahora = data['VOXRADAR_NEWS_SCRAPPING_FOLHA_EMCIMADAHORA'] + Utils.get_queue_suffix_by_environment(os.environ.get('ENVIRONMENT'))
 voxradar_news_save_data = data['VOXRADAR_NEWS_SAVE_DATA'] + Utils.get_queue_suffix_by_environment(os.environ.get('ENVIRONMENT'))
 
 file.close()
@@ -50,6 +51,7 @@ class Envs:
         "VOXRADAR_NEWS_SCRAPPING_ESTADAO": voxradar_news_scrapping_estadao,
         "VOXRADAR_NEWS_SCRAPPING_FOLHA": voxradar_news_scrapping_folha,
         "VOXRADAR_NEWS_SCRAPPING_VALOR": voxradar_news_scrapping_valor,
+        "VOXRADAR_NEWS_SCRAPPING_FOLHA_EMCIMADAHORA": voxradar_news_scrapping_folha_emcimadahora,
         "VOXRADAR_NEWS_SAVE_DATA": voxradar_news_save_data
       }
     },

@@ -4,7 +4,7 @@ from flask import request
 import datetime
 from src.integration.sqs.sqs import Sqs
 from src.types.voxradar_news_save_data_queue_dto import VoxradarNewsSaveDataQueueDTO
-from src.types.voxradar_news_scrapping_folha_queue_dto import VoxradarNewsScrappingFolhaQueueDTO
+from src.types.voxradar_news_scrapping_folha_emcimadahora_queue_dto import VoxradarNewsScrappingFolhaemcimadahoraQueueDTO
 from src.utils.utils import Utils
 from ..config.envs import Envs
 from .base.base_service import BaseService
@@ -14,7 +14,7 @@ import unicodedata
 import requests
 
 
-class ScrappingNewsFolhaService(BaseService):
+class ScrappingNewsFolhaEmcimadahoraService(BaseService):
 
     sqs: Sqs
 
@@ -25,10 +25,10 @@ class ScrappingNewsFolhaService(BaseService):
         self.sqs = Sqs()
 
     def exec(self, body:str) -> ReturnService:
-        self.logger.info(f'\n----- Scrapping News Folha Service | Init - {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S %z")} -----\n')
+        self.logger.info(f'\n----- Scrapping News Folha Emcimadahora Service | Init - {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S %z")} -----\n')
         folha_dict = {'title': [], 'domain':[],'source':[],'date': [], 'body_news': [], 'link': [],'category': [],'image': []}
-        voxradar_news_scrapping_folha_queue_dto:VoxradarNewsScrappingFolhaQueueDTO = self.__parse_body(body)
-        url_news = voxradar_news_scrapping_folha_queue_dto.url
+        voxradar_news_scrapping_folha_uol_encimadahora_queue_dto:VoxradarNewsScrappingFolhaemcimadahoraQueueDTO = self.__parse_body(body)
+        url_news = voxradar_news_scrapping_folha_uol_encimadahora_queue_dto.url
         page = requests.get(url_news).text
         soup = BeautifulSoup(page, 'html.parser')   
 
@@ -90,7 +90,14 @@ class ScrappingNewsFolhaService(BaseService):
 
         # Pick category news
         #   
-        category_news = 'politica'
+        try:
+            category_news = soup.find("meta", attrs={'property': 'og:title'})
+            category_news = str(category_news).split(" - ")[1].split(" - ")[0].lower().replace('"','')
+            category_news = unicodedata.normalize('NFD', category_news).encode('ascii', 'ignore')\
+                    .decode("utf-8")
+        except:
+            category_news = soup.find("meta", property="article:section")
+            category_news = str(category_news).split("content=")[1].split(" ")[0].replace('"','')
 
         category_news = Utils.translate_portuguese_english(category_news)
 
@@ -115,7 +122,6 @@ class ScrappingNewsFolhaService(BaseService):
         folha_dict["link"].append(url_news)
         folha_dict["category"].append(category_news)
         folha_dict["image"].append(image_new)
-        
 
         print(folha_dict)
 
@@ -123,9 +129,9 @@ class ScrappingNewsFolhaService(BaseService):
 
         return ReturnService(True, 'Sucess')
 
-    def __parse_body(self, body:str) -> VoxradarNewsScrappingFolhaQueueDTO:
+    def __parse_body(self, body:str) -> VoxradarNewsScrappingFolhaemcimadahoraQueueDTO:
         body = json.loads(body)
-        return VoxradarNewsScrappingFolhaQueueDTO(body.get('url'))
+        return VoxradarNewsScrappingFolhaemcimadahoraQueueDTO(body.get('url'))
     
     def __send_queue(self, title: str, domain: str, source: str, content: str, date: str, category: str, image: str, url: str):
         message_queue:VoxradarNewsSaveDataQueueDTO = VoxradarNewsSaveDataQueueDTO(title, domain, source, content, date, category, image, url)

@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 import os.path
 import unicodedata
 import regex
+import feedparser
 
 class Utils:
 
@@ -227,8 +228,53 @@ class Utils:
 
     return (translate.get(word))
   
-  #@classmethod
-  #def remove_string(text, string_vector ) -> str:
-  #  create function with remove and a list of strings to remove from the text
-  #  _days = timedelta(days)
-  #  return datetime - _days
+  @classmethod
+  def extract_links_from_rss(self, url:str)->str:
+    
+    links_filtered = []   
+    links = feedparser.parse(url)
+     
+    for e in links.entries:
+        
+        links_filtered.append(e.link)
+    return(links_filtered)
+
+  @classmethod
+  def month_convert(texto_horario):  
+    texto_horario = texto_horario.lower()
+    
+    meses={"janeiro":"01",
+        "fevereiro":"02",
+        "março":"03",
+        "abril":"04",
+        "maio":"05",
+        "junho":"06",
+        "julho":"07",
+        "agosto":"08",
+        "setembro":"09",
+        "outubro":"10",
+        "novembro":"11",
+        "dezembro":"12"}
+
+    for i in meses.keys():
+        if i in texto_horario:
+            texto_horario=texto_horario.replace(i,meses[i]) 
+
+    meses={"jan":"01",
+           "fev":"02",
+           "mar":"03",
+           "abr":"04",
+           "mai":"05",
+           "jun":"06",
+           "jul":"07",
+           "ago":"08",
+           "set":"09",
+           "out":"10",
+           "nov":"11",
+           "dez":"12"}
+
+    for i in meses.keys():
+        if i in texto_horario:
+            texto_horario=texto_horario.replace(i,meses[i])
+    
+    return texto_horario

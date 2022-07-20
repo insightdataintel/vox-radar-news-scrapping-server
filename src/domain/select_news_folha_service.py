@@ -6,6 +6,16 @@ from .base.base_service import BaseService
 from ..types.return_service import ReturnService
 from bs4 import BeautifulSoup
 import requests
+import discord
+import os
+from dotenv import load_dotenv
+import asyncio
+from discord.ext import commands
+
+
+
+
+
 
 class SelectNewsFolhaService(BaseService):
     sqs: Sqs
@@ -45,6 +55,23 @@ class SelectNewsFolhaService(BaseService):
         print(links_filtered)
         for link in links_filtered:
             self.__send_queue(link)
+
+###ainda estamos com problemas....
+        # TOKEN = 'OTkzNTAyNzM0NTAwMjQ5NjYw.G-6Gwu.9KLt62IcPtmlNG9CebPQibQK4PmXWFIngl4t2g'
+        # TOKEN2 = 'OTkzNjAwMDQzNjE5NzE3MTQw.GuRHBE.bt5RrnkeN8qjQBIfvESCF2MzScFduw6a9yVWuk'
+        # GUILD = 993563167584170075
+        # client = discord.Client()
+
+        # @client.event
+        # async def on_ready():  #  Called when internal cache is loaded
+        #     print('We have logged in as {0.user}'.format(client))
+
+        #     #async def on_message():
+        #     channel = client.get_channel(GUILD) #  Gets channel from internal cache
+        #     await channel.send("hello world testing from server") #  Sends message to channel      
+
+        # client.run(TOKEN)
+        
 
         return ReturnService(True, 'Sucess')
 
