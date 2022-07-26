@@ -8,6 +8,8 @@ import os.path
 import unicodedata
 import regex
 import feedparser
+from bs4 import BeautifulSoup
+import numpy as np
 
 class Utils:
 
@@ -238,6 +240,141 @@ class Utils:
         
         links_filtered.append(e.link)
     return(links_filtered)
+
+  @classmethod
+  def extract_links_from_page(self, url:str)->str:
+
+
+      headers={"User-Agent": "Mozilla/5.0 (X11; Linux i686; rv:2.0b10) Gecko/20100101 Firefox/4.0b10"}
+      page = requests.get(url,headers=headers).text
+      soup = BeautifulSoup(page, 'html.parser')  
+      
+      domain = url.split(".")[1]+".com"
+      links = soup.find_all('a', href=True)
+      links = [link["href"] for link in links if domain in link["href"][:len(url)] ]
+      len_link = [len(link.split("/")) for link in links]
+      len_max = np.array(len_link).max()
+      links_news = [link for link in links if len(link.split("/"))==len_max]
+      links_filtered = []
+      blocking = ['portal_estadao_selo_acesso', 'einvestidor.', 'emais.', 'paladar.']  
+      for link in links_news:
+          present = False
+          for word in blocking:
+              if word in link:
+                  present = True
+          if present is False:
+              if link[len(link)-1]=="/":
+                  pass
+              else:
+                  links_filtered.append(link)
+
+      links_filtered = list(set(links_filtered))
+      return(links_filtered)
+
+  @classmethod
+  def extract_links_from_page_v2(self, url:str)->str:
+
+    headers={"User-Agent": "Mozilla/5.0 (X11; Linux i686; rv:2.0b10) Gecko/20100101 Firefox/4.0b10"}
+    page = requests.get(url,headers=headers).text
+    soup = BeautifulSoup(page, 'html.parser')  
+    
+    domain = url.split(".")[1]+".com"
+    links = soup.find_all('a', href=True)
+    links = [link["href"] for link in links if domain in link["href"][:len(url)] ]
+    len_link = [len(link.split("/")) for link in links]
+    len_max = np.array(len_link).max()
+    links_news = [link for link in links if len(link.split("/"))==len_max]
+    links_filtered = []
+    blocking = ['portal_estadao_selo_acesso', 'einvestidor.', 'emais.', 'paladar.','/cadastro/alterar-senha','/pagina/'] 
+    for link in links_news:
+        present = False
+        for word in blocking:
+            if word in link:
+                present = True
+        if present is False:
+            # if link[len(link)-1]=="/":
+            #     pass
+            # else:
+            links_filtered.append(link)
+
+    links_filtered = list(set(links_filtered))
+    return(links_filtered)      
+
+  @classmethod
+  def extract_links_from_page_v3(self, url:str)->str:
+
+    headers={"User-Agent": "Mozilla/5.0 (X11; Linux i686; rv:2.0b10) Gecko/20100101 Firefox/4.0b10"}
+    page = requests.get(url,headers=headers).text
+    soup = BeautifulSoup(page, 'html.parser')   
+
+    domain0 = 'https://www.'
+    domain = url.split(".")[1]+".com"
+    links = soup.find('div', class_='list-news').find_all('a', href=True)
+    linkos = []
+    for link in links:
+        new_link = str(link).split('href=')[1].split('rel')[0].replace('"','').replace(' ','')
+        linkos.append(domain0+domain+'.br'+new_link)
+    return(linkos)
+
+  @classmethod
+  def extract_links_from_page_oantagonista(self, url:str)->str:
+
+    headers={"User-Agent": "Mozilla/5.0 (X11; Linux i686; rv:2.0b10) Gecko/20100101 Firefox/4.0b10"}
+    page = requests.get(url,headers=headers).text
+    soup = BeautifulSoup(page, 'html.parser')   
+
+    links = soup.find_all('div', class_='content_post')
+    linkos = []
+    for link in links:
+        new_link = str(link).split('href=')[1].split('title')[0].replace('"','').replace(' ','')
+        linkos.append(new_link)
+    return(linkos)
+
+  @classmethod
+  def extract_links_from_page_metropoles(self, url:str)->str:
+
+    headers={"User-Agent": "Mozilla/5.0 (X11; Linux i686; rv:2.0b10) Gecko/20100101 Firefox/4.0b10"}
+    page = requests.get(url,headers=headers).text
+    soup = BeautifulSoup(page, 'html.parser')   
+    
+    links = soup.find_all('div', class_='column is-full is-full')
+    linkos = []
+    for link in links:
+        new_link = str(link).split('href=')[1].split('onclick')[0].replace('"','').replace(' ','')
+        linkos.append(new_link)
+    return(linkos)
+
+  @classmethod
+  def extract_links_from_page_broadcast_agro(self, url:str)->str:
+
+    headers={"User-Agent": "Mozilla/5.0 (X11; Linux i686; rv:2.0b10) Gecko/20100101 Firefox/4.0b10"}
+    page = requests.get(url,headers=headers).text
+    soup = BeautifulSoup(page, 'html.parser')   
+    
+    domain0 = 'http://www.'
+    domain = url.split(".")[1]+".com"
+    links = soup.find_all('div', class_='materia')
+    linkos = []
+    for link in links:
+        new_link = str(link).split('href=')[1].split('target')[0].replace('"','').replace(' ','')
+        linkos.append(domain0+domain+'.br'+new_link)
+    return(linkos)
+
+
+  @classmethod
+  def extract_links_from_page_dinheiro_rural(self, url:str)->str:
+
+    headers={"User-Agent": "Mozilla/5.0 (X11; Linux i686; rv:2.0b10) Gecko/20100101 Firefox/4.0b10"}
+    page = requests.get(url,headers=headers).text
+    soup = BeautifulSoup(page, 'html.parser')   
+    
+    links = soup.find_all('div', class_='wrapper-title no-image')
+    linkos = []
+    for link in links:
+        new_link = str(link).split('href=')[1].split('title')[0].replace('"','').replace(' ','')
+        linkos.append(new_link)
+    return(linkos)
+
 
   @classmethod
   def month_convert(texto_horario):  

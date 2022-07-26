@@ -92,7 +92,7 @@ class ScrappingNewsEstadaoService(BaseService):
             category_news = unicodedata.normalize('NFD', category_news).encode('ascii', 'ignore')\
                     .decode("utf-8")
         except:
-            category_news = url_news.replace("www.","http://").split("//")[1].split(".")[0].replace('"','')
+            category_news = self.extract_category(url_news)
 
         #
         category_news = Utils.translate_portuguese_english(category_news)
@@ -124,6 +124,10 @@ class ScrappingNewsEstadaoService(BaseService):
     
 
         return ReturnService(True, 'Sucess')
+
+    def extract_category(self, url_news):
+        category_news = url_news.replace("www.","http://").split("//")[1].split(".")[0].replace('"','')
+        return category_news
 
     def __parse_body(self, body:str) -> VoxradarNewsScrappingEstadaoQueueDTO:
         body = json.loads(body)

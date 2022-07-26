@@ -1,12 +1,12 @@
 import datetime
 from src.integration.sqs.sqs import Sqs
-from src.types.voxradar_news_scrapping_globo_g1_queue_dto import VoxradarNewsScrappingGloboG1QueueDTO
+from src.types.voxradar_news_scrapping_metropoles_queue_dto import VoxradarNewsScrappingMetropolesQueueDTO
 from src.utils.utils import Utils
 from ..config.envs import Envs
 from .base.base_service import BaseService
 from ..types.return_service import ReturnService
 
-class SelectNewsGloboG1Service(BaseService):
+class SelectNewsMetropolesService(BaseService):
     sqs: Sqs
 
     def __init__(self):
@@ -17,14 +17,15 @@ class SelectNewsGloboG1Service(BaseService):
         
 
     def exec(self) -> ReturnService:
-        self.logger.info(f'\n----- Select News Globo G1 Service | Init - {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S %z")} -----\n')
+        self.logger.info(f'\n----- Select News Metrópoles Service | Init - {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S %z")} -----\n')
         
         # self.log(None, f"Iniciando scrapping estado de {sigarp_capture_data_estadao_scrapping_queue_dto.state}, cidade de {sigarp_capture_data_estadao_scrapping_queue_dto.city}, ano {sigarp_capture_data_estadao_scrapping_queue_dto.year}", Log.INFO)
 
             
-        url = "https://g1.globo.com/rss/g1/"
+        url = "https://www.metropoles.com/ultimas-noticias"
+
         
-        links_filtered = Utils.extract_links_from_rss(url)
+        links_filtered = Utils.extract_links_from_page_metropoles(url)
                     
         print(links_filtered)
         for link in links_filtered:
@@ -34,7 +35,7 @@ class SelectNewsGloboG1Service(BaseService):
 
         
     def __send_queue(self, url:str):
-        message_queue:VoxradarNewsScrappingGloboG1QueueDTO = VoxradarNewsScrappingGloboG1QueueDTO(url)
+        message_queue:VoxradarNewsScrappingMetropolesQueueDTO = VoxradarNewsScrappingMetropolesQueueDTO(url)
         
         #self.log(None, 'Send to queue {} | {}'.format(Envs.AWS['SQS']['QUEUE']['SIGARP_SAVE_DATA_VALOR'], sigarp_save_data_valor_dto.to_json()), Log.INFO)
 
