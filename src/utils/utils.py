@@ -377,6 +377,21 @@ class Utils:
 
 
   @classmethod
+  def extract_links_from_page_istoe(self, url:str)->str:
+
+    headers={"User-Agent": "Mozilla/5.0 (X11; Linux i686; rv:2.0b10) Gecko/20100101 Firefox/4.0b10"}
+    page = requests.get(url,headers=headers).text
+    soup = BeautifulSoup(page, 'html.parser')   
+    
+    links = soup.find('div', class_='c-box-principal').find_all('a',class_='link-category')
+    linkos = []
+    for link in links:
+        new_link = str(link).split('href=')[1].split('title')[0].replace('"','').replace(' ','')
+        linkos.append(new_link)
+    return(linkos)
+
+
+  @classmethod
   def month_convert(texto_horario):  
     texto_horario = texto_horario.lower()
     

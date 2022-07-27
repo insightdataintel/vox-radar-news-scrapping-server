@@ -12,6 +12,7 @@ from src.domain.scrapping_news_dinheiro_rural_service import ScrappingNewsDinhei
 from src.domain.scrapping_news_folha_uol_emcimadahora_service import ScrappingNewsFolhaEmcimadahoraService
 from src.domain.scrapping_news_globo_g1_service import ScrappingNewsGloboG1Service
 from src.domain.scrapping_news_globo_valor_service import ScrappingNewsGloboValorService
+from src.domain.scrapping_news_istoe_service import ScrappingNewsIstoeService
 from src.domain.scrapping_news_jota_service import ScrappingNewsJotaService
 from src.domain.scrapping_news_metropoles_service import ScrappingNewsMetropolesService
 from src.domain.scrapping_news_oantagonista_service import ScrappingNewsOAntagonistaService
@@ -35,6 +36,7 @@ from src.domain.select_news_estadao_service import SelectNewsEstadaoService
 from src.domain.select_news_folha_uol_emcimadahora_service import SelectNewsFolhaEmcimadahoraService
 from src.domain.select_news_globog1_service import SelectNewsGloboG1Service
 from src.domain.select_news_globovalor_service import SelectNewsGloboValorService
+from src.domain.select_news_istoe_service import SelectNewsIstoeService
 from src.domain.select_news_jota_service import SelectNewsJotaService
 from src.domain.select_news_metropoles_service import SelectNewsMetropolesService
 from src.domain.select_news_oantagonista_service import SelectNewsOAntagonistaService
@@ -390,6 +392,17 @@ class RouteApp():
             ScrappingNewsDinheiroRuralService().exec(json.dumps(request.get_json()))
             return "I'm ok"             
 
+        @app.route("/select-news-istoe")
+        def select_news_istoe():
+            logger.info("/istoe")
+            SelectNewsIstoeService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-istoe",methods=['POST'])
+        def scrapping_news_istoe():
+            logger.info("/istoe")
+            ScrappingNewsIstoeService().exec(json.dumps(request.get_json()))
+            return "I'm ok"   
 
 
         return app
