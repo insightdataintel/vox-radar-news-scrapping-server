@@ -46,11 +46,12 @@ class ScrappingNewsR7TecnologiaecienciaService(BaseService):
             date = date.replace('T', ' ') 
 
         except:
+
             date = soup.find("div", class_= "dataPublicacaoPost float-left mr-5")
-            date = str(date).split('Atualizado em')[1].split("<")[0].replace(':"','').replace('"','').split("+")[0].replace('h',':').replace('-','')
-            date = date.split()
-            date[1] = Utils.month_convert(date[1])
-            date = "-".join(date)+':00'+'-03:00'
+            date = str(date).split('Atualizado em')[1].split("<")[0].replace(':"','').replace('"','').split("+")[0].replace('-','')
+            aux = date.split()
+            aux[1] = Utils.month_convert(aux[1])
+            date = aux[0]+'-'+aux[1]+'-'+aux[2]+ ' ' + aux[3].replace('h',':')+':00'+'-03:00'
     #
     #Pick body's news
     #
