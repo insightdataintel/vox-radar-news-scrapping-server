@@ -392,6 +392,83 @@ class Utils:
 
 
   @classmethod
+  def request_link(self, url:str)->str:
+
+    headers={"User-Agent": "Mozilla/5.0 (X11; Linux i686; rv:2.0b10) Gecko/20100101 Firefox/4.0b10"}
+    page = requests.get(url,headers=headers).text
+    soup = BeautifulSoup(page, 'html.parser')   
+    return soup
+
+
+  @classmethod
+  def extract_links_from_page_aredacao(self, url:str)->str:
+
+    soup = Utils.request_link(url)
+    
+    links = soup.find_all('li', class_='listaNoticia')
+    linkos = []
+    for link in links:
+        new_link = str(link).split('href=')[1].split('style=')[0].replace('"','').replace(' ','')
+        linkos.append(new_link)
+    return(linkos)
+
+
+  @classmethod
+  def extract_links_from_page_maisgoias(self, url:str)->str:
+
+    soup = Utils.request_link(url)
+    
+    links = soup.find_all('article', class_='cardHor')
+    linkos = []
+    for link in links:
+        new_link = str(link).split('href=')[1].split('>')[0].replace('"','').replace(' ','')
+        linkos.append(new_link)
+    return(linkos)
+
+
+  @classmethod
+  def extract_links_from_page_jornalahora(self, url:str)->str:
+
+    soup = Utils.request_link(url)
+    
+    links = soup.find('div', class_='wpb_wrapper').find_all('a',class_='td-image-wrap')
+    linkos = []
+    for link in links:
+        new_link = str(link).split('href=')[1].split('rel="bookmark"')[0].replace('"','').replace(' ','')
+        linkos.append(new_link)
+    return(linkos)
+
+
+  @classmethod
+  def extract_links_from_page_tribunadoplanalto(self, url:str)->str:
+
+    soup = Utils.request_link(url)
+    
+    links = soup.find_all('div', class_='col-12 separator')
+    linkos = []
+    for link in links:
+      aux = link.find('a',class_='fix-thumb-image')
+      new_link = str(aux).split('href=')[1].split('">')[0].replace('"','').replace(' ','')
+      linkos.append(new_link)
+    return(linkos)
+
+
+  @classmethod
+  def extract_links_from_page_diariodamanha(self, url:str)->str:
+
+    soup = Utils.request_link(url)
+    
+    links = soup.find_all('div', class_='col-md-4 col-12')
+    linkos = []
+    for link in links:
+      aux = link.find('a',href = True)
+      new_link = str(aux).split('href=')[1].split('">')[0].replace('"','').replace(' ','')
+      linkos.append(new_link)
+    return(linkos)
+    
+
+
+  @classmethod
   def month_convert(texto_horario):  
     texto_horario = texto_horario.lower()
     
