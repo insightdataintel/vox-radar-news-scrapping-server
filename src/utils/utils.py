@@ -465,7 +465,70 @@ class Utils:
       new_link = str(aux).split('href=')[1].split('">')[0].replace('"','').replace(' ','')
       linkos.append(new_link)
     return(linkos)
+
+
+  @classmethod
+  def extract_links_from_page_folhaz(self, url:str)->str:
+
+    soup = Utils.request_link(url)
+    links = soup.find_all('div', class_='post-details')
+    linkos = []
+    for link in links:
+      aux = link.find('a',class_= 'more-link button')
+      new_link = str(aux).split('href=')[1].split('">')[0].replace('"','').replace(' ','')
+      linkos.append(new_link)
+    return(linkos)
     
+
+  @classmethod
+  def extract_links_from_page_sagres(self, url:str)->str:
+
+    soup = Utils.request_link(url)
+    links = soup.find_all('h3', class_='entry-title td-module-title')
+    linkos = []
+    for link in links:
+      aux = link.find('a',href = True)
+      new_link = str(aux).split('href=')[1].split('rel="bookmark"')[0].replace('"','').replace(' ','')
+      linkos.append(new_link)
+    return(linkos)
+
+
+  @classmethod
+  def extract_links_from_page_ohoje(self, url:str)->str:
+
+    soup = Utils.request_link(url)
+    links = soup.find_all('div', class_='news list-editor')
+    linkos = []
+    for link in links:
+      aux = link.find('a',href = True)
+      new_link = str(aux).split('href=')[1].split('><div')[0].replace('"','').replace(' ','')
+      linkos.append(new_link)
+    return(linkos)
+
+
+  @classmethod
+  def extract_links_from_page_jornalopcao(self, url:str)->str:
+
+    soup = Utils.request_link(url)
+    links = soup.find_all('div', class_='template-part-component-feed-post has-thumb')
+    linkos = []
+    for link in links:
+      aux = link.find('a',class_='main_link')
+      new_link = str(aux).split('href=')[1].split('>')[0].replace('"','').replace(' ','')
+      linkos.append(new_link)
+    return(linkos)
+
+  @classmethod
+  def extract_links_from_page_opopular(self, url:str)->str:
+
+    soup = Utils.request_link(url)
+    links = soup.find("ul", {"class": "row news"}).find_all("li")
+    linkos = []
+    for link in links:
+      new_link = link.find("a")['href']
+      linkos.append("https://opopular.com.br"+new_link)
+    return(linkos)    
+
 
 
   @classmethod
