@@ -239,7 +239,40 @@ class Utils:
     for e in links.entries:
         
         links_filtered.append(e.link)
+
     return(links_filtered)
+
+  @classmethod
+  def extract_links_from_rss_ge(self, url:str)->str:
+    
+    links_filtered = []   
+    links = feedparser.parse(url)
+     
+    for e in links.entries:
+        if '/jogo/' in e.link:
+          None
+        else:
+          links_filtered.append(e.link)
+
+    return(links_filtered)    
+
+  @classmethod
+  def extract_links_from_rss_oglobo(self, url:str)->str:
+    
+    links_filtered = []   
+    links = feedparser.parse(url)
+    no_text = ['/stories/','/jogo/']     
+
+    for e in links.entries:
+      for item in no_text:
+          if item in e.link:
+              e.link = ''
+      if e.link =='':
+          None
+      else:
+          links_filtered.append(e.link)
+
+    return(links_filtered)    
 
   @classmethod
   def extract_links_from_page(self, url:str)->str:
@@ -528,6 +561,19 @@ class Utils:
       new_link = link.find("a")['href']
       linkos.append("https://opopular.com.br"+new_link)
     return(linkos)    
+
+
+  @classmethod
+  def extract_links_from_page_globo(self, url:str)->str:
+
+    soup = Utils.request_link(url)
+    links = soup.find_all('a', class_='post__link')
+    linkos = []
+    for link in links:
+      new_link = str(link).split('data-tracking-label=')[1].split('data-tracking-view=')[0].replace('"','').replace(' ','')
+      linkos.append(new_link)
+    return(linkos)    
+
 
 
 

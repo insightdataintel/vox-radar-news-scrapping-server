@@ -14,13 +14,17 @@ from src.domain.scrapping_news_dinheiro_rural_service import ScrappingNewsDinhei
 from src.domain.scrapping_news_folha_uol_emcimadahora_service import ScrappingNewsFolhaEmcimadahoraService
 from src.domain.scrapping_news_folhaz_service import ScrappingNewsFolhaZService
 from src.domain.scrapping_news_globo_g1_service import ScrappingNewsGloboG1Service
+from src.domain.scrapping_news_globo_ge_service import ScrappingNewsGloboGeService
+from src.domain.scrapping_news_globo_service import ScrappingNewsGloboService
 from src.domain.scrapping_news_globo_valor_service import ScrappingNewsGloboValorService
+from src.domain.scrapping_news_gshow_service import ScrappingNewsGShowService
 from src.domain.scrapping_news_istoe_service import ScrappingNewsIstoeService
 from src.domain.scrapping_news_jornalahora_service import ScrappingNewsJornalAHoraService
 from src.domain.scrapping_news_jornalopcao_service import ScrappingNewsJornalOpcaoService
 from src.domain.scrapping_news_jota_service import ScrappingNewsJotaService
 from src.domain.scrapping_news_maisgoias_service import ScrappingNewsMaisGoiasService
 from src.domain.scrapping_news_metropoles_service import ScrappingNewsMetropolesService
+from src.domain.scrapping_news_o_globo_service import ScrappingNewsOGloboService
 from src.domain.scrapping_news_oantagonista_service import ScrappingNewsOAntagonistaService
 from src.domain.scrapping_news_ohoje_service import ScrappingNewsOHojeService
 from src.domain.scrapping_news_opopular_service import ScrappingNewsOPopularService
@@ -47,14 +51,18 @@ from src.domain.select_news_dinheiro_rural_service import SelectNewsDinheiroRura
 from src.domain.select_news_estadao_service import SelectNewsEstadaoService
 from src.domain.select_news_folha_uol_emcimadahora_service import SelectNewsFolhaEmcimadahoraService
 from src.domain.select_news_folhaz_service import SelectNewsFolhaZService
-from src.domain.select_news_globog1_service import SelectNewsGloboG1Service
+from src.domain.select_news_globo_g1_service import SelectNewsGloboG1Service
+from src.domain.select_news_globo_ge_service import SelectNewsGloboGeService
+from src.domain.select_news_globo_service import SelectNewsGloboService
 from src.domain.select_news_globovalor_service import SelectNewsGloboValorService
+from src.domain.select_news_gshow_service import SelectNewsGShowService
 from src.domain.select_news_istoe_service import SelectNewsIstoeService
 from src.domain.select_news_jornalahora_service import SelectNewsJornalAHoraService
 from src.domain.select_news_jornalopcao_service import SelectNewsJornalOpcaoService
 from src.domain.select_news_jota_service import SelectNewsJotaService
 from src.domain.select_news_maisgoias_service import SelectNewsMaisGoiasService
 from src.domain.select_news_metropoles_service import SelectNewsMetropolesService
+from src.domain.select_news_o_globo_service import SelectNewsOGloboService
 from src.domain.select_news_oantagonista_service import SelectNewsOAntagonistaService
 from src.domain.select_news_ohoje_service import SelectNewsOHojeService
 from src.domain.select_news_opopular_service import SelectNewsOPopularService
@@ -549,6 +557,54 @@ class RouteApp():
             ScrappingNewsOPopularService().exec(json.dumps(request.get_json()))
             return "I'm ok"  
 
+
+        @app.route("/select-news-globoge")
+        def select_news_globoge():
+            logger.info("/globoge")
+            SelectNewsGloboGeService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-globoge",methods=['POST'])
+        def scrapping_news_globoge():
+            logger.info("/globoge")
+            ScrappingNewsGloboGeService().exec(json.dumps(request.get_json()))
+            return "I'm ok" 
+
+        @app.route("/select-news-oglobo")
+        def select_news_oglobo():
+            logger.info("/oglobo")
+            SelectNewsOGloboService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-oglobo",methods=['POST'])
+        def scrapping_news_oglobo():
+            logger.info("/oglobo")
+            ScrappingNewsOGloboService().exec(json.dumps(request.get_json()))
+            return "I'm ok" 
+
+        @app.route("/select-news-gshow")
+        def select_news_gshow():
+            logger.info("/gshow")
+            SelectNewsGShowService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-gshow",methods=['POST'])
+        def scrapping_news_gshow():
+            logger.info("/gshow")
+            ScrappingNewsGShowService().exec(json.dumps(request.get_json()))
+            return "I'm ok" 
+
+        @app.route("/select-news-globo")
+        def select_news_globo():
+            logger.info("/globo")
+            SelectNewsGloboService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-globo",methods=['POST'])
+        def scrapping_news_globo():
+            logger.info("/globo")
+            ScrappingNewsGloboService().exec(json.dumps(request.get_json()))
+            return "I'm ok" 
 
 
 
