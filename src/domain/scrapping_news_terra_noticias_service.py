@@ -4,7 +4,7 @@ from flask import request
 import datetime
 from src.integration.sqs.sqs import Sqs
 from src.types.voxradar_news_save_data_queue_dto import VoxradarNewsSaveDataQueueDTO
-from src.types.voxradar_news_scrapping_globo_ge_queue_dto import VoxradarNewsScrappingGloboGeQueueDTO
+from src.types.voxradar_news_scrapping_terra_noticias_queue_dto import VoxradarNewsScrappingTerraNoticiasQueueDTO
 from src.utils.utils import Utils
 from ..config.envs import Envs
 from .base.base_service import BaseService
@@ -14,7 +14,7 @@ import unicodedata
 import requests
 
 
-class ScrappingNewsGloboGeService(BaseService):
+class ScrappingNewsTerraNoticiasService(BaseService):
 
     sqs: Sqs
 
@@ -25,9 +25,9 @@ class ScrappingNewsGloboGeService(BaseService):
         self.sqs = Sqs()
 
     def exec(self, body:str) -> ReturnService:
-        self.logger.info(f'\n----- Scrapping News Globo Ge Service | Init - {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S %z")} -----\n')
-        globo_dict = {'title': [], 'domain':[],'source':[],'date': [], 'body_news': [], 'link': [],'category': [],'image': []}
-        voxradar_news_scrapping_globo_ge_queue_dto:VoxradarNewsScrappingGloboGeQueueDTO = self.__parse_body(body)
+        self.logger.info(f'\n----- Scrapping News Terra Noticias Service | Init - {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S %z")} -----\n')
+        terra_dict = {'title': [], 'domain':[],'source':[],'date': [], 'body_news': [], 'link': [],'category': [],'image': []}
+        voxradar_news_scrapping_globo_ge_queue_dto:VoxradarNewsScrappingTerraNoticiasQueueDTO = self.__parse_body(body)
         url_news = voxradar_news_scrapping_globo_ge_queue_dto.url
         page = requests.get(url_news).text
         soup = BeautifulSoup(page, 'html.parser')   
@@ -40,19 +40,16 @@ class ScrappingNewsGloboGeService(BaseService):
     #Stardandizing Date
     #
         date = soup.find_all("script")
-        date = str(date).split('MODIFIED:')[1].split(',')[0].replace('T', ' ').replace('Z', '').replace('"','').strip()
-        date = datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S.%f")
-        delta = datetime.timedelta(hours=3)
-        date = date - delta
-        date = "%s-3:00"%(str(date.strftime('%Y-%m-%d %H:%M:%S')))  
+        date = str(date).split('"datePublished":')[1].split(',')[0].replace('T', ' ').replace('Z', '').replace('"','').strip()
         #
     #
     #Pick body's news
     #
     #
-        mode = ['article']
 
-        classk = ['articleBody']
+        mode = ['div']
+
+        classk = ['article__content']
         paragraf = ['p']
         body_new = ''
 
@@ -69,15 +66,17 @@ class ScrappingNewsGloboGeService(BaseService):
 
         for k in range(0,len(paragraf)):
             try:
-                body_news = [x.text for x in soup.find(mode[i], itemprop = classk[j]).find_all(paragraf[k]) if len(x.text)>20]
+                body_news = [x.text for x in soup.find(mode[i], class_ = classk[j]).find_all(paragraf[k]) if len(x.text)>20]
                 if(len(body_news)>0):
                     break
             except:
-                None
+                body_news = [x.text for x in soup.find(mode[i], id = 'textContent').find_all(paragraf[k]) if len(x.text)>20]
+                if(len(body_news)>0):
+                    break
 
 
 
-        no_text = ['Cartola','Leia outras','podcast','Foto','clique aqui','Assine o Premiere']
+        no_text = ['Cartola','Leia outras','podcast','Foto','clique aqui','Assine o Premiere','VÍDEOS:']
         for x in body_news:
             for item in no_text:
                 if item in x:
@@ -86,10 +85,10 @@ class ScrappingNewsGloboGeService(BaseService):
                 pass
             else:
                 body_new = body_new+x+' \n' ##
-
     # Pick category news
     #   
-        category_news = 'sports'
+        category_news = url_news.replace("www.",'').replace("https://",'')
+        category_news = category_news.split('/')[1]
 
         #
         #
@@ -101,28 +100,31 @@ class ScrappingNewsGloboGeService(BaseService):
         #
         #
         domain = url_news.split(".com")[0]+'.com'
-        source = url_news.split("https://")[1].split(".com")[0] 
+        try:
+            source = url_news.split("www.")[1].split(".com")[0]               
+        except:
+            source = url_news.split("https://")[1].split(".com")[0]  
         #
         #
-        globo_dict["title"].append(title)
-        globo_dict["domain"].append(domain)
-        globo_dict["source"].append(source)
-        globo_dict["date"].append(date)
-        globo_dict["body_news"].append(body_new)
-        globo_dict["link"].append(url_news)
-        globo_dict["category"].append(category_news)
-        globo_dict["image"].append(image_new)
+        terra_dict["title"].append(title)
+        terra_dict["domain"].append(domain)
+        terra_dict["source"].append(source)
+        terra_dict["date"].append(date)
+        terra_dict["body_news"].append(body_new)
+        terra_dict["link"].append(url_news)
+        terra_dict["category"].append(category_news)
+        terra_dict["image"].append(image_new)
         
 
-        print(globo_dict)
+        print(terra_dict)
 
         self.__send_queue(title, domain, source, body_new, date, category_news, image_new, url_news)
 
         return ReturnService(True, 'Sucess')
 
-    def __parse_body(self, body:str) -> VoxradarNewsScrappingGloboGeQueueDTO:
+    def __parse_body(self, body:str) -> VoxradarNewsScrappingTerraNoticiasQueueDTO:
         body = json.loads(body)
-        return VoxradarNewsScrappingGloboGeQueueDTO(body.get('url'))
+        return VoxradarNewsScrappingTerraNoticiasQueueDTO(body.get('url'))
     
     def __send_queue(self, title: str, domain: str, source: str, content: str, date: str, category: str, image: str, url: str):
         message_queue:VoxradarNewsSaveDataQueueDTO = VoxradarNewsSaveDataQueueDTO(title, domain, source, content, date, category, image, url)

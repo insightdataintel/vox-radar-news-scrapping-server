@@ -575,6 +575,43 @@ class Utils:
     return(linkos)    
 
 
+  @classmethod
+  def extract_links_from_page_uol_esporte(self, url:str)->str:
+
+    soup = Utils.request_link(url)
+    links = soup.find_all('div', class_='thumbnails-wrapper')
+    linkos = []
+    no_text = ['/amp-stories/','/jogo/']
+    for link in links:
+      new_link = str(link).split('href=')[1].split('>')[0].replace('"','').replace(' ','')
+      for item in no_text:
+        if item in new_link:
+            new_link = ''
+    if new_link == '':
+      None
+    else:
+      linkos.append(new_link)
+    return(linkos)    
+
+  @classmethod
+  def extract_links_from_page_terra(self, url:str)->str:
+
+    soup = Utils.request_link(url)
+    links = soup.find_all('a', class_='card-news__text--title main-url')
+    linkos = []
+    no_text = ['/amp-stories/','/jogo/','/story/', 'noopener']
+    for link in links:
+      new_link = str(link).split('href=')[1].split('id=')[0].split('target=')[0].replace('"','').replace(' ','')
+      for item in no_text:
+        if item in new_link:
+            new_link = ''
+    if new_link == '':
+      None
+    else:
+      linkos.append(new_link)
+    return(linkos)    
+
+
 
 
   @classmethod

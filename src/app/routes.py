@@ -39,8 +39,13 @@ from src.domain.scrapping_news_r7_politica_service import ScrappingNewsR7Politic
 from src.domain.scrapping_news_r7_saude_service import ScrappingNewsR7SaudeService
 from src.domain.scrapping_news_r7_tecnologiaeciencia_service import ScrappingNewsR7TecnologiaecienciaService
 from src.domain.scrapping_news_sagres_service import ScrappingNewsSagresService
+from src.domain.scrapping_news_terra_economia_service import ScrappingNewsTerraEconomiaService
+from src.domain.scrapping_news_terra_eleicoes_service import ScrappingNewsTerraEleicoesService
+from src.domain.scrapping_news_terra_esportes_service import ScrappingNewsTerraEsportesService
+from src.domain.scrapping_news_terra_noticias_service import ScrappingNewsTerraNoticiasService
 from src.domain.scrapping_news_tribunadoplanalto_service import ScrappingNewsTribunadoPlanaltoService
 from src.domain.scrapping_news_uol_economia_service import ScrappingNewsUolEconomiaService
+from src.domain.scrapping_news_uol_esporte_service import ScrappingNewsUolEsporteService
 from src.domain.scrapping_news_uol_noticias_service import ScrappingNewsUolNoticiasService
 from src.domain.select_news_aredacao_service import SelectNewsARedacaoService
 from src.domain.select_news_broadcast_agro_service import SelectNewsBroadcastAgroService
@@ -77,8 +82,13 @@ from src.domain.select_news_r7_politica_service import SelectNewsR7PoliticaServi
 from src.domain.select_news_r7_saude_service import SelectNewsR7SaudeService
 from src.domain.select_news_r7_tecnologiaeciencia_service import SelectNewsR7TecnologiaecienciaService
 from src.domain.select_news_sagres_service import SelectNewsSagresService
+from src.domain.select_news_terra_economia_service import SelectNewsTerraEconomiaService
+from src.domain.select_news_terra_eleicoes_service import SelectNewsTerraEleicoesService
+from src.domain.select_news_terra_esportes_service import SelectNewsTerraEsportesService
+from src.domain.select_news_terra_noticia_service import SelectNewsTerraNoticiasService
 from src.domain.select_news_tribunadoplanalto_service import SelectNewsTribunadoPlanaltoService
 from src.domain.select_news_uol_economia_service import SelectNewsUolEconomiaService
+from src.domain.select_news_uol_esporte_service import SelectNewsUolEsporteService
 from src.domain.select_news_uol_noticias_service import SelectNewsUolNoticiasService
 from ..domain.scrapping_news_estadao_service import ScrappingNewsEstadaoService
 from src.domain.scrapping_news_folha_service import ScrappingNewsFolhaService
@@ -605,6 +615,70 @@ class RouteApp():
             logger.info("/globo")
             ScrappingNewsGloboService().exec(json.dumps(request.get_json()))
             return "I'm ok" 
+
+
+        @app.route("/select-news-uolesporte")
+        def select_news_uolesporte():
+            logger.info("/uolesporte")
+            SelectNewsUolEsporteService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-uolesporte",methods=['POST'])
+        def scrapping_news_uolesporte():
+            logger.info("/uolesporte")
+            ScrappingNewsUolEsporteService().exec(json.dumps(request.get_json()))
+            return "I'm ok" 
+
+        @app.route("/select-news-terra-noticias")
+        def select_news_terranoticias():
+            logger.info("/terra-noticias")
+            SelectNewsTerraNoticiasService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-terra-noticias",methods=['POST'])
+        def scrapping_news_terra_noticias():
+            logger.info("/terra-noticias")
+            ScrappingNewsTerraNoticiasService().exec(json.dumps(request.get_json()))
+            return "I'm ok"      
+
+        @app.route("/select-news-terra-economia")
+        def select_news_terraeconomia():
+            logger.info("/terra-economia")
+            SelectNewsTerraEconomiaService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-terra-economia",methods=['POST'])
+        def scrapping_news_terra_economia():
+            logger.info("/terra-economia")
+            ScrappingNewsTerraEconomiaService().exec(json.dumps(request.get_json()))
+            return "I'm ok"         
+
+
+        @app.route("/select-news-terra-eleicoes")
+        def select_news_terraeleicoes():
+            logger.info("/terra-eleicoes")
+            SelectNewsTerraEleicoesService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-terra-eleicoes",methods=['POST'])
+        def scrapping_news_terra_eleicoes():
+            logger.info("/terra-eleicoes")
+            ScrappingNewsTerraEleicoesService().exec(json.dumps(request.get_json()))
+            return "I'm ok"
+
+
+        @app.route("/select-news-terra-esportes")
+        def select_news_terraesportes():
+            logger.info("/terra-esportes")
+            SelectNewsTerraEsportesService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-terra-esportes",methods=['POST'])
+        def scrapping_news_terra_esportes():
+            logger.info("/terra-esportes")
+            ScrappingNewsTerraEsportesService().exec(json.dumps(request.get_json()))
+            return "I'm ok"
+
 
 
 
