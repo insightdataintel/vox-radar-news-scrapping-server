@@ -427,7 +427,7 @@ class Utils:
   @classmethod
   def request_link(self, url:str)->str:
 
-    headers={"User-Agent": "Mozilla/5.0 (X11; Linux i686; rv:2.0b10) Gecko/20100101 Firefox/4.0b10"}
+    headers={"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"}
     page = requests.get(url,headers=headers).text
     soup = BeautifulSoup(page, 'html.parser')   
     return soup
@@ -602,6 +602,63 @@ class Utils:
     no_text = ['/amp-stories/','/jogo/','/story/', 'noopener']
     for link in links:
       new_link = str(link).split('href=')[1].split('id=')[0].split('target=')[0].replace('"','').replace(' ','')
+      for item in no_text:
+        if item in new_link:
+            new_link = ''
+    if new_link == '':
+      None
+    else:
+      linkos.append(new_link)
+    return(linkos)    
+
+
+  @classmethod
+  def extract_links_from_page_ig(self, url:str)->str:
+
+    soup = Utils.request_link(url)
+    links = soup.find_all('a', class_='title')
+    linkos = []
+    no_text = ['/amp-stories/','/jogo/','/story/', 'noopener']
+    for link in links:
+      new_link = str(link).split('href=')[1].split('id=')[0].split('target=')[0].replace('"','').replace(' ','')
+      for item in no_text:
+        if item in new_link:
+            new_link = ''
+    if new_link == '':
+      None
+    else:
+      linkos.append(new_link)
+    return(linkos)    
+
+
+  @classmethod
+  def extract_links_from_page_mixvale(self, url:str)->str:
+
+    soup = Utils.request_link(url)
+    links = soup.find_all('li', class_='infinite-post')
+    linkos = []
+    no_text = ['/amp-stories/','/jogo/','/story/', 'noopener']
+    for link in links:
+      new_link = str(link).split('href=')[1].split('rel="bookmark"')[0].split('target=')[0].replace('"','').replace(' ','')
+      for item in no_text:
+        if item in new_link:
+            new_link = ''
+    if new_link == '':
+      None
+    else:
+      linkos.append(new_link)
+    return(linkos)    
+
+
+  @classmethod
+  def extract_links_from_page_em(self, url:str)->str:
+
+    soup = Utils.request_link(url)
+    links = soup.find_all('div', class_='news-box free pb-10 mb-20')
+    linkos = []
+    no_text = ['/amp-stories/','/jogo/','/story/', 'noopener']
+    for link in links:
+      new_link = str(link).split('href=')[1].split('title="')[0].split('target=')[0].replace('"','').replace(' ','')
       for item in no_text:
         if item in new_link:
             new_link = ''

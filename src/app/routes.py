@@ -11,6 +11,15 @@ from src.domain.scrapping_news_correio24horas_service import ScrappingNewsCorrei
 from src.domain.scrapping_news_correiobraziliense_service import ScrappingNewsCorreioBrazilienseService
 from src.domain.scrapping_news_diariodamanha_service import ScrappingNewsDiariodaManhaService
 from src.domain.scrapping_news_dinheiro_rural_service import ScrappingNewsDinheiroRuralService
+from src.domain.scrapping_news_em_cultura_service import ScrappingNewsEmCulturaService
+from src.domain.scrapping_news_em_economia_service import ScrappingNewsEmEconomiaService
+from src.domain.scrapping_news_em_educacao_service import ScrappingNewsEmEducacaoService
+from src.domain.scrapping_news_em_gerais_service import ScrappingNewsEmGeraisService
+from src.domain.scrapping_news_em_internacional_service import ScrappingNewsEmInternacionalService
+from src.domain.scrapping_news_em_nacional_service import ScrappingNewsEmNacionalService
+from src.domain.scrapping_news_em_politica_service import ScrappingNewsEmPoliticaService
+from src.domain.scrapping_news_em_saude_service import ScrappingNewsEmSaudeService
+from src.domain.scrapping_news_em_tecnologia_service import ScrappingNewsEmTecnologiaService
 from src.domain.scrapping_news_folha_uol_emcimadahora_service import ScrappingNewsFolhaEmcimadahoraService
 from src.domain.scrapping_news_folhaz_service import ScrappingNewsFolhaZService
 from src.domain.scrapping_news_globo_g1_service import ScrappingNewsGloboG1Service
@@ -18,12 +27,14 @@ from src.domain.scrapping_news_globo_ge_service import ScrappingNewsGloboGeServi
 from src.domain.scrapping_news_globo_service import ScrappingNewsGloboService
 from src.domain.scrapping_news_globo_valor_service import ScrappingNewsGloboValorService
 from src.domain.scrapping_news_gshow_service import ScrappingNewsGShowService
+from src.domain.scrapping_news_ig_service import ScrappingNewsIgService
 from src.domain.scrapping_news_istoe_service import ScrappingNewsIstoeService
 from src.domain.scrapping_news_jornalahora_service import ScrappingNewsJornalAHoraService
 from src.domain.scrapping_news_jornalopcao_service import ScrappingNewsJornalOpcaoService
 from src.domain.scrapping_news_jota_service import ScrappingNewsJotaService
 from src.domain.scrapping_news_maisgoias_service import ScrappingNewsMaisGoiasService
 from src.domain.scrapping_news_metropoles_service import ScrappingNewsMetropolesService
+from src.domain.scrapping_news_mix_vale_service import ScrappingNewsMixValeService
 from src.domain.scrapping_news_o_globo_service import ScrappingNewsOGloboService
 from src.domain.scrapping_news_oantagonista_service import ScrappingNewsOAntagonistaService
 from src.domain.scrapping_news_ohoje_service import ScrappingNewsOHojeService
@@ -53,6 +64,15 @@ from src.domain.select_news_correio24horas_service import SelectNewsCorreio24hor
 from src.domain.select_news_correiobraziliense_service import SelectNewsCorreioBrazilienseService
 from src.domain.select_news_diariodamanha_service import SelectNewsDiariodaManhaService
 from src.domain.select_news_dinheiro_rural_service import SelectNewsDinheiroRuralService
+from src.domain.select_news_em_cultura_service import SelectNewsEmCulturaService
+from src.domain.select_news_em_economia_service import SelectNewsEmEconomiaService
+from src.domain.select_news_em_educacao_service import SelectNewsEmEducacaoService
+from src.domain.select_news_em_gerais_service import SelectNewsEmGeraisService
+from src.domain.select_news_em_internacional_service import SelectNewsEmInternacionalService
+from src.domain.select_news_em_nacional_service import SelectNewsEmNacionalService
+from src.domain.select_news_em_politica_service import SelectNewsEmPoliticaService
+from src.domain.select_news_em_saude_service import SelectNewsEmSaudeService
+from src.domain.select_news_em_tecnologia_service import SelectNewsEmTecnologiaService
 from src.domain.select_news_estadao_service import SelectNewsEstadaoService
 from src.domain.select_news_folha_uol_emcimadahora_service import SelectNewsFolhaEmcimadahoraService
 from src.domain.select_news_folhaz_service import SelectNewsFolhaZService
@@ -61,12 +81,14 @@ from src.domain.select_news_globo_ge_service import SelectNewsGloboGeService
 from src.domain.select_news_globo_service import SelectNewsGloboService
 from src.domain.select_news_globovalor_service import SelectNewsGloboValorService
 from src.domain.select_news_gshow_service import SelectNewsGShowService
+from src.domain.select_news_ig_service import SelectNewsIgService
 from src.domain.select_news_istoe_service import SelectNewsIstoeService
 from src.domain.select_news_jornalahora_service import SelectNewsJornalAHoraService
 from src.domain.select_news_jornalopcao_service import SelectNewsJornalOpcaoService
 from src.domain.select_news_jota_service import SelectNewsJotaService
 from src.domain.select_news_maisgoias_service import SelectNewsMaisGoiasService
 from src.domain.select_news_metropoles_service import SelectNewsMetropolesService
+from src.domain.select_news_mix_vale_service import SelectNewsMixValeService
 from src.domain.select_news_o_globo_service import SelectNewsOGloboService
 from src.domain.select_news_oantagonista_service import SelectNewsOAntagonistaService
 from src.domain.select_news_ohoje_service import SelectNewsOHojeService
@@ -678,6 +700,150 @@ class RouteApp():
             logger.info("/terra-esportes")
             ScrappingNewsTerraEsportesService().exec(json.dumps(request.get_json()))
             return "I'm ok"
+
+
+        @app.route("/select-news-terra-ig")
+        def select_news_ig():
+            logger.info("/ig")
+            SelectNewsIgService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-ig",methods=['POST'])
+        def scrapping_news_ig():
+            logger.info("/ig")
+            ScrappingNewsIgService().exec(json.dumps(request.get_json()))
+            return "I'm ok"
+
+
+        @app.route("/select-news-terra-mixvale")
+        def select_news_mixvale():
+            logger.info("/mixvale")
+            SelectNewsMixValeService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-mixvale",methods=['POST'])
+        def scrapping_news_mixvale():
+            logger.info("/mixvale")
+            ScrappingNewsMixValeService().exec(json.dumps(request.get_json()))
+            return "I'm ok"
+
+        @app.route("/select-news-terra-emgerais")
+        def select_news_emgerais():
+            logger.info("/emgerais")
+            SelectNewsEmGeraisService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-emgerais",methods=['POST'])
+        def scrapping_news_emgerais():
+            logger.info("/emgerais")
+            ScrappingNewsEmGeraisService().exec(json.dumps(request.get_json()))
+            return "I'm ok"
+
+
+        @app.route("/select-news-terra-empolitica")
+        def select_news_empolitica():
+            logger.info("/empolitica")
+            SelectNewsEmPoliticaService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-empolitica",methods=['POST'])
+        def scrapping_news_empolitica():
+            logger.info("/empolitica")
+            ScrappingNewsEmPoliticaService().exec(json.dumps(request.get_json()))
+            return "I'm ok"
+
+
+        @app.route("/select-news-terra-emeconomia")
+        def select_news_emeconomia():
+            logger.info("/emeconomia")
+            SelectNewsEmEconomiaService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-emeconomia",methods=['POST'])
+        def scrapping_news_emeconomia():
+            logger.info("/emeconomia")
+            ScrappingNewsEmEconomiaService().exec(json.dumps(request.get_json()))
+            return "I'm ok"
+
+        @app.route("/select-news-terra-emnacional")
+        def select_news_emnacional():
+            logger.info("/emnacional")
+            SelectNewsEmNacionalService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-emnacional",methods=['POST'])
+        def scrapping_news_emnacional():
+            logger.info("/emnacional")
+            ScrappingNewsEmNacionalService().exec(json.dumps(request.get_json()))
+            return "I'm ok"
+
+
+        @app.route("/select-news-terra-eminternacional")
+        def select_news_eminternacional():
+            logger.info("/eminternacional")
+            SelectNewsEmInternacionalService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-eminternacional",methods=['POST'])
+        def scrapping_news_eminternacional():
+            logger.info("/eminternacional")
+            ScrappingNewsEmInternacionalService().exec(json.dumps(request.get_json()))
+            return "I'm ok"
+
+
+        @app.route("/select-news-terra-emeducacao")
+        def select_news_emeducacao():
+            logger.info("/emeducacao")
+            SelectNewsEmEducacaoService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-emeducacao",methods=['POST'])
+        def scrapping_news_emeducacao():
+            logger.info("/emeducacao")
+            ScrappingNewsEmEducacaoService().exec(json.dumps(request.get_json()))
+            return "I'm ok"
+
+
+        @app.route("/select-news-terra-emtecnologia")
+        def select_news_emtecnologia():
+            logger.info("/emtecnologia")
+            SelectNewsEmTecnologiaService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-emtecnologia",methods=['POST'])
+        def scrapping_news_emtecnologia():
+            logger.info("/emtecnologia")
+            ScrappingNewsEmTecnologiaService().exec(json.dumps(request.get_json()))
+            return "I'm ok"
+
+
+
+        @app.route("/select-news-terra-emsaude")
+        def select_news_emsaude():
+            logger.info("/emsaude")
+            SelectNewsEmSaudeService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-emsaude",methods=['POST'])
+        def scrapping_news_emsaude():
+            logger.info("/emsaude")
+            ScrappingNewsEmSaudeService().exec(json.dumps(request.get_json()))
+            return "I'm ok"
+
+
+
+        @app.route("/select-news-terra-emcultura")
+        def select_news_emcultura():
+            logger.info("/emcultura")
+            SelectNewsEmCulturaService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-emcultura",methods=['POST'])
+        def scrapping_news_emcultura():
+            logger.info("/emcultura")
+            ScrappingNewsEmCulturaService().exec(json.dumps(request.get_json()))
+            return "I'm ok"
+
 
 
 
