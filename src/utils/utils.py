@@ -670,6 +670,105 @@ class Utils:
 
 
 
+  @classmethod
+  def extract_links_from_page_yahoo(self, url:str)->str:
+
+    soup = Utils.request_link(url)
+    links = soup.find_all('li', class_='js-stream-content Pos(r)')
+    linkos = []
+    no_text = ['/amp-stories/','/jogo/','/story/', 'noopener']
+    for link in links:
+      new_link = str(link).split('href=')[1].split('title="')[0].split('target=')[0].split('><')[0].replace('"','').replace(' ','')
+      for item in no_text:
+        if item in new_link:
+            new_link = ''
+    if new_link == '':
+      None
+    else:
+      linkos.append(new_link)
+    return(linkos)    
+
+
+  @classmethod
+  def extract_links_from_page_yahoo_finance(self, url:str)->str:
+
+    soup = Utils.request_link(url)
+    links = soup.find_all('li')
+    linkos = []
+    no_text = ['/amp-stories/','/jogo/','/story/', 'noopener','mail','search','rapidnofollow','noopener ','Notícias</a>','Esportes</a>',\
+            'Finanças</a>','Vida e Estilo</a>','Celebridades</a>','Cinema</a>','Mobile</a>','BOVESPA</a>','MERVAL</a>','quote']
+    linkos_aux = []
+    for link in links:
+        aux = link.find_all('a',href=True)
+        for i in range(0,len(aux)):
+            for item in no_text:
+                if item in str(aux[i]):
+                    aux[i] =''
+            aux_b = str(aux)
+        if ("['" in aux_b):
+            None
+        else:
+            linkos_aux.append(aux_b)
+
+    domn = 'https://br.'
+    domin = 'https://br.financas.yahoo.com'
+    auxa = str(linkos_aux).split('href=')
+    for i in range(1,len(auxa)):
+        new_link = str(auxa[i]).split('><')[0].replace('"','')
+        if domn in new_link:
+            None
+        else:
+            new_link = domin+new_link
+
+        linkos.append(new_link)
+
+
+    return(linkos)    
+
+
+  @classmethod
+  def extract_links_from_page_yahoo_sports(self, url:str)->str:
+
+    soup = Utils.request_link(url)
+    links = soup.find_all('li')
+    linkos = []
+    no_text = ['/amp-stories/','/jogo/','/story/', 'noopener','mail','search','rapidnofollow','noopener ','Notícias</a>','Esportes</a>',\
+                'Finanças</a>','Vida e Estilo</a>','Celebridades</a>','Cinema</a>','Mobile</a>','BOVESPA</a>','MERVAL</a>','quote']
+    no_text_g = ['/amp-stories/','/jogo/','/story/', 'noopener','mail','search','rapidnofollow','noopener ','NOTÍCIAS</a>','ESPORTER</a>',\
+                'FINANÇAS</a>','VIDA E ESTILO</a>','CELEBRIDADES</a>','CINEMA</a>','MOBILE</a>','BOVESPA</a>','MERVAL</a>','quote','Skip to Navigation',\
+                'MAIS','PÁGINA INICIAL','Skip to Main Content','ESPORTES','Sports','Skip to Related Content','Blogs','target="_self"',\
+                'Ajuda</a>','Sugestões</a>','Privacidade</a>','Sobre nossos anúncios</a>','Termos</a>','futebol/campeonato']
+    linkos_aux = []
+    for link in links:
+        aux = link.find_all('a',href=True)
+        for i in range(0,len(aux)):
+            for item in no_text:
+                if item in str(aux[i]):
+                    aux[i] =''
+            aux_b = str(aux)
+        if ("['" in aux_b):
+            None
+        else:
+            linkos_aux.append(aux_b)
+
+    domn = 'https://esportes.yahoo.com'
+    auxa = str(linkos_aux).split('href=')
+
+    for i in range(1,len(auxa)):
+        new_link = str(auxa[i]).split('><')[0].replace('"','')
+        if new_link in auxa[(i-1)]:
+            None
+        else: 
+            if domn in new_link:
+                None
+            else:
+                new_link = domn+new_link
+            linkos.append(new_link)
+
+
+    return(linkos)    
+
+
 
   @classmethod
   def month_convert(texto_horario):  

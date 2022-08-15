@@ -58,6 +58,9 @@ from src.domain.scrapping_news_tribunadoplanalto_service import ScrappingNewsTri
 from src.domain.scrapping_news_uol_economia_service import ScrappingNewsUolEconomiaService
 from src.domain.scrapping_news_uol_esporte_service import ScrappingNewsUolEsporteService
 from src.domain.scrapping_news_uol_noticias_service import ScrappingNewsUolNoticiasService
+from src.domain.scrapping_news_yahoo_esportes_service import ScrappingNewsYahooEsportesService
+from src.domain.scrapping_news_yahoo_financas_service import ScrappingNewsYahooFinancasService
+from src.domain.scrapping_news_yahoo_noticias_service import ScrappingNewsYahooNoticiasService
 from src.domain.select_news_aredacao_service import SelectNewsARedacaoService
 from src.domain.select_news_broadcast_agro_service import SelectNewsBroadcastAgroService
 from src.domain.select_news_correio24horas_service import SelectNewsCorreio24horasService
@@ -112,6 +115,9 @@ from src.domain.select_news_tribunadoplanalto_service import SelectNewsTribunado
 from src.domain.select_news_uol_economia_service import SelectNewsUolEconomiaService
 from src.domain.select_news_uol_esporte_service import SelectNewsUolEsporteService
 from src.domain.select_news_uol_noticias_service import SelectNewsUolNoticiasService
+from src.domain.select_news_yahoo_esportes_service import SelectNewsYahooEsportesService
+from src.domain.select_news_yahoo_financas_service import SelectNewsYahooFinancasService
+from src.domain.select_news_yahoo_noticias_service import SelectNewsYahooNoticiasService
 from ..domain.scrapping_news_estadao_service import ScrappingNewsEstadaoService
 from src.domain.scrapping_news_folha_service import ScrappingNewsFolhaService
 from src.domain.select_news_folha_service import SelectNewsFolhaService
@@ -702,7 +708,7 @@ class RouteApp():
             return "I'm ok"
 
 
-        @app.route("/select-news-terra-ig")
+        @app.route("/select-news-ig")
         def select_news_ig():
             logger.info("/ig")
             SelectNewsIgService().exec()
@@ -715,7 +721,7 @@ class RouteApp():
             return "I'm ok"
 
 
-        @app.route("/select-news-terra-mixvale")
+        @app.route("/select-news-mixvale")
         def select_news_mixvale():
             logger.info("/mixvale")
             SelectNewsMixValeService().exec()
@@ -727,7 +733,7 @@ class RouteApp():
             ScrappingNewsMixValeService().exec(json.dumps(request.get_json()))
             return "I'm ok"
 
-        @app.route("/select-news-terra-emgerais")
+        @app.route("/select-news-emgerais")
         def select_news_emgerais():
             logger.info("/emgerais")
             SelectNewsEmGeraisService().exec()
@@ -740,7 +746,7 @@ class RouteApp():
             return "I'm ok"
 
 
-        @app.route("/select-news-terra-empolitica")
+        @app.route("/select-news-empolitica")
         def select_news_empolitica():
             logger.info("/empolitica")
             SelectNewsEmPoliticaService().exec()
@@ -753,7 +759,7 @@ class RouteApp():
             return "I'm ok"
 
 
-        @app.route("/select-news-terra-emeconomia")
+        @app.route("/select-news-emeconomia")
         def select_news_emeconomia():
             logger.info("/emeconomia")
             SelectNewsEmEconomiaService().exec()
@@ -765,7 +771,7 @@ class RouteApp():
             ScrappingNewsEmEconomiaService().exec(json.dumps(request.get_json()))
             return "I'm ok"
 
-        @app.route("/select-news-terra-emnacional")
+        @app.route("/select-news-emnacional")
         def select_news_emnacional():
             logger.info("/emnacional")
             SelectNewsEmNacionalService().exec()
@@ -778,7 +784,7 @@ class RouteApp():
             return "I'm ok"
 
 
-        @app.route("/select-news-terra-eminternacional")
+        @app.route("/select-news-eminternacional")
         def select_news_eminternacional():
             logger.info("/eminternacional")
             SelectNewsEmInternacionalService().exec()
@@ -791,7 +797,7 @@ class RouteApp():
             return "I'm ok"
 
 
-        @app.route("/select-news-terra-emeducacao")
+        @app.route("/select-news-emeducacao")
         def select_news_emeducacao():
             logger.info("/emeducacao")
             SelectNewsEmEducacaoService().exec()
@@ -804,7 +810,7 @@ class RouteApp():
             return "I'm ok"
 
 
-        @app.route("/select-news-terra-emtecnologia")
+        @app.route("/select-news-emtecnologia")
         def select_news_emtecnologia():
             logger.info("/emtecnologia")
             SelectNewsEmTecnologiaService().exec()
@@ -818,7 +824,7 @@ class RouteApp():
 
 
 
-        @app.route("/select-news-terra-emsaude")
+        @app.route("/select-news-emsaude")
         def select_news_emsaude():
             logger.info("/emsaude")
             SelectNewsEmSaudeService().exec()
@@ -832,7 +838,7 @@ class RouteApp():
 
 
 
-        @app.route("/select-news-terra-emcultura")
+        @app.route("/select-news-emcultura")
         def select_news_emcultura():
             logger.info("/emcultura")
             SelectNewsEmCulturaService().exec()
@@ -843,6 +849,46 @@ class RouteApp():
             logger.info("/emcultura")
             ScrappingNewsEmCulturaService().exec(json.dumps(request.get_json()))
             return "I'm ok"
+
+
+        @app.route("/select-news-yahoo-noticias")
+        def select_news_yahoo_noticias():
+            logger.info("/yahoo-noticias")
+            SelectNewsYahooNoticiasService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-yahoo-noticias",methods=['POST'])
+        def scrapping_news_yahoo_noticias():
+            logger.info("/yahoo-noticias")
+            ScrappingNewsYahooNoticiasService().exec(json.dumps(request.get_json()))
+            return "I'm ok"
+
+
+        @app.route("/select-news-yahoo-financas")
+        def select_news_yahoo_financas():
+            logger.info("/yahoo-financas")
+            SelectNewsYahooFinancasService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-yahoo-financas",methods=['POST'])
+        def scrapping_news_yahoo_financas():
+            logger.info("/yahoo-financas")
+            ScrappingNewsYahooFinancasService().exec(json.dumps(request.get_json()))
+            return "I'm ok"
+
+
+        @app.route("/select-news-yahoo-esportes")
+        def select_news_yahoo_esportes():
+            logger.info("/yahoo-esportes")
+            SelectNewsYahooEsportesService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-yahoo-esportes",methods=['POST'])
+        def scrapping_news_yahoo_esportes():
+            logger.info("/yahoo-esportes")
+            ScrappingNewsYahooEsportesService().exec(json.dumps(request.get_json()))
+            return "I'm ok"
+
 
 
 
