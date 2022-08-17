@@ -769,6 +769,181 @@ class Utils:
     return(linkos)    
 
 
+  @classmethod
+  def extract_links_from_page_ndmais(self, url:str)->str:
+
+    soup = Utils.request_link(url)
+    links = soup.find_all('a',class_='title')
+    linkos = []
+    no_text = ['/amp-stories/','/jogo/','/story/', 'noopener','mail','search','rapidnofollow','noopener ','Notícias</a>','Esportes</a>',\
+            'Finanças</a>','Vida e Estilo</a>','Celebridades</a>','Cinema</a>','Mobile</a>','BOVESPA</a>','MERVAL</a>','quote']
+    for link in links:
+      new_link = str(link).split('href=')[1].split('title="')[0].split('target=')[0].split('><')[0].replace('"','').replace(' ','')
+      for item in no_text:
+        if item in new_link:
+            new_link = ''
+    if new_link == '':
+      None
+    else:
+      linkos.append(new_link)
+    return(linkos)    
+
+  @classmethod
+  def extract_links_from_page_lance(self, url:str)->str:
+
+    soup = Utils.request_link(url)
+    domain = 'https://www.lance.com.br'
+    links = soup.find_all('div',class_='container-card')
+    linkos = []
+    no_text = ['/amp-stories/','/jogo/','/story/', 'noopener','mail','search','rapidnofollow','noopener ','Notícias</a>','Esportes</a>',\
+            'Finanças</a>','Vida e Estilo</a>','Celebridades</a>','Cinema</a>','Mobile</a>','BOVESPA</a>','MERVAL</a>','quote','/web-stories/','/enquetes/']
+    for link in links:
+      new_link = str(link).split('href=')[1].split('title="')[0].split('target=')[0].split('><')[0].split('id="')[0].replace('"','').replace(' ','')
+      for item in no_text:
+        if item in new_link:
+            new_link = ''
+    if new_link == '':
+      None
+    else:
+      linkos.append(domain+new_link)
+    return(linkos)    
+
+
+  @classmethod
+  def extract_links_from_page_odocumento(self, url:str)->str:
+
+    soup = Utils.request_link(url)
+    links = soup.find_all('li',class_='mvp-blog-story-wrap left relative infinite-post')
+    linkos = []
+    no_text = ['/amp-stories/','/jogo/','/story/', 'noopener','mail','search','rapidnofollow','noopener ','Notícias</a>','Esportes</a>',\
+            'Finanças</a>','Vida e Estilo</a>','Celebridades</a>','Cinema</a>','Mobile</a>','BOVESPA</a>','MERVAL</a>','quote','/web-stories/','/enquetes/']
+    for link in links:
+      new_link = str(link).split('href=')[1].split('title="')[0].split('target=')[0].split('><')[0].split('id="')[0].split('rel="')[0].replace('"','').replace(' ','')
+      for item in no_text:
+        if item in new_link:
+            new_link = ''
+    if new_link == '':
+      None
+    else:
+      linkos.append(new_link)
+    return(linkos)   
+    
+  @classmethod
+  def extract_links_from_page_revistaforum(self, url:str)->str:
+
+    soup = Utils.request_link(url)
+    links = soup.find_all('div')
+    no_text = ['/amp-stories/','/jogo/','/story/', 'noopener','mail','search','rapidnofollow','noopener ','Notícias</a>','Esportes</a>',\
+                'Finanças</a>','Vida e Estilo</a>','Celebridades</a>','Cinema</a>','Mobile</a>','BOVESPA</a>','MERVAL</a>','quote','/web-stories/','/enquetes/']
+
+    linkosauxa = []
+    linkos  = []
+    domain = "https://revistaforum.com.br"
+
+    for link in links:
+        auxa = link.find_all('h2', class_='titulo')
+        linkosauxa.append(auxa)
+    # 
+    linkosauxa = str(linkosauxa).replace('[]','').replace(',','').split('href=')
+    for i in range(1,len(linkosauxa)):
+        auxb = linkosauxa[i].split('">')[0].replace('"','')
+        linkos.append(domain+auxb)
+    linkos = list(set(linkos))
+    return(linkos)    
+
+
+  @classmethod
+  def extract_links_from_page_portal_holanda(self, url:str)->str:
+
+    soup = Utils.request_link(url)
+    links = soup.find_all('div',class_='columns')
+    no_text = ['/amp-stories/','/jogo/','/story/', 'noopener','mail','search','rapidnofollow','noopener ','Notícias</a>','Esportes</a>',\
+            'Finanças</a>','Vida e Estilo</a>','Celebridades</a>','Cinema</a>','Mobile</a>','BOVESPA</a>','MERVAL</a>','quote',\
+            '/web-stories/','/enquetes/','instagram/','comscore','gbrcomponentes','instagram.','bit.ly','digitalaudit.ivcbrasil','amazonasdireito.com.br','taxonomy','videojs.com/','turismo-0']
+
+    linkosauxa = []
+    linkosauxb  =[]
+    linkos  = []
+    domain = "https://www.portaldoholanda.com.br"
+
+    for link in links:
+        auxa = link.find_all('a', href = True)
+        linkosauxa.append(auxa)
+    # 
+    linkosauxa = str(linkosauxa).replace('[]','').replace(',','').split('href=')
+    for i in range(1,len(linkosauxa)):
+        auxb = linkosauxa[i].split('">')[0].split('title=')[0].replace('"','').strip()
+        for item in no_text:
+          if item in linkosauxa[i]:
+              auxb = ''
+
+        if(domain in auxb):
+            None
+        else:
+            if auxb == '':
+                None
+            elif str(auxb)[0]=='/':
+                linkosauxb.append(domain+auxb)
+            else:
+                linkosauxb.append(domain+'/'+auxb)
+
+    link_exclude=domain
+    link_exclude2=domain+'/'
+
+    linkosauxb = list(set(linkosauxb))
+    linkos = []
+    for i in range(0,len(linkosauxb)):
+        if link_exclude ==linkosauxb[i]:
+            None
+        elif link_exclude2 ==linkosauxb[i]:
+            None
+        else:
+            linkos.append(linkosauxb[i])
+
+    return(linkos)    
+
+
+  @classmethod
+  def extract_links_from_page_gazeta_do_povo(self, url:str)->str:
+
+    soup = Utils.request_link(url)
+    links = soup.find_all('div',class_='item-list')
+    no_text = ['/amp-stories/','/jogo/','/story/', 'noopener','mail','search','rapidnofollow','noopener ','Notícias</a>','Esportes</a>',\
+            'Finanças</a>','Vida e Estilo</a>','Celebridades</a>','Cinema</a>','Mobile</a>','BOVESPA</a>','MERVAL</a>','quote',\
+            '/web-stories/','/enquetes/','instagram/','comscore','gbrcomponentes','instagram.','bit.ly','digitalaudit.ivcbrasil','amazonasdireito.com.br','taxonomy','videojs.com/','turismo-0']
+
+    linkosauxa = []
+    linkos  = []
+    domain = "https://www.gazetadopovo.com.br"
+    domain_2 = "umdoisesportes"
+
+    for link in links:
+        auxa = link.find_all('a', href = True)
+        linkosauxa.append(auxa)
+    # 
+    linkosauxa = str(linkosauxa).replace('[]','').replace(',','').split('href=')
+    for i in range(1,len(linkosauxa)):
+        auxb = linkosauxa[i].split('">')[0].split('title=')[0].replace('"','').strip()
+        for item in no_text:
+          if item in linkosauxa[i]:
+              auxb = ''
+
+        if(domain in auxb):
+            None
+        else:
+          if auxb == '':
+              None
+          elif domain_2 in auxb:
+              linkos.append(auxb)
+          elif str(auxb)[0]=='/':
+              linkos.append(domain+auxb)
+          else:
+              linkos.append(domain+'/'+auxb)
+
+    return(linkos)   
+
+
+
 
   @classmethod
   def month_convert(texto_horario):  
