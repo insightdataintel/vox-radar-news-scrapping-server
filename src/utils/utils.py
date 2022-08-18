@@ -944,6 +944,77 @@ class Utils:
 
 
 
+  @classmethod
+  def extract_links_from_page_jovempan(self, url:str)->str:
+
+    soup = Utils.request_link(url)
+    links = soup.find_all('div',class_='col-xs-5 col-md-4')
+    no_text = ['/amp-stories/','/jogo/','/story/', 'noopener','mail','search','rapidnofollow','noopener ','Notícias</a>','Esportes</a>',\
+            'Finanças</a>','Vida e Estilo</a>','Celebridades</a>','Cinema</a>','Mobile</a>','BOVESPA</a>','MERVAL</a>','quote',\
+            '/web-stories/','/enquetes/','instagram/','comscore','gbrcomponentes','instagram.','bit.ly','digitalaudit.ivcbrasil','amazonasdireito.com.br','taxonomy','videojs.com/','turismo-0']
+
+    linkosauxa = []
+    linkos  = []
+
+    for link in links:
+        auxa = link.find_all('a', href = True)
+        linkosauxa.append(auxa)
+    # 
+    linkosauxa = str(linkosauxa).replace('[]','').replace(',','').split('href=')
+    for i in range(1,len(linkosauxa)):
+        auxb = linkosauxa[i].split('">')[0].split('title=')[0].replace('"','').strip()
+        for item in no_text:
+            if item in linkosauxa[i]:
+                auxb = ''
+        if auxb== '':
+            None
+        else:
+            linkos.append(auxb)
+
+    return(linkos)   
+
+
+
+  @classmethod
+  def extract_links_from_page_campograndenews(self, url:str)->str:
+
+    soup = Utils.request_link(url)
+    links = soup.find_all('div',class_='row')
+    no_text = ['/amp-stories/','/jogo/','/story/', 'noopener','mail','search','rapidnofollow','noopener ','Notícias</a>','Esportes</a>',\
+            'Finanças</a>','Vida e Estilo</a>','Celebridades</a>','Cinema</a>','Mobile</a>','BOVESPA</a>','MERVAL</a>','quote',\
+            '/web-stories/','/enquetes/','instagram/','comscore','gbrcomponentes','instagram.','bit.ly','digitalaudit.ivcbrasil','amazonasdireito.com.br','taxonomy',\
+                'videojs.com/','turismo-0','facebook.com','campograndenews','https://twitter.com','ultimas-noticias','#','wa.me/','mais-lidas']
+
+    linkosauxa = []
+    linkosauxb  =[]
+    linkos = []
+    domainpart = 'https://www.campograndenews.com.br'
+
+    for link in links:
+        auxa = link.find_all('a', href = True)
+        linkosauxa.append(str(auxa))
+
+
+    # # # # # 
+
+    linkosauxa = str(linkosauxa).replace('[]','').replace(',','').split('href=')
+    for i in range(1,len(linkosauxa)):
+        auxb = linkosauxa[i].split('" target')[0].split('">')[0].replace('"','').strip()
+        for item in no_text:
+            if item in linkosauxa[i]:
+                auxb = ''
+        if auxb== '':
+            None
+        else:
+            linkosauxb.append(auxb)
+
+    linkosauxb = list(set(linkosauxb))
+    for link in linkosauxb:
+        linkos.append(domainpart+link)
+
+    return(linkos)   
+
+
 
   @classmethod
   def month_convert(texto_horario):  

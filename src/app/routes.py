@@ -7,6 +7,7 @@ from flask_cors import CORS
 from logzero import logger
 from src.domain.scrapping_news_aredacao_service import ScrappingNewsARedacaoService
 from src.domain.scrapping_news_broadcast_agro_service import ScrappingNewsBroadcastAgroService
+from src.domain.scrapping_news_campo_grande_news_service import ScrappingNewsCampoGrandeNewsService
 from src.domain.scrapping_news_correio24horas_service import ScrappingNewsCorreio24horasService
 from src.domain.scrapping_news_correiobraziliense_service import ScrappingNewsCorreioBrazilienseService
 from src.domain.scrapping_news_diariodamanha_service import ScrappingNewsDiariodaManhaService
@@ -33,6 +34,7 @@ from src.domain.scrapping_news_istoe_service import ScrappingNewsIstoeService
 from src.domain.scrapping_news_jornalahora_service import ScrappingNewsJornalAHoraService
 from src.domain.scrapping_news_jornalopcao_service import ScrappingNewsJornalOpcaoService
 from src.domain.scrapping_news_jota_service import ScrappingNewsJotaService
+from src.domain.scrapping_news_jovempan_service import ScrappingNewsJovemPanService
 from src.domain.scrapping_news_lance_service import ScrappingNewsLanceService
 from src.domain.scrapping_news_maisgoias_service import ScrappingNewsMaisGoiasService
 from src.domain.scrapping_news_metropoles_service import ScrappingNewsMetropolesService
@@ -107,8 +109,10 @@ from src.domain.select_news_ohoje_service import SelectNewsOHojeService
 from src.domain.select_news_opopular_service import SelectNewsOPopularService
 from src.domain.select_news_opovonoticias_service import SelectNewsOpovoNoticiasService
 from src.domain.select_news_otempo_supernoticia_service import SelectNewsOtemposupernoticiaService
+from src.domain.select_news_portal_campo_grande_news_service import SelectNewsCampoGrandeNewsService
 from src.domain.select_news_portal_gazeta_do_povo_service import SelectNewsGazetadoPovoService
 from src.domain.select_news_portal_holanda_service import SelectNewsPortalHolandaService
+from src.domain.select_news_portal_jovempan_service import SelectNewsJovemPanService
 from src.domain.select_news_r7_agronegocios_service import SelectNewsR7AgronegociosService
 from src.domain.select_news_r7_brasilia_service import SelectNewsR7BrasiliaService
 from src.domain.select_news_r7_economia_service import SelectNewsR7EconomiaService
@@ -977,6 +981,31 @@ class RouteApp():
             logger.info("/gazeta-do-povo")
             ScrappingNewsGazetadoPovoService().exec(json.dumps(request.get_json()))
             return "I'm ok"
+
+
+        @app.route("/select-news-jovempan")
+        def select_news_jovempan():
+            logger.info("/jovempan")
+            SelectNewsJovemPanService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-jovempan",methods=['POST'])
+        def scrapping_news_jovempan():
+            logger.info("/jovempan")
+            ScrappingNewsJovemPanService().exec(json.dumps(request.get_json()))
+            return "I'm ok"
+
+        @app.route("/select-news-campo-grande-news")
+        def select_news_campograndenews():
+            logger.info("/campo-grande-news")
+            SelectNewsCampoGrandeNewsService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-campo-grande-news",methods=['POST'])
+        def scrapping_news_campograndenews():
+            logger.info("/campo-grande-news")
+            ScrappingNewsCampoGrandeNewsService().exec(json.dumps(request.get_json()))
+            return "I'm ok"            
 
 
 
