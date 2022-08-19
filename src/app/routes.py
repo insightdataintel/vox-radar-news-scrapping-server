@@ -30,6 +30,7 @@ from src.domain.scrapping_news_globo_service import ScrappingNewsGloboService
 from src.domain.scrapping_news_globo_valor_service import ScrappingNewsGloboValorService
 from src.domain.scrapping_news_gshow_service import ScrappingNewsGShowService
 from src.domain.scrapping_news_ig_service import ScrappingNewsIgService
+from src.domain.scrapping_news_istoe_dinheiro_service import ScrappingNewsIstoeDinheiroService
 from src.domain.scrapping_news_istoe_service import ScrappingNewsIstoeService
 from src.domain.scrapping_news_jornalahora_service import ScrappingNewsJornalAHoraService
 from src.domain.scrapping_news_jornalopcao_service import ScrappingNewsJornalOpcaoService
@@ -39,6 +40,7 @@ from src.domain.scrapping_news_lance_service import ScrappingNewsLanceService
 from src.domain.scrapping_news_maisgoias_service import ScrappingNewsMaisGoiasService
 from src.domain.scrapping_news_metropoles_service import ScrappingNewsMetropolesService
 from src.domain.scrapping_news_mix_vale_service import ScrappingNewsMixValeService
+from src.domain.scrapping_news_money_times_service import ScrappingNewsMoneyTimesService
 from src.domain.scrapping_news_ndmais_service import ScrappingNewsNdmaisService
 from src.domain.scrapping_news_o_globo_service import ScrappingNewsOGloboService
 from src.domain.scrapping_news_oantagonista_service import ScrappingNewsOAntagonistaService
@@ -101,6 +103,7 @@ from src.domain.select_news_lance_service import SelectNewsLanceService
 from src.domain.select_news_maisgoias_service import SelectNewsMaisGoiasService
 from src.domain.select_news_metropoles_service import SelectNewsMetropolesService
 from src.domain.select_news_mix_vale_service import SelectNewsMixValeService
+from src.domain.select_news_money_times_service import SelectNewsMoneyTimesService
 from src.domain.select_news_ndmais_service import SelectNewsNdmaisService
 from src.domain.select_news_o_globo_service import SelectNewsOGloboService
 from src.domain.select_news_oantagonista_service import SelectNewsOAntagonistaService
@@ -109,10 +112,11 @@ from src.domain.select_news_ohoje_service import SelectNewsOHojeService
 from src.domain.select_news_opopular_service import SelectNewsOPopularService
 from src.domain.select_news_opovonoticias_service import SelectNewsOpovoNoticiasService
 from src.domain.select_news_otempo_supernoticia_service import SelectNewsOtemposupernoticiaService
-from src.domain.select_news_portal_campo_grande_news_service import SelectNewsCampoGrandeNewsService
-from src.domain.select_news_portal_gazeta_do_povo_service import SelectNewsGazetadoPovoService
+from src.domain.select_news_campo_grande_news_service import SelectNewsCampoGrandeNewsService
+from src.domain.select_news_gazeta_do_povo_service import SelectNewsGazetadoPovoService
 from src.domain.select_news_portal_holanda_service import SelectNewsPortalHolandaService
-from src.domain.select_news_portal_jovempan_service import SelectNewsJovemPanService
+from src.domain.select_news_istoe_dinheiro_service import SelectNewsIstoeDinheiroService
+from src.domain.select_news_jovempan_service import SelectNewsJovemPanService
 from src.domain.select_news_r7_agronegocios_service import SelectNewsR7AgronegociosService
 from src.domain.select_news_r7_brasilia_service import SelectNewsR7BrasiliaService
 from src.domain.select_news_r7_economia_service import SelectNewsR7EconomiaService
@@ -1006,6 +1010,32 @@ class RouteApp():
             logger.info("/campo-grande-news")
             ScrappingNewsCampoGrandeNewsService().exec(json.dumps(request.get_json()))
             return "I'm ok"            
+
+        @app.route("/select-news-istoe-dinheiro")
+        def select_news_istoe_dinheiro():
+            logger.info("/istoe-dinheiro")
+            SelectNewsIstoeDinheiroService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-istoe-dinheiro",methods=['POST'])
+        def scrapping_news_istoe_dinheiro():
+            logger.info("/istoe-dinheiro")
+            ScrappingNewsIstoeDinheiroService().exec(json.dumps(request.get_json()))
+            return "I'm ok"   
+
+        @app.route("/select-news-money-times")
+        def select_news_money_times():
+            logger.info("/money-times")
+            SelectNewsMoneyTimesService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-money-times",methods=['POST'])
+        def scrapping_news_money_times():
+            logger.info("/money-times")
+            ScrappingNewsMoneyTimesService().exec(json.dumps(request.get_json()))
+            return "I'm ok"   
+
+
 
 
 
