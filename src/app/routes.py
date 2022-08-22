@@ -12,6 +12,7 @@ from src.domain.scrapping_news_correio24horas_service import ScrappingNewsCorrei
 from src.domain.scrapping_news_correiobraziliense_service import ScrappingNewsCorreioBrazilienseService
 from src.domain.scrapping_news_diariodamanha_service import ScrappingNewsDiariodaManhaService
 from src.domain.scrapping_news_dinheiro_rural_service import ScrappingNewsDinheiroRuralService
+from src.domain.scrapping_news_ebc_service import ScrappingNewsEbcService
 from src.domain.scrapping_news_em_cultura_service import ScrappingNewsEmCulturaService
 from src.domain.scrapping_news_em_economia_service import ScrappingNewsEmEconomiaService
 from src.domain.scrapping_news_em_educacao_service import ScrappingNewsEmEducacaoService
@@ -49,6 +50,7 @@ from src.domain.scrapping_news_ohoje_service import ScrappingNewsOHojeService
 from src.domain.scrapping_news_opopular_service import ScrappingNewsOPopularService
 from src.domain.scrapping_news_opovo_noticias_service import ScrappingNewsOpovoNoticiasService
 from src.domain.scrapping_news_otempo_supernoticia_service import ScrappingNewsOtemposupernoticiaService
+from src.domain.scrapping_news_poliarquia_service import ScrappingNewsPoliarquiaService
 from src.domain.scrapping_news_portal_holanda_service import ScrappingNewsPortalHolandaService
 from src.domain.scrapping_news_r7_agronegocios_service import ScrappingNewsR7AgronegociosService
 from src.domain.scrapping_news_r7_brasilia_service import ScrappingNewsR7BrasiliaService
@@ -77,6 +79,7 @@ from src.domain.select_news_correio24horas_service import SelectNewsCorreio24hor
 from src.domain.select_news_correiobraziliense_service import SelectNewsCorreioBrazilienseService
 from src.domain.select_news_diariodamanha_service import SelectNewsDiariodaManhaService
 from src.domain.select_news_dinheiro_rural_service import SelectNewsDinheiroRuralService
+from src.domain.select_news_ebc_service import SelectNewsEbcService
 from src.domain.select_news_em_cultura_service import SelectNewsEmCulturaService
 from src.domain.select_news_em_economia_service import SelectNewsEmEconomiaService
 from src.domain.select_news_em_educacao_service import SelectNewsEmEducacaoService
@@ -114,6 +117,7 @@ from src.domain.select_news_opovonoticias_service import SelectNewsOpovoNoticias
 from src.domain.select_news_otempo_supernoticia_service import SelectNewsOtemposupernoticiaService
 from src.domain.select_news_campo_grande_news_service import SelectNewsCampoGrandeNewsService
 from src.domain.select_news_gazeta_do_povo_service import SelectNewsGazetadoPovoService
+from src.domain.select_news_poliarquia_service import SelectNewsPoliarquiaService
 from src.domain.select_news_portal_holanda_service import SelectNewsPortalHolandaService
 from src.domain.select_news_istoe_dinheiro_service import SelectNewsIstoeDinheiroService
 from src.domain.select_news_jovempan_service import SelectNewsJovemPanService
@@ -1034,6 +1038,32 @@ class RouteApp():
             logger.info("/money-times")
             ScrappingNewsMoneyTimesService().exec(json.dumps(request.get_json()))
             return "I'm ok"   
+
+
+        @app.route("/select-news-poliarquia")
+        def select_news_poliarquia():
+            logger.info("/poliarquia")
+            SelectNewsPoliarquiaService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-poliarquia",methods=['POST'])
+        def scrapping_news_poliarquia():
+            logger.info("/poliarquia")
+            ScrappingNewsPoliarquiaService().exec(json.dumps(request.get_json()))
+            return "I'm ok"   
+
+        @app.route("/select-news-ebc")
+        def select_news_ebc():
+            logger.info("/ebc")
+            SelectNewsEbcService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-ebc",methods=['POST'])
+        def scrapping_news_ebc():
+            logger.info("/ebc")
+            ScrappingNewsEbcService().exec(json.dumps(request.get_json()))
+            return "I'm ok"   
+
 
 
 
