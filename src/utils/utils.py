@@ -1176,6 +1176,181 @@ class Utils:
     return(linkos)   
 
 
+  @classmethod
+  def extract_links_from_page_exame(self, url:str)->str:
+
+    soup = Utils.request_link(url)
+    links = soup.find_all('h2', class_='sc-ca4a5a85-1 jra-dax')
+    no_text = ['/amp-stories/','/jogo/','/story/', 'noopener','mail','search','rapidnofollow','noopener ','Notícias</a>','Esportes</a>',\
+            'Finanças</a>','Vida e Estilo</a>','Celebridades</a>','Cinema</a>','Mobile</a>','BOVESPA</a>','MERVAL</a>','quote',\
+            '/web-stories/','/enquetes/','instagram/','comscore','gbrcomponentes','instagram.','bit.ly','digitalaudit.ivcbrasil','amazonasdireito.com.br','taxonomy',\
+                'videojs.com/','turismo-0','facebook.com','campograndenews','https://twitter.com','ultimas-noticias','#','wa.me/','mais-lidas','/ultimas-noticias/tag/']
+
+    linkosauxa = []
+    linkosauxb  =[]
+    linkos = []
+    domain = 'https://exame.com'
+
+    for link in links:
+        auxa = link.find('a',href=True)
+        linkosauxa.append(str(auxa))
+    linkosauxa = list(set(linkosauxa))
+
+    # # # # # # # 
+
+    linkosauxa = str(linkosauxa).replace('[]','').replace(',','').split('href=')
+    for i in range(1,len(linkosauxa)):
+        auxb = linkosauxa[i].split('rel="bookmark"')[0].split('">')[0].split('" title')[0].replace('"','').strip()
+        for item in no_text:
+            if item in linkosauxa[i]:
+                auxb = ''
+        if auxb== '':
+            None
+        else:
+            linkosauxb.append(auxb)
+
+    temp = ''
+    linkosauxb = list(set(linkosauxb))
+    for i in range(0,len(linkosauxb)):
+        for j in range(1,len(linkosauxb)):
+            if str(linkosauxb[i]) in str(linkosauxb[j]):
+                temp = linkosauxb[j]
+
+        if temp == '':
+            None
+        else:
+            linkos.append(domain + temp)
+
+    return(linkos)   
+
+
+
+
+  @classmethod
+  def extract_links_from_page_brasil247(self, url:str)->str:
+
+    soup = Utils.request_link(url)
+    links = soup.find_all('h3', class_='articleGrid__headline')
+    no_text = ['/amp-stories/','/jogo/','/story/', 'noopener','mail','search','rapidnofollow','noopener ','Notícias</a>','Esportes</a>',\
+            'Finanças</a>','Vida e Estilo</a>','Celebridades</a>','Cinema</a>','Mobile</a>','BOVESPA</a>','MERVAL</a>','quote',\
+            '/web-stories/','/enquetes/','instagram/','comscore','gbrcomponentes','instagram.','bit.ly','digitalaudit.ivcbrasil','amazonasdireito.com.br','taxonomy',\
+                'videojs.com/','turismo-0','facebook.com','campograndenews','https://twitter.com','ultimas-noticias','#','wa.me/','mais-lidas','/ultimas-noticias/tag/']
+
+    linkosauxa = []
+    linkosauxb  =[]
+    linkos = []
+   
+
+    for link in links:
+        auxa = link.find('a',href=True)
+        linkosauxa.append(str(auxa))
+    linkosauxa = list(set(linkosauxa))
+
+    # # # # # # # 
+
+    linkosauxa = str(linkosauxa).replace('[]','').replace(',','').split('href=')
+    for i in range(1,len(linkosauxa)):
+        auxb = linkosauxa[i].split('rel="bookmark"')[0].split('">')[0].split('" title')[0].replace('"','').strip()
+        for item in no_text:
+            if item in linkosauxa[i]:
+                auxb = ''
+        if auxb== '':
+            None
+        else:
+            linkosauxb.append(auxb)
+
+    temp = ''
+    linkosauxb = list(set(linkosauxb))
+    for i in range(0,len(linkosauxb)):
+        for j in range(1,len(linkosauxb)):
+            if str(linkosauxb[i]) in str(linkosauxb[j]):
+                temp = linkosauxb[j]
+
+        if temp == '':
+            None
+        else:
+            linkos.append(temp)
+
+    return(linkos)   
+
+
+
+
+
+  @classmethod
+  def extract_links_from_page_noticiasominuto(self, url:str)->str:
+
+    soup = Utils.request_link(url)
+    links = soup.find_all('p', class_='article-thumb-text')
+    no_text = ['/amp-stories/','/jogo/','/story/', 'noopener','mail','search','rapidnofollow','noopener ','Notícias</a>','Esportes</a>',\
+            'Finanças</a>','Vida e Estilo</a>','Celebridades</a>','Cinema</a>','Mobile</a>','BOVESPA</a>','MERVAL</a>','quote',\
+            '/web-stories/','/enquetes/','instagram/','comscore','gbrcomponentes','instagram.','bit.ly','digitalaudit.ivcbrasil','amazonasdireito.com.br','taxonomy',\
+                'videojs.com/','turismo-0','facebook.com','campograndenews','https://twitter.com','ultimas-noticias','#','wa.me/','mais-lidas','/ultimas-noticias/tag/']
+
+    linkosauxa = []
+    linkosauxb  =[]
+    linkos = []
+   
+
+    for link in links:
+        auxa = link.find('a',href=True)
+        linkosauxa.append(str(auxa))
+    linkosauxa = list(set(linkosauxa))
+
+    # # # # # # # 
+
+    linkosauxa = str(linkosauxa).replace('[]','').replace(',','').split('href=')
+    for i in range(1,len(linkosauxa)):
+        auxb = linkosauxa[i].split('rel="bookmark"')[0].split('">')[0].split('" title')[0].replace('"','').strip()
+        for item in no_text:
+            if item in linkosauxa[i]:
+                auxb = ''
+        if auxb== '':
+            None
+        else:
+            linkosauxb.append(auxb)
+
+    temp = ''
+    linkosauxb = list(set(linkosauxb))
+    for i in range(0,len(linkosauxb)):
+        for j in range(1,len(linkosauxb)):
+            if str(linkosauxb[i]) in str(linkosauxb[j]):
+                temp = linkosauxb[j]
+
+        if temp == '':
+            None
+        else:
+            linkos.append(temp)
+
+    return(linkos)   
+
+  @classmethod
+  def extract_links_from_page_noticiasconcursos(self, url:str)->str:
+
+    soup = Utils.request_link(url)
+    links = soup.find_all('a', class_='img-holder')
+    no_text = ['/amp-stories/','/jogo/','/story/', 'noopener','mail','search','rapidnofollow','noopener ','Notícias</a>','Esportes</a>',\
+            'Finanças</a>','Vida e Estilo</a>','Celebridades</a>','Cinema</a>','Mobile</a>','BOVESPA</a>','MERVAL</a>','quote',\
+            '/web-stories/','/enquetes/','instagram/','comscore','gbrcomponentes','instagram.','bit.ly','digitalaudit.ivcbrasil','amazonasdireito.com.br','taxonomy',\
+                'videojs.com/','turismo-0','facebook.com','campograndenews','https://twitter.com','ultimas-noticias','#','wa.me/','mais-lidas','/ultimas-noticias/tag/']
+
+    linkosauxa = []
+    linkos = []
+    domain = 'https://noticiasconcursos.com.br/'
+   
+    linkosauxa = str(links).split('href=')
+    for i in range(1,len(linkosauxa)):
+        auxb = linkosauxa[i].split('" style')[0].split('" title')[0].replace('"','').strip()
+        for item in no_text:
+            if item in linkosauxa[i]:
+                auxb = ''
+        if auxb== '':
+            None
+        else:
+            linkos.append(domain + auxb)
+
+    return(linkos)   
+
 
 
 
