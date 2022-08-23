@@ -6,9 +6,13 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 from logzero import logger
 from src.domain.scrapping_news_aredacao_service import ScrappingNewsARedacaoService
+from src.domain.scrapping_news_bem_parana_esportes_service import ScrappingNewsBemParanaEsportesService
+from src.domain.scrapping_news_bem_parana_noticias_service import ScrappingNewsBemParanaNoticiasService
+from src.domain.scrapping_news_bem_parana_politica_service import ScrappingNewsBemParanaPoliticaService
 from src.domain.scrapping_news_brasil247_service import ScrappingNewsBrasil247Service
 from src.domain.scrapping_news_broadcast_agro_service import ScrappingNewsBroadcastAgroService
 from src.domain.scrapping_news_campo_grande_news_service import ScrappingNewsCampoGrandeNewsService
+from src.domain.scrapping_news_coimbra_diario_service import ScrappingNewsCoimbraDiarioService
 from src.domain.scrapping_news_correio24horas_service import ScrappingNewsCorreio24horasService
 from src.domain.scrapping_news_correiobraziliense_service import ScrappingNewsCorreioBrazilienseService
 from src.domain.scrapping_news_diariodamanha_service import ScrappingNewsDiariodaManhaService
@@ -78,8 +82,12 @@ from src.domain.scrapping_news_yahoo_esportes_service import ScrappingNewsYahooE
 from src.domain.scrapping_news_yahoo_financas_service import ScrappingNewsYahooFinancasService
 from src.domain.scrapping_news_yahoo_noticias_service import ScrappingNewsYahooNoticiasService
 from src.domain.select_news_aredacao_service import SelectNewsARedacaoService
+from src.domain.select_news_bem_parana_esportes_service import SelectNewsBemParanaEsportesService
+from src.domain.select_news_bem_parana_noticias_service import SelectNewsBemParanaNoticiasService
+from src.domain.select_news_bem_parana_politica_service import SelectNewsBemParanaPoliticaService
 from src.domain.select_news_brasil247_service import SelectNewsBrasil247Service
 from src.domain.select_news_broadcast_agro_service import SelectNewsBroadcastAgroService
+from src.domain.select_news_coimbra_diario_service import SelectNewsCoimbraDiarioService
 from src.domain.select_news_correio24horas_service import SelectNewsCorreio24horasService
 from src.domain.select_news_correiobraziliense_service import SelectNewsCorreioBrazilienseService
 from src.domain.select_news_diariodamanha_service import SelectNewsDiariodaManhaService
@@ -1121,6 +1129,57 @@ class RouteApp():
             logger.info("/noticiasconcursos")
             ScrappingNewsNoticiasConcursoservice().exec(json.dumps(request.get_json()))
             return "I'm ok"  
+
+        @app.route("/select-news-coimbra-diario")
+        def select_news_coimbradiario():
+            logger.info("/coimbra-diario")
+            SelectNewsCoimbraDiarioService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-coimbra-diario",methods=['POST'])
+        def scrapping_news_coimbradiario():
+            logger.info("/coimbra-diario")
+            ScrappingNewsCoimbraDiarioService().exec(json.dumps(request.get_json()))
+            return "I'm ok"  
+
+
+        @app.route("/select-news-bem-parana-noticias")
+        def select_news_bemparananoticias():
+            logger.info("/bem-parana-noticias")
+            SelectNewsBemParanaNoticiasService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-bem-parana-noticias",methods=['POST'])
+        def scrapping_news_bemparananoticias():
+            logger.info("/bem-parana-noticias")
+            ScrappingNewsBemParanaNoticiasService().exec(json.dumps(request.get_json()))
+            return "I'm ok"  
+
+        @app.route("/select-news-bem-parana-esportes")
+        def select_news_bemparanaesportes():
+            logger.info("/bem-parana-esportes")
+            SelectNewsBemParanaEsportesService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-bem-parana-noticias",methods=['POST'])
+        def scrapping_news_bemparanaesportes():
+            logger.info("/bem-parana-esportes")
+            ScrappingNewsBemParanaEsportesService().exec(json.dumps(request.get_json()))
+            return "I'm ok"  
+
+
+        @app.route("/select-news-bem-parana-politica")
+        def select_news_bemparanapolitica():
+            logger.info("/bem-parana-politica")
+            SelectNewsBemParanaPoliticaService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-bem-parana-politica",methods=['POST'])
+        def scrapping_news_bemparanapolitica():
+            logger.info("/bem-parana-politica")
+            ScrappingNewsBemParanaPoliticaService().exec(json.dumps(request.get_json()))
+            return "I'm ok"  
+
 
 
 
