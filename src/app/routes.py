@@ -15,6 +15,7 @@ from src.domain.scrapping_news_campo_grande_news_service import ScrappingNewsCam
 from src.domain.scrapping_news_coimbra_diario_service import ScrappingNewsCoimbraDiarioService
 from src.domain.scrapping_news_correio24horas_service import ScrappingNewsCorreio24horasService
 from src.domain.scrapping_news_correiobraziliense_service import ScrappingNewsCorreioBrazilienseService
+from src.domain.scrapping_news_dgabc_service import ScrappingNewsDgabcService
 from src.domain.scrapping_news_diariodamanha_service import ScrappingNewsDiariodaManhaService
 from src.domain.scrapping_news_dinheiro_rural_service import ScrappingNewsDinheiroRuralService
 from src.domain.scrapping_news_ebc_service import ScrappingNewsEbcService
@@ -39,6 +40,9 @@ from src.domain.scrapping_news_gshow_service import ScrappingNewsGShowService
 from src.domain.scrapping_news_ig_service import ScrappingNewsIgService
 from src.domain.scrapping_news_istoe_dinheiro_service import ScrappingNewsIstoeDinheiroService
 from src.domain.scrapping_news_istoe_service import ScrappingNewsIstoeService
+from src.domain.scrapping_news_jornal_de_brasilia_brasilia_service import ScrappingNewsJornaldeBrasiliaBrasiliaService
+from src.domain.scrapping_news_jornal_de_brasilia_noticias_service import ScrappingNewsJornaldeBrasiliaNoticiasService
+from src.domain.scrapping_news_jornal_de_brasilia_torcida_service import ScrappingNewsJornaldeBrasiliaTorcidaService
 from src.domain.scrapping_news_jornalahora_service import ScrappingNewsJornalAHoraService
 from src.domain.scrapping_news_jornalopcao_service import ScrappingNewsJornalOpcaoService
 from src.domain.scrapping_news_jota_service import ScrappingNewsJotaService
@@ -58,8 +62,14 @@ from src.domain.scrapping_news_ohoje_service import ScrappingNewsOHojeService
 from src.domain.scrapping_news_opopular_service import ScrappingNewsOPopularService
 from src.domain.scrapping_news_opovo_noticias_service import ScrappingNewsOpovoNoticiasService
 from src.domain.scrapping_news_otempo_supernoticia_service import ScrappingNewsOtemposupernoticiaService
+from src.domain.scrapping_news_polemica_paraiba_brasil_service import ScrappingNewsPolemicaParaibaBrasilService
+from src.domain.scrapping_news_polemica_paraiba_economia_service import ScrappingNewsPolemicaParaibaEconomiaService
+from src.domain.scrapping_news_polemica_paraiba_esportes_service import ScrappingNewsPolemicaParaibaEsportesService
+from src.domain.scrapping_news_polemica_paraiba_internacional_service import ScrappingNewsPolemicaParaibaInternacionalService
+from src.domain.scrapping_news_polemica_paraiba_politica_service import ScrappingNewsPolemicaParaibaPoliticaService
 from src.domain.scrapping_news_poliarquia_service import ScrappingNewsPoliarquiaService
 from src.domain.scrapping_news_portal_holanda_service import ScrappingNewsPortalHolandaService
+from src.domain.scrapping_news_primeiro_jornal_service import ScrappingNewsPrimeiroJornalService
 from src.domain.scrapping_news_r7_agronegocios_service import ScrappingNewsR7AgronegociosService
 from src.domain.scrapping_news_r7_brasilia_service import ScrappingNewsR7BrasiliaService
 from src.domain.scrapping_news_r7_economia_service import ScrappingNewsR7EconomiaService
@@ -68,6 +78,13 @@ from src.domain.scrapping_news_r7_internacional_service import ScrappingNewsR7In
 from src.domain.scrapping_news_r7_politica_service import ScrappingNewsR7PoliticaService
 from src.domain.scrapping_news_r7_saude_service import ScrappingNewsR7SaudeService
 from src.domain.scrapping_news_r7_tecnologiaeciencia_service import ScrappingNewsR7TecnologiaecienciaService
+from src.domain.scrapping_news_reporter_diario_cidades_service import ScrappingNewsReporterDiarioCidadesService
+from src.domain.scrapping_news_reporter_diario_economia_service import ScrappingNewsReporterDiarioEconomiaService
+from src.domain.scrapping_news_reporter_diario_educacao_service import ScrappingNewsReporterDiarioEducacaoService
+from src.domain.scrapping_news_reporter_diario_esportes_service import ScrappingNewsReporterDiarioEsportesService
+from src.domain.scrapping_news_reporter_diario_policia_service import ScrappingNewsReporterDiarioPoliciaService
+from src.domain.scrapping_news_reporter_diario_politica_service import ScrappingNewsReporterDiarioPoliticaService
+from src.domain.scrapping_news_reporter_diario_saude_service import ScrappingNewsReporterDiarioSaudeService
 from src.domain.scrapping_news_revista_forum_service import ScrappingNewsRevistaForumService
 from src.domain.scrapping_news_sagres_service import ScrappingNewsSagresService
 from src.domain.scrapping_news_terra_economia_service import ScrappingNewsTerraEconomiaService
@@ -90,6 +107,7 @@ from src.domain.select_news_broadcast_agro_service import SelectNewsBroadcastAgr
 from src.domain.select_news_coimbra_diario_service import SelectNewsCoimbraDiarioService
 from src.domain.select_news_correio24horas_service import SelectNewsCorreio24horasService
 from src.domain.select_news_correiobraziliense_service import SelectNewsCorreioBrazilienseService
+from src.domain.select_news_dgabc_service import SelectNewsDgabcService
 from src.domain.select_news_diariodamanha_service import SelectNewsDiariodaManhaService
 from src.domain.select_news_dinheiro_rural_service import SelectNewsDinheiroRuralService
 from src.domain.select_news_ebc_service import SelectNewsEbcService
@@ -113,6 +131,9 @@ from src.domain.select_news_globovalor_service import SelectNewsGloboValorServic
 from src.domain.select_news_gshow_service import SelectNewsGShowService
 from src.domain.select_news_ig_service import SelectNewsIgService
 from src.domain.select_news_istoe_service import SelectNewsIstoeService
+from src.domain.select_news_jornal_de_brasilia_brasilia_service import SelectNewsJornaldeBrasiliaBrasiliaService
+from src.domain.select_news_jornal_de_brasilia_noticias_service import SelectNewsJornaldeBrasiliaNoticiasService
+from src.domain.select_news_jornal_de_brasilia_torcida_service import SelectNewsJornaldeBrasiliaTorcidaService
 from src.domain.select_news_jornalahora_service import SelectNewsJornalAHoraService
 from src.domain.select_news_jornalopcao_service import SelectNewsJornalOpcaoService
 from src.domain.select_news_jota_service import SelectNewsJotaService
@@ -133,10 +154,16 @@ from src.domain.select_news_opovonoticias_service import SelectNewsOpovoNoticias
 from src.domain.select_news_otempo_supernoticia_service import SelectNewsOtemposupernoticiaService
 from src.domain.select_news_campo_grande_news_service import SelectNewsCampoGrandeNewsService
 from src.domain.select_news_gazeta_do_povo_service import SelectNewsGazetadoPovoService
+from src.domain.select_news_polemica_paraiba_brasil_service import SelectNewsPolemicaParaibaBrasilService
+from src.domain.select_news_polemica_paraiba_economia_service import SelectNewsPolemicaParaibaEconomiaService
+from src.domain.select_news_polemica_paraiba_esportes_service import SelectNewsPolemicaParaibaEsportesService
+from src.domain.select_news_polemica_paraiba_internacional_service import SelectNewsPolemicaParaibaInternacionalService
+from src.domain.select_news_polemica_paraiba_politica_service import SelectNewsPolemicaParaibaPoliticaService
 from src.domain.select_news_poliarquia_service import SelectNewsPoliarquiaService
 from src.domain.select_news_portal_holanda_service import SelectNewsPortalHolandaService
 from src.domain.select_news_istoe_dinheiro_service import SelectNewsIstoeDinheiroService
 from src.domain.select_news_jovempan_service import SelectNewsJovemPanService
+from src.domain.select_news_primeiro_jornal_service import SelectNewsPrimeiroJornalService
 from src.domain.select_news_r7_agronegocios_service import SelectNewsR7AgronegociosService
 from src.domain.select_news_r7_brasilia_service import SelectNewsR7BrasiliaService
 from src.domain.select_news_r7_economia_service import SelectNewsR7EconomiaService
@@ -145,6 +172,13 @@ from src.domain.select_news_r7_internacional_service import SelectNewsR7Internac
 from src.domain.select_news_r7_politica_service import SelectNewsR7PoliticaService
 from src.domain.select_news_r7_saude_service import SelectNewsR7SaudeService
 from src.domain.select_news_r7_tecnologiaeciencia_service import SelectNewsR7TecnologiaecienciaService
+from src.domain.select_news_reporter_diario_cidades_service import SelectNewsReporterDiarioCidadesService
+from src.domain.select_news_reporter_diario_economia_service import SelectNewsReporterDiarioEconomiaService
+from src.domain.select_news_reporter_diario_educacao_service import SelectNewsReporterDiarioEducacaoService
+from src.domain.select_news_reporter_diario_esportes_service import SelectNewsReporterDiarioEsportesService
+from src.domain.select_news_reporter_diario_policia_service import SelectNewsReporterDiarioPoliciaService
+from src.domain.select_news_reporter_diario_politica_service import SelectNewsReporterDiarioPoliticaService
+from src.domain.select_news_reporter_diario_saude_service import SelectNewsReporterDiarioSaudeService
 from src.domain.select_news_revista_forum_service import SelectNewsRevistaForumService
 from src.domain.select_news_sagres_service import SelectNewsSagresService
 from src.domain.select_news_terra_economia_service import SelectNewsTerraEconomiaService
@@ -1179,6 +1213,226 @@ class RouteApp():
             logger.info("/bem-parana-politica")
             ScrappingNewsBemParanaPoliticaService().exec(json.dumps(request.get_json()))
             return "I'm ok"  
+
+
+        @app.route("/select-news-polemica-paraiba-brasil")
+        def select_news_polemica_paraiba_brasil():
+            logger.info("/polemica-paraiba-brasil")
+            SelectNewsPolemicaParaibaBrasilService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-polemica-paraiba-brasil",methods=['POST'])
+        def scrapping_news_polemica_paraiba_brasil():
+            logger.info("/polemica-paraiba-brasil")
+            ScrappingNewsPolemicaParaibaBrasilService().exec(json.dumps(request.get_json()))
+            return "I'm ok"  
+
+        @app.route("/select-news-polemica-paraiba-politica")
+        def select_news_polemica_paraiba_politica():
+            logger.info("/polemica-paraiba-politica")
+            SelectNewsPolemicaParaibaPoliticaService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-polemica-paraiba-politica",methods=['POST'])
+        def scrapping_news_polemica_paraiba_politica():
+            logger.info("/polemica-paraiba-politica")
+            ScrappingNewsPolemicaParaibaPoliticaService().exec(json.dumps(request.get_json()))
+            return "I'm ok"  
+
+        @app.route("/select-news-polemica-paraiba-economia")
+        def select_news_polemica_paraiba_economia():
+            logger.info("/polemica-paraiba-economia")
+            SelectNewsPolemicaParaibaEconomiaService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-polemica-paraiba-economia",methods=['POST'])
+        def scrapping_news_polemica_paraiba_economia():
+            logger.info("/polemica-paraiba-economia")
+            ScrappingNewsPolemicaParaibaEconomiaService().exec(json.dumps(request.get_json()))
+            return "I'm ok"  
+
+
+        @app.route("/select-news-polemica-paraiba-esportes")
+        def select_news_polemica_paraiba_esportes():
+            logger.info("/polemica-paraiba-esportes")
+            SelectNewsPolemicaParaibaEsportesService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-polemica-paraiba-esportes",methods=['POST'])
+        def scrapping_news_polemica_paraiba_esportes():
+            logger.info("/polemica-paraiba-esportes")
+            ScrappingNewsPolemicaParaibaEsportesService().exec(json.dumps(request.get_json()))
+            return "I'm ok"  
+
+
+        @app.route("/select-news-polemica-paraiba-internacional")
+        def select_news_polemica_paraiba_internacional():
+            logger.info("/polemica-paraiba-internacional")
+            SelectNewsPolemicaParaibaInternacionalService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-polemica-paraiba-internacional",methods=['POST'])
+        def scrapping_news_polemica_paraiba_internacional():
+            logger.info("/polemica-paraiba-internacional")
+            ScrappingNewsPolemicaParaibaInternacionalService().exec(json.dumps(request.get_json()))
+            return "I'm ok"  
+
+
+        @app.route("/select-news-reporter-diario-politica")
+        def select_news_reporter_diario_politica():
+            logger.info("/reporter-diario-politica")
+            SelectNewsReporterDiarioPoliticaService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-reporter-diario-politica",methods=['POST'])
+        def scrapping_news_reporter_diario_politica():
+            logger.info("/reporter-diario-politica")
+            ScrappingNewsReporterDiarioPoliticaService().exec(json.dumps(request.get_json()))
+            return "I'm ok"  
+
+
+        @app.route("/select-news-reporter-diario-cidades")
+        def select_news_reporter_diario_cidades():
+            logger.info("/reporter-diario-cidades")
+            SelectNewsReporterDiarioCidadesService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-reporter-diario-cidades",methods=['POST'])
+        def scrapping_news_reporter_diario_cidades():
+            logger.info("/reporter-diario-cidades")
+            ScrappingNewsReporterDiarioCidadesService().exec(json.dumps(request.get_json()))
+            return "I'm ok"  
+
+
+        @app.route("/select-news-reporter-diario-economia")
+        def select_news_reporter_diario_economia():
+            logger.info("/reporter-diario-economia")
+            SelectNewsReporterDiarioEconomiaService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-reporter-diario-economia",methods=['POST'])
+        def scrapping_news_reporter_diario_economia():
+            logger.info("/reporter-diario-economia")
+            ScrappingNewsReporterDiarioEconomiaService().exec(json.dumps(request.get_json()))
+            return "I'm ok"  
+            
+
+        @app.route("/select-news-reporter-diario-esportes")
+        def select_news_reporter_diario_esportes():
+            logger.info("/reporter-diario-esportes")
+            SelectNewsReporterDiarioEsportesService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-reporter-diario-esportes",methods=['POST'])
+        def scrapping_news_reporter_diario_esportes():
+            logger.info("/reporter-diario-esportes")
+            ScrappingNewsReporterDiarioEsportesService().exec(json.dumps(request.get_json()))
+            return "I'm ok"  
+
+        @app.route("/select-news-reporter-diario-educacao")
+        def select_news_reporter_diario_educacao():
+            logger.info("/reporter-diario-educacao")
+            SelectNewsReporterDiarioEducacaoService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-reporter-diario-educacao",methods=['POST'])
+        def scrapping_news_reporter_diario_educacao():
+            logger.info("/reporter-diario-educacao")
+            ScrappingNewsReporterDiarioEducacaoService().exec(json.dumps(request.get_json()))
+            return "I'm ok"  
+
+
+        @app.route("/select-news-reporter-diario-saude")
+        def select_news_reporter_diario_saude():
+            logger.info("/reporter-diario-saude")
+            SelectNewsReporterDiarioSaudeService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-reporter-diario-saude",methods=['POST'])
+        def scrapping_news_reporter_diario_saude():
+            logger.info("/reporter-diario-saude")
+            ScrappingNewsReporterDiarioSaudeService().exec(json.dumps(request.get_json()))
+            return "I'm ok"  
+
+
+        @app.route("/select-news-reporter-diario-policia")
+        def select_news_reporter_diario_policia():
+            logger.info("/reporter-diario-policia")
+            SelectNewsReporterDiarioPoliciaService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-reporter-diario-policia",methods=['POST'])
+        def scrapping_news_reporter_diario_policia():
+            logger.info("/reporter-diario-policia")
+            ScrappingNewsReporterDiarioPoliciaService().exec(json.dumps(request.get_json()))
+            return "I'm ok"  
+
+
+        @app.route("/select-news-jornal-de-brasilia-noticias")
+        def select_news_jornal_de_brasilia_noticias():
+            logger.info("/jornal-de-brasilia-noticias")
+            SelectNewsJornaldeBrasiliaNoticiasService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-jornal-de-brasilia-noticias",methods=['POST'])
+        def scrapping_news_jornal_de_brasilia_noticias():
+            logger.info("/jornal-de-brasilia-noticias")
+            ScrappingNewsJornaldeBrasiliaNoticiasService().exec(json.dumps(request.get_json()))
+            return "I'm ok"  
+
+
+        @app.route("/select-news-jornal-de-brasilia-brasilia")
+        def select_news_jornal_de_brasilia_brasilia():
+            logger.info("/jornal-de-brasilia-brasilia")
+            SelectNewsJornaldeBrasiliaBrasiliaService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-jornal-de-brasilia-brasilia",methods=['POST'])
+        def scrapping_news_jornal_de_brasilia_brasilia():
+            logger.info("/jornal-de-brasilia-brasilia")
+            ScrappingNewsJornaldeBrasiliaBrasiliaService().exec(json.dumps(request.get_json()))
+            return "I'm ok"  
+
+
+        @app.route("/select-news-jornal-de-brasilia-torcida")
+        def select_news_jornal_de_brasilia_torcida():
+            logger.info("/jornal-de-brasilia-torcida")
+            SelectNewsJornaldeBrasiliaTorcidaService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-jornal-de-brasilia-torcida",methods=['POST'])
+        def scrapping_news_jornal_de_brasilia_torcida():
+            logger.info("/jornal-de-brasilia-torcida")
+            ScrappingNewsJornaldeBrasiliaTorcidaService().exec(json.dumps(request.get_json()))
+            return "I'm ok"  
+
+        @app.route("/select-news-dgabc")
+        def select_news_dgabc():
+            logger.info("/dgabc")
+            SelectNewsDgabcService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-dgabc",methods=['POST'])
+        def scrapping_news_dgabc():
+            logger.info("/dgabc")
+            ScrappingNewsDgabcService().exec(json.dumps(request.get_json()))
+            return "I'm ok"              
+
+
+        @app.route("/select-news-primeiro-jornal")
+        def select_news_primeiro_jornal():
+            logger.info("/primeiro-jornal")
+            SelectNewsPrimeiroJornalService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-primeiro-jornal",methods=['POST'])
+        def scrapping_news_primeiro_jornal():
+            logger.info("/primeiro-jornal")
+            ScrappingNewsPrimeiroJornalService().exec(json.dumps(request.get_json()))
+            return "I'm ok"              
+
+
+
 
 
 
