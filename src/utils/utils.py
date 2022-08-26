@@ -1585,6 +1585,79 @@ class Utils:
 
 
   @classmethod
+  def extract_links_from_page_cnnbrasil(self, url:str)->str:
+
+    soup = Utils.request_link(url)
+    links = soup.find_all('li', class_='home__list__item')
+    no_text = ['/amp-stories/','/jogo/','/story/', 'noopener','mail','search','rapidnofollow','noopener ','Notícias</a>','Esportes</a>',\
+            'Finanças</a>','Vida e Estilo</a>','Celebridades</a>','Cinema</a>','Mobile</a>','BOVESPA</a>','MERVAL</a>','quote',\
+            '/web-stories/','/enquetes/','instagram/','comscore','gbrcomponentes','instagram.','bit.ly','digitalaudit.ivcbrasil','amazonasdireito.com.br','taxonomy',\
+                'videojs.com/','turismo-0','facebook.com','campograndenews','https://twitter.com','ultimas-noticias','#','wa.me/','mais-lidas','/ultimas-noticias/tag/',\
+                'pagtickets']
+
+    linkosauxa = []
+    linkosauxb  =[]
+    linkos = []
+
+    for link in links:
+        auxa = link.find('a',href=True)
+        linkosauxa.append(str(auxa))
+    linkosauxa = list(set(linkosauxa))
+
+    # # # # # # # # # 
+
+    linkosauxa = str(linkosauxa).split('href=')
+    for i in range(1,len(linkosauxa)):
+        auxb = linkosauxa[i].split('" title=')[0].replace('"','').strip()
+        for item in no_text:
+            if item in linkosauxa[i]:
+                auxb = ''
+        if auxb== '':
+            None
+        else:
+            linkosauxb.append(auxb)
+
+    return(linkos)  
+
+
+  @classmethod
+  def extract_links_from_page_politicalivre(self, url:str)->str:
+
+    soup = Utils.request_link(url)
+    links = soup.find_all('div', class_='postagem')
+    no_text = ['/amp-stories/','/jogo/','/story/', 'noopener','mail','search','rapidnofollow','noopener ','Notícias</a>','Esportes</a>',\
+            'Finanças</a>','Vida e Estilo</a>','Celebridades</a>','Cinema</a>','Mobile</a>','BOVESPA</a>','MERVAL</a>','quote',\
+            '/web-stories/','/enquetes/','instagram/','comscore','gbrcomponentes','instagram.','bit.ly','digitalaudit.ivcbrasil','amazonasdireito.com.br','taxonomy',\
+                'videojs.com/','turismo-0','facebook.com','campograndenews','https://twitter.com','ultimas-noticias','#','wa.me/','mais-lidas','/ultimas-noticias/tag/',\
+                'pagtickets']
+
+    linkosauxa = []
+    linkosauxb  =[]
+    linkos = []
+
+    for link in links:
+        auxa = link.find('a',href=True)
+        linkosauxa.append(str(auxa))
+    linkosauxa = list(set(linkosauxa))
+
+    # # # # # # # # # 
+
+    linkosauxa = str(linkosauxa).split('href=')
+    for i in range(1,len(linkosauxa)):
+        auxb = linkosauxa[i].split('">')[0].replace('"','').strip()
+        for item in no_text:
+            if item in linkosauxa[i]:
+                auxb = ''
+        if auxb== '':
+            None
+        else:
+            linkosauxb.append(auxb)
+
+    return(linkos)  
+
+
+
+  @classmethod
   def month_convert(texto_horario):  
     texto_horario = texto_horario.lower()
     

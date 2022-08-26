@@ -12,6 +12,13 @@ from src.domain.scrapping_news_bem_parana_politica_service import ScrappingNewsB
 from src.domain.scrapping_news_brasil247_service import ScrappingNewsBrasil247Service
 from src.domain.scrapping_news_broadcast_agro_service import ScrappingNewsBroadcastAgroService
 from src.domain.scrapping_news_campo_grande_news_service import ScrappingNewsCampoGrandeNewsService
+from src.domain.scrapping_news_cnn_brasil_business_service import ScrappingNewsCNNBrasilBusinessService
+from src.domain.scrapping_news_cnn_brasil_esporte_service import ScrappingNewsCNNBrasilEsporteService
+from src.domain.scrapping_news_cnn_brasil_internacional_service import ScrappingNewsCNNBrasilInternacionalService
+from src.domain.scrapping_news_cnn_brasil_nacional_service import ScrappingNewsCNNBrasilNacionalService
+from src.domain.scrapping_news_cnn_brasil_politica_service import ScrappingNewsCNNBrasilPoliticaService
+from src.domain.scrapping_news_cnn_brasil_saude_service import ScrappingNewsCNNBrasilSaudeService
+from src.domain.scrapping_news_cnn_brasil_tecnologia_service import ScrappingNewsCNNBrasilTecnologiaService
 from src.domain.scrapping_news_coimbra_diario_service import ScrappingNewsCoimbraDiarioService
 from src.domain.scrapping_news_correio24horas_service import ScrappingNewsCorreio24horasService
 from src.domain.scrapping_news_correiobraziliense_service import ScrappingNewsCorreioBrazilienseService
@@ -68,6 +75,14 @@ from src.domain.scrapping_news_polemica_paraiba_esportes_service import Scrappin
 from src.domain.scrapping_news_polemica_paraiba_internacional_service import ScrappingNewsPolemicaParaibaInternacionalService
 from src.domain.scrapping_news_polemica_paraiba_politica_service import ScrappingNewsPolemicaParaibaPoliticaService
 from src.domain.scrapping_news_poliarquia_service import ScrappingNewsPoliarquiaService
+from src.domain.scrapping_news_politicalivre_bahia_service import ScrappingNewsPoliticalivreBahiaService
+from src.domain.scrapping_news_politicalivre_brasil_service import ScrappingNewsPoliticalivreBrasilService
+from src.domain.scrapping_news_politicalivre_economia_service import ScrappingNewsPoliticalivreEconomiaService
+from src.domain.scrapping_news_politicalivre_exclusiva_service import ScrappingNewsPoliticalivreExclusivasService
+from src.domain.scrapping_news_politicalivre_interior_service import ScrappingNewsPoliticalivreInteriorService
+from src.domain.scrapping_news_politicalivre_justica_service import ScrappingNewsPoliticalivreJusticaService
+from src.domain.scrapping_news_politicalivre_mundo_service import ScrappingNewsPoliticalivreMundoService
+from src.domain.scrapping_news_politicalivre_salvador_service import ScrappingNewsPoliticalivreSalvadorService
 from src.domain.scrapping_news_portal_holanda_service import ScrappingNewsPortalHolandaService
 from src.domain.scrapping_news_primeiro_jornal_service import ScrappingNewsPrimeiroJornalService
 from src.domain.scrapping_news_r7_agronegocios_service import ScrappingNewsR7AgronegociosService
@@ -104,6 +119,13 @@ from src.domain.select_news_bem_parana_noticias_service import SelectNewsBemPara
 from src.domain.select_news_bem_parana_politica_service import SelectNewsBemParanaPoliticaService
 from src.domain.select_news_brasil247_service import SelectNewsBrasil247Service
 from src.domain.select_news_broadcast_agro_service import SelectNewsBroadcastAgroService
+from src.domain.select_news_cnn_brasil_business_service import SelectNewsCNNBrasilBusinessService
+from src.domain.select_news_cnn_brasil_esporte_service import SelectNewsCNNBrasilEsporteService
+from src.domain.select_news_cnn_brasil_internacional_service import SelectNewsCNNBrasilInternacionalService
+from src.domain.select_news_cnn_brasil_nacional_service import SelectNewsCNNBrasilNacionalService
+from src.domain.select_news_cnn_brasil_politica_service import SelectNewsCNNBrasilPoliticaService
+from src.domain.select_news_cnn_brasil_saude_service import SelectNewsCNNBrasilSaudeService
+from src.domain.select_news_cnn_brasil_tecnologia_service import SelectNewsCNNBrasilTecnologiaService
 from src.domain.select_news_coimbra_diario_service import SelectNewsCoimbraDiarioService
 from src.domain.select_news_correio24horas_service import SelectNewsCorreio24horasService
 from src.domain.select_news_correiobraziliense_service import SelectNewsCorreioBrazilienseService
@@ -160,6 +182,14 @@ from src.domain.select_news_polemica_paraiba_esportes_service import SelectNewsP
 from src.domain.select_news_polemica_paraiba_internacional_service import SelectNewsPolemicaParaibaInternacionalService
 from src.domain.select_news_polemica_paraiba_politica_service import SelectNewsPolemicaParaibaPoliticaService
 from src.domain.select_news_poliarquia_service import SelectNewsPoliarquiaService
+from src.domain.select_news_politicalivre_bahia_service import SelectNewsPoliticalivreBahiaService
+from src.domain.select_news_politicalivre_brasil_service import SelectNewsPoliticalivreBrasilService
+from src.domain.select_news_politicalivre_economia_service import SelectNewsPoliticalivreEconomiaService
+from src.domain.select_news_politicalivre_exclusivas_service import SelectNewsPoliticalivreExclusivasService
+from src.domain.select_news_politicalivre_interior_service import SelectNewsPoliticalivreInteriorService
+from src.domain.select_news_politicalivre_justica_service import SelectNewsPoliticalivreJusticaService
+from src.domain.select_news_politicalivre_mundo_service import SelectNewsPoliticalivreMundoService
+from src.domain.select_news_politicalivre_salvador_service import SelectNewsPoliticalivreSalvadorService
 from src.domain.select_news_portal_holanda_service import SelectNewsPortalHolandaService
 from src.domain.select_news_istoe_dinheiro_service import SelectNewsIstoeDinheiroService
 from src.domain.select_news_jovempan_service import SelectNewsJovemPanService
@@ -1431,6 +1461,199 @@ class RouteApp():
             ScrappingNewsPrimeiroJornalService().exec(json.dumps(request.get_json()))
             return "I'm ok"              
 
+
+        @app.route("/select-news-cnn-brasil-politica")
+        def select_news_cnn_brasil_politica():
+            logger.info("/cnn-brasil-politica")
+            SelectNewsCNNBrasilPoliticaService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-cnn-brasil-politica",methods=['POST'])
+        def scrapping_news_cnn_brasil_politica():
+            logger.info("/cnn-brasil-politica")
+            ScrappingNewsCNNBrasilPoliticaService().exec(json.dumps(request.get_json()))
+            return "I'm ok"              
+
+
+        @app.route("/select-news-cnn-brasil-nacional")
+        def select_news_cnn_brasil_nacional():
+            logger.info("/cnn-brasil-nacional")
+            SelectNewsCNNBrasilNacionalService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-cnn-brasil-nacional",methods=['POST'])
+        def scrapping_news_cnn_brasil_nacional():
+            logger.info("/cnn-brasil-nacional")
+            ScrappingNewsCNNBrasilNacionalService().exec(json.dumps(request.get_json()))
+            return "I'm ok"              
+
+
+        @app.route("/select-news-cnn-brasil-business")
+        def select_news_cnn_brasil_business():
+            logger.info("/cnn-brasil-business")
+            SelectNewsCNNBrasilBusinessService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-cnn-brasil-business",methods=['POST'])
+        def scrapping_news_cnn_brasil_business():
+            logger.info("/cnn-brasil-business")
+            ScrappingNewsCNNBrasilBusinessService().exec(json.dumps(request.get_json()))
+            return "I'm ok"    
+
+
+        @app.route("/select-news-cnn-brasil-internacional")
+        def select_news_cnn_brasil_internacional():
+            logger.info("/cnn-brasil-internacional")
+            SelectNewsCNNBrasilInternacionalService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-cnn-brasil-internacional",methods=['POST'])
+        def scrapping_news_cnn_brasil_internacional():
+            logger.info("/cnn-brasil-internacional")
+            ScrappingNewsCNNBrasilInternacionalService().exec(json.dumps(request.get_json()))
+            return "I'm ok"   
+
+
+        @app.route("/select-news-cnn-brasil-saude")
+        def select_news_cnn_brasil_saude():
+            logger.info("/cnn-brasil-saude")
+            SelectNewsCNNBrasilSaudeService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-cnn-brasil-saude",methods=['POST'])
+        def scrapping_news_cnn_brasil_saude():
+            logger.info("/cnn-brasil-saude")
+            ScrappingNewsCNNBrasilSaudeService().exec(json.dumps(request.get_json()))
+            return "I'm ok"   
+
+
+        @app.route("/select-news-cnn-brasil-tecnologia")
+        def select_news_cnn_brasil_tecnologia():
+            logger.info("/cnn-brasil-tecnologia")
+            SelectNewsCNNBrasilTecnologiaService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-cnn-brasil-tecnologia",methods=['POST'])
+        def scrapping_news_cnn_brasil_tecnologia():
+            logger.info("/cnn-brasil-tecnologia")
+            ScrappingNewsCNNBrasilTecnologiaService().exec(json.dumps(request.get_json()))
+            return "I'm ok"   
+
+
+        @app.route("/select-news-cnn-brasil-esporte")
+        def select_news_cnn_brasil_esporte():
+            logger.info("/cnn-brasil-esporte")
+            SelectNewsCNNBrasilEsporteService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-cnn-brasil-esporte",methods=['POST'])
+        def scrapping_news_cnn_brasil_esporte():
+            logger.info("/cnn-brasil-esporte")
+            ScrappingNewsCNNBrasilEsporteService().exec(json.dumps(request.get_json()))
+            return "I'm ok"   
+
+
+        @app.route("/select-news-politicalivre-exclusivas")
+        def select_news_politicalivre_exclusivas():
+            logger.info("/politicalivre-exclusivas")
+            SelectNewsPoliticalivreExclusivasService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-politicalivre-exclusivas",methods=['POST'])
+        def scrapping_news_politicalivre_exclusivas():
+            logger.info("/politicalivre-exclusivas")
+            ScrappingNewsPoliticalivreExclusivasService().exec(json.dumps(request.get_json()))
+            return "I'm ok"   
+
+
+        @app.route("/select-news-politicalivre-brasil")
+        def select_news_politicalivre_brasil():
+            logger.info("/politicalivre-brasil")
+            SelectNewsPoliticalivreBrasilService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-politicalivre-brasil",methods=['POST'])
+        def scrapping_news_politicalivre_brasil():
+            logger.info("/politicalivre-brasil")
+            ScrappingNewsPoliticalivreBrasilService().exec(json.dumps(request.get_json()))
+            return "I'm ok"  
+
+
+        @app.route("/select-news-politicalivre-mundo")
+        def select_news_politicalivre_mundo():
+            logger.info("/politicalivre-mundo")
+            SelectNewsPoliticalivreMundoService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-politicalivre-mundo",methods=['POST'])
+        def scrapping_news_politicalivre_mundo():
+            logger.info("/politicalivre-mundo")
+            ScrappingNewsPoliticalivreMundoService().exec(json.dumps(request.get_json()))
+            return "I'm ok" 
+
+
+        @app.route("/select-news-politicalivre-justica")
+        def select_news_politicalivre_justica():
+            logger.info("/politicalivre-justica")
+            SelectNewsPoliticalivreJusticaService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-politicalivre-justica",methods=['POST'])
+        def scrapping_news_politicalivre_justica():
+            logger.info("/politicalivre-justica")
+            ScrappingNewsPoliticalivreJusticaService().exec(json.dumps(request.get_json()))
+            return "I'm ok" 
+
+        @app.route("/select-news-politicalivre-economia")
+        def select_news_politicalivre_economia():
+            logger.info("/politicalivre-economia")
+            SelectNewsPoliticalivreEconomiaService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-politicalivre-economia",methods=['POST'])
+        def scrapping_news_politicalivre_economia():
+            logger.info("/politicalivre-economia")
+            ScrappingNewsPoliticalivreEconomiaService().exec(json.dumps(request.get_json()))
+            return "I'm ok" 
+
+        @app.route("/select-news-politicalivre-salvador")
+        def select_news_politicalivre_salvador():
+            logger.info("/politicalivre-salvador")
+            SelectNewsPoliticalivreSalvadorService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-politicalivre-salvador",methods=['POST'])
+        def scrapping_news_politicalivre_salvador():
+            logger.info("/politicalivre-salvador")
+            ScrappingNewsPoliticalivreSalvadorService().exec(json.dumps(request.get_json()))
+            return "I'm ok" 
+
+
+
+        @app.route("/select-news-politicalivre-interior")
+        def select_news_politicalivre_interior():
+            logger.info("/politicalivre-interior")
+            SelectNewsPoliticalivreInteriorService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-politicalivre-interior",methods=['POST'])
+        def scrapping_news_politicalivre_interior():
+            logger.info("/politicalivre-interior")
+            ScrappingNewsPoliticalivreInteriorService().exec(json.dumps(request.get_json()))
+            return "I'm ok" 
+
+
+        @app.route("/select-news-politicalivre-bahia")
+        def select_news_politicalivre_bahia():
+            logger.info("/politicalivre-bahia")
+            SelectNewsPoliticalivreBahiaService().exec()
+            return "I'm ok"
+        
+        @app.route("/scrapping-news-politicalivre-bahia",methods=['POST'])
+        def scrapping_news_politicalivre_bahia():
+            logger.info("/politicalivre-bahia")
+            ScrappingNewsPoliticalivreBahiaService().exec(json.dumps(request.get_json()))
+            return "I'm ok" 
 
 
 
