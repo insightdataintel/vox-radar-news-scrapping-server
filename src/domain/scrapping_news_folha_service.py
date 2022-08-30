@@ -37,6 +37,7 @@ class ScrappingNewsFolhaService(BaseService):
         title = soup.find("meta", attrs={'property': 'og:title'})
         title = str(title).split("content=")[1].split("property=")[0].replace('"','')
         title = title.encode('iso-8859-1').decode('utf-8')
+
         if (title==""):
             self.logger.error(f"It is cannot possible to retrieve date from Valor")
             title = " "
@@ -71,11 +72,12 @@ class ScrappingNewsFolhaService(BaseService):
                     body_new=body_new+x+' \n '##
 
             body_new = body_new.replace('Leia mais','').replace('Continua após a publicidade','').replace('Leia também','').replace('— Foto: Getty Images', '').encode('iso-8859-1').decode('utf-8')
+            
 
             
         
         except:
-            body_news = [x.text for x in soup.find("div", class_ = "c-news__content").find_all("p") if len(x.text)>80]
+            body_news = [x.text for x in soup.find("div", class_ = "col col--md-1-1 col--lg-12-18").find_all("p") if len(x.text)>80]
             body_new = ''
             for x in body_news:
                 if "assinante da Folha" in x:
@@ -90,7 +92,7 @@ class ScrappingNewsFolhaService(BaseService):
 
         # Pick category news
         #   
-        category_news = 'politica'
+        category_news = url_news.replace('https://www1.','').split('/')[1]
 
         category_news = Utils.translate_portuguese_english(category_news)
 

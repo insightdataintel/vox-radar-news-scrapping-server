@@ -35,11 +35,13 @@ class ScrappingNewsEstadaoService(BaseService):
         #title
         #
         try:
-            title = soup.find_all("h1")[0].text.replace('"', '').replace("'", "")
+            title = soup.find('meta',property='og:title')
+            title = str(title).split("content=")[1].split(" - ")[0].split(" | ")[0].split(" property=")[0].split('itemprop=')[0].split('- ISTOÉ DINHEIRO')[0].split('| Exame')[0].replace('- @aredacao','').replace('"','')
         except Exception as e:
             self.logger.error(f"Não foi possível recuperar alguma informação do site Estadão, o erro encontrado foi | {e}")
             title = " "
-            pass                 
+            pass       
+                  
         #
         #Stardandizing Date
         try:
@@ -52,47 +54,45 @@ class ScrappingNewsEstadaoService(BaseService):
             date = date.replace('T', ' ')    
         #
         #Pick body's news
-        try:
-            body_news=[x.text for x in soup.find("div","n--noticia__content content").find_all('p') if len(x.text)>2]   
-            body_new=""
-            for x in body_news:
-                if x.replace(" ","")[-1]==",":
-                    body_new=body_new+x
-                else:
-                    body_new=body_new+x+' \n '
-        except:
-            try:
-                body_news = [x.text for x in soup.find("div", class_ = "pw-container").find_all("p") if len(x.text)>2]
-                body_new = ''
-                for x in body_news:
-                    if x.replace(" ","")[-1]==",":
-                        body_new=body_new+x
-                    else:
-                        body_new=body_new+x+' \n '
 
-                body_new = body_new.replace('Leia mais','')
+        mode = ['div','article']
+        classk = ['n--noticia__content content','fusion-app','pw-container','styles__Container-sc-1ehbu6v-0 cNWinE content',\
+                    'col-lg-7 col-md-10','post-content','content-wrapper  news-body content','video-desc','box area-select','row']
+        body_new = ''
 
-            
-            except:
-                body_news = [x.text for x in soup.find("div", class_ = "styles__Container-sc-1ehbu6v-0 cNWinE content").find_all("p") if len(x.text)>2]
-                body_new = ''
-                for x in body_news:
-                    if x.replace(" ","")[-1]==",":
-                        body_new=body_new+x
-                    else:
-                        body_new=body_new+x+' \n '
+        (i,j,classmode,p) = Utils.search_mode_classk(mode,classk,soup)
+        body_news = Utils.creating_body_news(i,j,classmode,p,mode,classk,soup)
 
-                body_new = body_new.replace('Leia mais','').replace('Continua após a publicidade','').replace('Leia também','')
+        no_text = ['Cartola','Leia outras','podcast','Foto','clique aqui','Assine o Premiere','VÍDEOS:',\
+                    'o app do Yahoo Mail','Assine agora a newsletter','via Getty Images','Fonte: ','O seu endereço de e-mail',\
+                    'email protected','Comunicação Social da Polícia','email','Portal iG','nossas newsletters',\
+                    'WhatsApp:  As regras de privacidade','de 700 caracteres [0]','pic.twitter.com','(@','Leia também',\
+                    '(Reportagem', 'Entre para o grupo do Money Times','Entre agora para o nosso grupo no Telegram!',\
+                    'Ilustração: ','Continue lendo no','CONTINUA DEPOIS DA PUBLICIDADE','Assine o 247, apoie por Pix','Leia Também',\
+                    'aproveite a tarifa gratuita','Descarregue a nossa App gratuita','Os jogos (e as apostas)',\
+                    'Salve meu nome, e-mail neste navegador para a próxima vez que eu comentar','Redatora do portal, possui ','Continua após a publicidade',\
+                    'Grupo Estado','Os comentários são exclusivos para assinantes do Estadão.']
+
+        for x in body_news:
+            for item in no_text:
+                if item in x:
+                    x = ''
+            if x=='':
+                None
+            else:
+                body_new = body_new+x+'\n' ##
+
+        body_new = body_new.strip().replace('(Reuters) –', '').replace('247 -', '')    
 
         # Pick category news
         #   
-        try:
-            category_news = soup.find("meta", attrs={'property': 'og:title'})
-            category_news = str(category_news).split(" - ")[1].split(" - ")[0].lower().replace('"','')
-            category_news = unicodedata.normalize('NFD', category_news).encode('ascii', 'ignore')\
-                    .decode("utf-8")
-        except:
-            category_news = self.extract_category(url_news)
+        if (',' in url_news):
+            try:
+                category_news = url_news.replace("https://",'').split(',')[0].split('/')[2]
+            except:
+                category_news = url_news.replace("https://",'').split(',')[0].split('/')[1]
+        else:
+            category_news = url_news.replace('https://','').split('/')[1]
 
         #
         category_news = Utils.translate_portuguese_english(category_news)

@@ -225,11 +225,68 @@ class Utils:
                 "inovacao":"inovation",
                 "internacional":"international",
                 "nacional":"national",
-                "economia":"economy"
+                "economia":"economy",
+                'bem-estar':'health',
+                'ciência':'science',
+                'ciencia':'science',
+                'saude':'health',
+                'futebol':'sports',
+                'cultura':'culture',
+                'cinema':'culture',
+                'noticias':'news',
+                'opiniao':'opinion',
+                'notas-e-informacoes':'opinion',
+                'espaco-aberto':'opinion',
+                'artigos-dos-leitores':'opinion',
+                'gente':'people'
                 }
 
     return (translate.get(word))
   
+
+  @classmethod
+  def search_mode_classk(self,mode:list,classk:list,soup)->list:
+      for i in range(0,len(mode)):
+          for j in range(0,len(classk)):
+              try:
+                  yes = soup.find(mode[i], class_ = classk[j])
+                  if(len(yes)>0):
+                      # try:
+                      paragraf = yes.find_all('p')
+                      if(len(paragraf)>0):
+                          return(i,j,'class_','p')
+                      # except:
+                      else:
+                          return(i,j,'class_','')
+              except:
+                  None
+              try:
+                  yess = soup.find(mode[i], id = classk[j])
+                  if(len(yess)>0):
+                      # try:
+                      paragraff = yess.find_all('p')
+                      if(len(paragraff)>0):
+                          return(i,j,'id','p')
+                      # except:
+                      else:
+                          return(i,j,'id','')    
+              except:
+                  None
+  @classmethod            
+  def creating_body_news(self,i:int,j:int,classmode:str,p:str,mode:list,classk:list,soup)->list:
+      if(p=='p'):
+          if(classmode=='id'):
+              return [x.text for x in soup.find(mode[i], id = classk[j]).find_all('p') if len(x.text)>20]
+          elif(classmode=='class_'):
+              return [x.text for x in soup.find(mode[i], class_ = classk[j]).find_all('p') if len(x.text)>20]
+      else:
+          if(classmode=='id'):
+              return [x.text for x in soup.find(mode[i], id = classk[j]) if len(x.text)>20]
+          elif(classmode=='class_'):
+              return [x.text for x in soup.find(mode[i], class_ = classk[j]) if len(x.text)>20]
+
+
+
   @classmethod
   def extract_links_from_rss(self, url:str)->str:
     

@@ -1,6 +1,6 @@
 import json
 
-class VoxradarNewsScrappingSagresQueueDTO:
+class VoxradarNewsScrappingOHojeQueueDTO:
   url:str
 
   def __init__(self, url: str):
