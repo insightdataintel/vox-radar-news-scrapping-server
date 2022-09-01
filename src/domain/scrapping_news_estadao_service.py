@@ -91,6 +91,8 @@ class ScrappingNewsEstadaoService(BaseService):
                 category_news = url_news.replace("https://",'').split(',')[0].split('/')[2]
             except:
                 category_news = url_news.replace("https://",'').split(',')[0].split('/')[1]
+        elif('/blogs/' in url_news):
+            category_news = url_news.replace("https://",'').split('.')[0]
         else:
             category_news = url_news.replace('https://','').split('/')[1]
 

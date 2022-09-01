@@ -92,7 +92,7 @@ class ScrappingNewsFolhaService(BaseService):
 
         # Pick category news
         #   
-        category_news = url_news.replace('https://www1.','').split('/')[1]
+        category_news = url_news.replace('https://www1.','').replace('https://','').split('/')[1]
 
         category_news = Utils.translate_portuguese_english(category_news)
 
