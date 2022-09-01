@@ -207,7 +207,7 @@ class Utils:
                 "opinião":"opinion",
                 "educação":"education",
                 "maternar":"maternity",
-                "televisao":"television",
+                "televisao":"media",
                 "painel":"panel",
                 "ilustrada":"media",
                 "mundo":"world",
@@ -243,12 +243,24 @@ class Utils:
                 'link':'technology',
                 'educacao':'education',
                 'sao-paulo':'brazil',
-                'hashtag':'midia',
-                'blogs':'midia',
+                'hashtag':'media',
+                'blogs':'media',
                 'restaurants':'entrepreneurship',
                 'cotidiano':'brazil',
-                'colunas':'midia',
-                'celebridades':'midia'
+                'colunas':'media',
+                'monica':'news',
+                'celebridades':'media',
+                'noticias':'news',
+                'colunistas':'media',
+                'voceviu':'media',
+                'voce':'media',
+                'voc':'media',
+                'ciancia':'science',
+                'equilibrio':'people',
+                'bichos':'media',
+                'ilustrissima':'media',
+                'ambiente':'environment',
+                'equilibrioesaude':'people'
                 }
 
     return (translate.get(word))
@@ -1732,6 +1744,56 @@ class Utils:
             'Finanças</a>','Vida e Estilo</a>','Celebridades</a>','Cinema</a>','Mobile</a>','BOVESPA</a>','MERVAL</a>','quote','category/',\
             '/web-stories/','/enquetes/','instagram/','comscore','gbrcomponentes','instagram.','bit.ly','digitalaudit.ivcbrasil','amazonasdireito.com.br','taxonomy',\
                 'videojs.com/','turismo-0','facebook.com','campograndenews','https://twitter.com','ultimas-noticias','#','wa.me/','mais-lidas','/ultimas-noticias/tag/','secure.']
+
+    linkosauxa = []
+    linkosauxb  =[]
+    linkos = []
+
+
+    for link in links:
+        auxa = link.find('a',href=True)
+        linkosauxa.append(str(auxa))
+    linkosauxa = list(set(linkosauxa))
+
+    # # # # # # # # 
+
+    linkosauxa = str(links).split('href=')
+    for i in range(1,len(linkosauxa)):
+        auxb = linkosauxa[i].split('">')[0].replace('"','').strip()
+        for item in no_text:
+            if item in linkosauxa[i]:
+                auxb = ''
+        if auxb== '':
+            None
+        else:
+            linkosauxb.append(auxb)
+
+    temp = ''
+    linkosauxb = list(set(linkosauxb))
+    for i in range(0,len(linkosauxb)):
+        for j in range(1,len(linkosauxb)):
+            if str(linkosauxb[i]) in str(linkosauxb[j]):
+                temp = linkosauxb[j]
+
+        if temp == '':
+            None
+        else:
+        
+            linkos.append(temp)
+    return(linkos)  
+
+
+
+  @classmethod
+  def extract_links_from_page_valor(self, url:str)->str:
+
+    soup = Utils.request_link(url)
+    links = soup.find_all('div', class_='feed-post-body')
+    no_text = ['/amp-stories/','/jogo/','/story/', 'noopener','mail','search','rapidnofollow','noopener ','Notícias</a>','Esportes</a>',\
+            'Finanças</a>','Vida e Estilo</a>','Celebridades</a>','Cinema</a>','Mobile</a>','BOVESPA</a>','MERVAL</a>','quote','category/',\
+            '/web-stories/','/enquetes/','instagram/','comscore','gbrcomponentes','instagram.','bit.ly','digitalaudit.ivcbrasil','amazonasdireito.com.br','taxonomy',\
+                'videojs.com/','turismo-0','facebook.com','campograndenews','https://twitter.com','ultimas-noticias','#',\
+                'wa.me/','mais-lidas','/ultimas-noticias/tag/','secure.']
 
     linkosauxa = []
     linkosauxb  =[]

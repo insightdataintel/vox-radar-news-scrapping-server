@@ -5,6 +5,7 @@ from ..config.envs import Envs
 from .base.base_service import BaseService
 from ..types.return_service import ReturnService
 from bs4 import BeautifulSoup
+from src.utils.utils import Utils
 import requests
 
 class SelectNewsValorService(BaseService):
@@ -23,29 +24,13 @@ class SelectNewsValorService(BaseService):
         # self.log(None, f"Iniciando scrapping estado de {sigarp_capture_data_estadao_scrapping_queue_dto.state}, cidade de {sigarp_capture_data_estadao_scrapping_queue_dto.city}, ano {sigarp_capture_data_estadao_scrapping_queue_dto.year}", Log.INFO)
 
             
-        url = "https://valor.globo.com/"
+        url = "https://valor.globo.com/ultimas-noticias/"
         
-        page = requests.get(url).text
+        links_filtered = Utils.extract_links_from_page_valor(url)
 
-            
-        soup = BeautifulSoup(page, 'html.parser')
-        links_filtered = []    
-        #//Taking links from url
-        try:
-            domain = url.split(".")[1]+".com"
-            links = soup.find_all('a', class_="bstn-dedupe-url")
-            for item in links:
-                aux = str(item).split("href=")[1].split(" ")[0].replace(">","").replace('"','')
-                if (aux == 'https://infograficos.valor.globo.com/guia-de-fundos/'):
-                    pass
-                else:
-                    links_filtered.append(aux)
-        except Exception as e:
-            self.logger.error(f"Não foi possível encontrar os Links na página inicial do site Valor | {e}")
-        links_filtered = list(set(links_filtered))
         print(links_filtered)
-        for link in links_filtered:
-            self.__send_queue(link)
+        # for link in links_filtered:
+        #     self.__send_queue(link)
 
         return ReturnService(True, 'Sucess')
 

@@ -40,8 +40,8 @@ class SelectNewsFolhaService(BaseService):
         links_filtered = Utils.extract_links_from_page_folha(url)
 
         print(links_filtered)
-        # for link in links_filtered:
-        #     self.__send_queue(link)
+        for link in links_filtered:
+            self.__send_queue(link)
 
         return ReturnService(True, 'Sucess')
 

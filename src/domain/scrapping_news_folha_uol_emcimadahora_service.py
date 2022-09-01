@@ -90,14 +90,15 @@ class ScrappingNewsFolhaEmcimadahoraService(BaseService):
 
         # Pick category news
         #   
-        try:
-            category_news = soup.find("meta", attrs={'property': 'og:title'})
-            category_news = str(category_news).split(" - ")[1].split(" - ")[0].lower().replace('"','')
-            category_news = unicodedata.normalize('NFD', category_news).encode('ascii', 'ignore')\
-                    .decode("utf-8")
-        except:
+        if ('colunas' in url_news):
+            category_news = 'news'
+        else:
             category_news = soup.find("meta", property="article:section")
             category_news = str(category_news).split("content=")[1].split(" ")[0].replace('"','')
+            category_news = category_news.encode('latin-1', 'ignore').decode("utf-8",'ignore')
+            aux = unicodedata.normalize('NFD', category_news)
+            aux = aux.encode('ascii', 'ignore')
+            category_news = aux.decode("utf-8").lower()
 
         category_news = Utils.translate_portuguese_english(category_news)
 
