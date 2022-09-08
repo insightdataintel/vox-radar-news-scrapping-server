@@ -39,35 +39,59 @@ class ScrappingNewsGloboG1Service(BaseService):
     #
     #Stardandizing Date
     #
-        date = soup.find("time")
-        date = str(date).split('datetime=')[1].split("Z")[0].replace(':"','').replace('"','')
-        date = date.replace('T', ' ')   
-        date = datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S.%f")
-        delta = datetime.timedelta(hours=3)
-        date = date - delta
-        date = "%s:%.3f-3:00"%(str(date.strftime('%Y-%m-%d %H:%M')),float("%.3f" % (date.second + date.microsecond / 1e6)))  
+        try:
+            date = soup.find_all("script")
+            date = str(date).split('MODIFIED:')[1].split(',')[0].replace('T', ' ').replace('Z', '').replace('"','').strip()
+            date = datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S.%f")
+            delta = datetime.timedelta(hours=3)
+            date = date - delta
+            date = "%s-3:00"%(str(date.strftime('%Y-%m-%d %H:%M:%S')))  
+        except:
+            date = soup.find_all("script",type='application/ld+json')
+            date = str(date).split('datePublished":')[1].split(',')[0].replace('T', ' ').replace('Z', '').replace('"','').strip()
+            date = datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S.%f")
+            delta = datetime.timedelta(hours=3)
+            date = date - delta
+            date = "%s-3:00"%(str(date.strftime('%Y-%m-%d %H:%M:%S')))  
         #
     #
     #Pick body's news
     #
     #
-        body_news = [x.text for x in soup.find("div", class_ = "mc-article-body").find_all("p") if len(x.text)>90]
+        mode = ['ul','div','article']
+        classk = ['n--noticia__content content','cb-summary__list cb-timeline-content','cb-summary-container','fusion-app','pw-container','styles__Container-sc-1ehbu6v-0 cNWinE content',\
+                    'col-lg-7 col-md-10','post-content','content-wrapper  news-body content','video-desc','cb-summary content-summary cb-divider-bottom',\
+                        'box area-select','cb-main-grid','c-news__content','mc-article-body','row']
         body_new = ''
+
+        (i,j,classmode,p) = Utils.search_mode_classk(mode,classk,soup)
+        body_news = Utils.creating_body_news(i,j,classmode,p,mode,classk,soup)
+
+        no_text = ['Cartola','Leia outras','podcast','Foto','clique aqui','Assine o Premiere','VÍDEOS:',\
+                    'o app do Yahoo Mail','Assine agora a newsletter','via Getty Images','Fonte: ','O seu endereço de e-mail',\
+                    'email protected','Comunicação Social da Polícia','email','Portal iG','nossas newsletters',\
+                    'WhatsApp:  As regras de privacidade','de 700 caracteres [0]','pic.twitter.com','(@','Leia também',\
+                    '(Reportagem', 'Entre para o grupo do Money Times','Entre agora para o nosso grupo no Telegram!',\
+                    'Ilustração: ','Continue lendo no','CONTINUA DEPOIS DA PUBLICIDADE','Assine o 247, apoie por Pix','Leia Também',\
+                    'aproveite a tarifa gratuita','Descarregue a nossa App gratuita','Os jogos (e as apostas)',\
+                    'Salve meu nome, e-mail neste navegador para a próxima vez que eu comentar','Redatora do portal, possui ','Continua após a publicidade',\
+                    'Grupo Estado','Os comentários são exclusivos para assinantes do Estadão.']
+
         for x in body_news:
-            if x.replace(" ","")[-1]==",":
-                body_new=body_new+x
+            for item in no_text:
+                if item in x:
+                    x = ''
+            if x=='':
+                None
             else:
-                body_new=body_new+x+' \n '##
+                body_new = body_new+x+'\n' ##
 
-        body_new = body_new.replace('Leia mais','').replace('Continua após a publicidade','').replace('Leia também','').replace('— Foto: Getty Images', '')
-
-
+        body_new = body_new.strip().replace('(Reuters) –', '').replace('247 -', '')    
 
     # Pick category news
     #   
-        category_news = soup.find_all("script")
-        category_news = str(category_news).split('editoria_path":')[1].split(",")[0].replace(':"','').replace('"','').replace(' ','').replace("\\", "")
-
+        category_news = url_news.replace("www.",'').replace("https://",'')
+        category_news = category_news.split('/')[1]
         category_news = Utils.translate_portuguese_english(category_news)
 
         #
@@ -79,8 +103,8 @@ class ScrappingNewsGloboG1Service(BaseService):
         image_new = str(ass).split("content=")[1].split(" ")[0].replace('"','')
         #
         #
-        domain = url_news.split("://")[1].split("/")[0]
-        source = url_news.split("://")[1].split(".")[1]
+        domain = url_news.split(".com")[0]+'.com'
+        source = url_news.split("https://")[1].split(".")[0] 
         #
         #
         globo_dict["title"].append(title)

@@ -65,8 +65,10 @@ class ScrappingNewsGloboValorService(BaseService):
 
     # Pick category news
     #   
-        category_news = soup.find_all("script")
-        category_news = str(category_news).split('editoria_path":')[1].split(",")[0].replace(':"','').replace('"','').replace(' ','').replace("\\", "")
+        # category_news = soup.find_all("script")
+        # category_news = str(category_news).split('editoria_path":')[1].split(",")[0].replace(':"','').replace('"','').replace(' ','').replace("\\", "")
+        category_news = url_news.replace("www.",'').replace("https://",'')
+        category_news = category_news.split('/')[1]        
 
         category_news = Utils.translate_portuguese_english(category_news)
 
@@ -79,8 +81,8 @@ class ScrappingNewsGloboValorService(BaseService):
         image_new = str(ass).split("content=")[1].split(" ")[0].replace('"','')
         #
         #
-        domain = url_news.split("://")[1].split("/")[0]
-        source = url_news.split("://")[1].split(".")[1]
+        domain = url_news.split(".com")[0]+'.com'
+        source = url_news.split("https://")[1].split(".")[0]  
         #
         #
         globo_dict["title"].append(title)

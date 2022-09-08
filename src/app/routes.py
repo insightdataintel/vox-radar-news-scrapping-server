@@ -149,7 +149,7 @@ from src.domain.select_news_folhaz_service import SelectNewsFolhaZService
 from src.domain.select_news_globo_g1_service import SelectNewsGloboG1Service
 from src.domain.select_news_globo_ge_service import SelectNewsGloboGeService
 from src.domain.select_news_globo_service import SelectNewsGloboService
-from src.domain.select_news_globovalor_service import SelectNewsGloboValorService
+from src.domain.select_news_globo_valor_service import SelectNewsGloboValorService
 from src.domain.select_news_gshow_service import SelectNewsGShowService
 from src.domain.select_news_ig_service import SelectNewsIgService
 from src.domain.select_news_istoe_service import SelectNewsIstoeService

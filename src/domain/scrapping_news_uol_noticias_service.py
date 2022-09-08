@@ -43,26 +43,55 @@ class ScrappingNewsUolNoticiasService(BaseService):
         #
         #Stardandizing Date
         date = soup.find("script", type="application/ld+json")
-        date = str(date).split('datePublished":')[1].split(",")[0].replace(':"','').replace('"','').replace(' ','')
-        date = date.replace('T', ' ')   
+        date = str(date).split('"datePublished":')[1].split(',')[0].replace('T', ' ').replace('Z', '').replace('"','').strip()
+        date = datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S.%f")
+        delta = datetime.timedelta(hours=3)
+        date = date - delta
+        date = "%s-3:00"%(str(date.strftime('%Y-%m-%d %H:%M:%S')))  
+
         #
         #Pick body's news
-
-        body_news = [x.text for x in soup.find("div", class_ = "text").find_all("p") if len(x.text)>90]
+        mode = ['div']
+        classk = ['text','content']
+        paragraf = ['p']
         body_new = ''
-        for x in body_news:
-            if x.replace(" ","")[-1]==",":
-                body_new=body_new+x
-            else:
-                body_new=body_new+x+' \n '##
 
-        body_new = body_new.replace('Leia mais','').replace('Continua após a publicidade','').replace('Leia também','').replace('— Foto: Getty Images', '')
+        for i in range(0,len(mode)):
+            for j in range(0,len(classk)):
+                try:
+                    yes = soup.find(mode[i],class_= classk[j])
+                    if(len(yes)>0):
+                        break
+                except:
+                    None
+
+                    
+
+        for k in range(0,len(paragraf)):
+            try:
+                body_news = [x.text for x in soup.find(mode[i], class_ = [classk[j],classk[1]]).find_all(paragraf[k]) if len(x.text)>20]
+                if(len(body_news)>0):
+                    break
+            except:
+                body_news = [x.text for x in soup.find(mode[i], id = 'textContent').find_all(paragraf[k]) if len(x.text)>20]
+                if(len(body_news)>0):
+                    break
+
+
+
+        no_text = ['Cartola','Leia outras','podcast','Foto','clique aqui','Assine o Premiere','VÍDEOS:','Li e concordo com os Termos de Uso']
+        for x in body_news:
+            for item in no_text:
+                if item in x:
+                    x = ''
+            if x=='':
+                pass
+            else:
+                body_new = body_new+x+' \n' ##
 
         # Pick category news
         #   
-        category_news = soup.find("script", id="js-collection")
-        category_news = str(category_news).split('"channel" :')[1].split(",")[0].replace(':"','').replace('"','')
-
+        category_news = 'noticias'
         category_news = Utils.translate_portuguese_english(category_news)
 
         #
