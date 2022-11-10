@@ -94,7 +94,7 @@ class ScrappingNewsBroadcastAgroService(BaseService):
                     body_new=body_new+x+' \n '##       
         except Exception as e:
             self.logger.error(f"Não foi possível encontrar o corpo da notícia do Broadcast Agro: {url_news} | {e}")
-            body_new = ""    
+            return ReturnService(False, 'Did not collect the body of the News')    
    
 
 

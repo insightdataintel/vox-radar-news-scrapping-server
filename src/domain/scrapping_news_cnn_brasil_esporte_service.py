@@ -107,7 +107,7 @@ class ScrappingNewsCNNBrasilEsporteService(BaseService):
                     body_new = body_new+x+'\n' ##
         except Exception as e:
             self.logger.error(f"Não foi possível encontrar o corpo da notícia do CNN Brasil Esporte: {url_news} | {e}")
-            date = ""    
+            return ReturnService(False, 'Did not collect the body of the News')   
     #    
     # Pick category news
     #   

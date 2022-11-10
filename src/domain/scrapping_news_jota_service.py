@@ -39,7 +39,7 @@ class ScrappingNewsJotaService(BaseService):
             title = soup.find("meta", attrs={'property': 'og:title'})
             title = str(title).split("content=")[1].split("property=")[0].replace('"','')
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar o título da notícia do Folha de São Paulo: {url_news} | {e}")     
+            self.logger.error(f"Não foi possível encontrar o título da notícia do Jota: {url_news} | {e}")     
             title = ""
     #
     #Stardandizing Date
@@ -48,7 +48,7 @@ class ScrappingNewsJotaService(BaseService):
             date = soup.find("div", class_= "jota-article__date")
             date = str(date).split('datetime=')[1].split(">")[0].replace('"','').replace('h',':').replace('T', ' ') 
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar a data da notícia do Folha de São Paulo: {url_news} | {e}")
+            self.logger.error(f"Não foi possível encontrar a data da notícia do Jota: {url_news} | {e}")
             date = ""    
     #
     #Pick body's news
@@ -82,8 +82,8 @@ class ScrappingNewsJotaService(BaseService):
             body_new = body_new.replace('Leia mais','').replace('Continua após a publicidade','').replace('Leia também','').replace('— Foto: Getty Images', '')
             body_new = body_new.split('Foto destaque:')[0]
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar o corpo da notícia do Folha de São Paulo: {url_news} | {e}")
-            body_new = ""
+            self.logger.error(f"Não foi possível encontrar o corpo da notícia do Jota: {url_news} | {e}")
+            return ReturnService(False, 'Did not collect the body of the News')
 
     # Pick category news
     # 
@@ -102,7 +102,7 @@ class ScrappingNewsJotaService(BaseService):
             ass = soup.find("meta", property="og:image")
             image_new = str(ass).split("content=")[1].split(" ")[0].replace('"','')
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar imagens da notícia do Folha de São Paulo: {url_news} | {e}")     
+            self.logger.error(f"Não foi possível encontrar imagens da notícia do Jota: {url_news} | {e}")     
             image_new = "" 
         #
         #

@@ -102,7 +102,7 @@ class ScrappingNewsCorreioBrazilienseService(BaseService):
             body_new = body_new.split('Foto destaque:')[0]
         except Exception as e:
             self.logger.error(f"Não foi possível encontrar o corpo da notícia do Correrio Braziliense: {url_news} | {e}")
-            body_new = ""            
+            return ReturnService(False, 'Did not collect the body of the News')            
    
 
 

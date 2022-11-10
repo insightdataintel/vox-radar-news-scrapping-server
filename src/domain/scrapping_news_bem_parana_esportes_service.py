@@ -107,7 +107,7 @@ class ScrappingNewsBemParanaEsportesService(BaseService):
             body_new = body_new.strip().replace('\n',' ').replace('(Reuters) –', '').replace('247 -', '')
         except Exception as e:
             self.logger.error(f"Não foi possível encontrar o corpo da notícia do Bem Parana Esportes: {url_news} | {e}")
-            body_new = ""  
+            return ReturnService(False, 'Did not collect the body of the News')  
     #    
     # Pick category news
     #   

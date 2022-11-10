@@ -94,7 +94,7 @@ class ScrappingNewsFolhaService(BaseService):
                 body_new = body_new.replace('Leia mais','').replace('Continua após a publicidade','').replace('Leia também','').replace('— Foto: Getty Images', '').encode('iso-8859-1').decode('utf-8')
             except Exception as e:
                 self.logger.error(f"Não foi possível encontrar o corpo da notícia do Folha de São Paulo: {url_news} | {e}")
-                body_new = ""
+                return ReturnService(False, 'Did not collect the body of the News')
 
         # Pick category news
         try:

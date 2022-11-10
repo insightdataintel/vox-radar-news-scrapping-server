@@ -110,7 +110,7 @@ class ScrappingNewsCNNBrasilPoliticaService(BaseService):
 
         except Exception as e:
             self.logger.error(f"Não foi possível encontrar o corpo da notícia do CNN Brasil Politica: {url_news} | {e}")
-            body_new= ""    
+            return ReturnService(False, 'Did not collect the body of the News')    
     #    
     # Pick category news
     #   
