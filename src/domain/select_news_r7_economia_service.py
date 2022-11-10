@@ -27,7 +27,7 @@ class SelectNewsR7EconomiaService(BaseService):
         try:
             links_filtered = Utils.extract_links_from_rss(url)
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar os Links na página inicial do site Valor Econômico | {e}")
+            self.logger.error(f"Não foi possível encontrar os Links na página inicial do site r7 economia | {e}")
             return ReturnService(False, "Error")
                     
         print(links_filtered)

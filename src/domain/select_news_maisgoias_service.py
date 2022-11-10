@@ -28,7 +28,7 @@ class SelectNewsMaisGoiasService(BaseService):
         try:
             links_filtered = Utils.extract_links_from_page_maisgoias(url)
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar os Links na página inicial do site Valor Econômico | {e}")
+            self.logger.error(f"Não foi possível encontrar os Links na página inicial do site maisgoias | {e}")
             return ReturnService(False, "Error")
                     
         print(links_filtered)

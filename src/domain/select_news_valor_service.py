@@ -70,7 +70,7 @@ class SelectNewsValorService(BaseService):
                     links_filtered.append(temp)
 
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar os Links na página inicial do site Valor Econômico | {e}")
+            self.logger.error(f"Não foi possível encontrar os Links na página inicial do site valor | {e}")
 
         print(links_filtered)
         for link in links_filtered:

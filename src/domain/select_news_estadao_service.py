@@ -46,6 +46,7 @@ class SelectNewsEstadaoService(BaseService):
                     links_filtered.append(link)
         except Exception as e:
             self.logger.error(f"Não foi possível encontrar os Links na página inicial do site Estadão | {e}")
+            return ReturnService(False, "Error")
         
         links_filtered = list(set(links_filtered))
         print(links_filtered)
