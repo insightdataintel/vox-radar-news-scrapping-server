@@ -35,25 +35,35 @@ class ScrappingNewsOPopularService(BaseService):
     #
     #title
     #
-        title = soup.find("title")
-        title = str(title).split("<title>")[1].split("</title")[0].replace('- @aredacao','').replace('"','')
-            #
+        try:
+            title = soup.find("title")
+            title = str(title).split("<title>")[1].split("</title")[0].replace('- @aredacao','').replace('"','')
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar o título da notícia do Folha de São Paulo: {url_news} | {e}")     
+            title = ""
+    #
     #Stardandizing Date
     #
-        date = soup.find("time",class_='inner-date')
-        date = str(date).split('datetime=')[1].split('itemprop')[0].replace('"','')
-        date = date.replace('T',' ').split('+')[0]
+        try:
+            date = soup.find("time",class_='inner-date')
+            date = str(date).split('datetime=')[1].split('itemprop')[0].replace('"','')
+            date = date.replace('T',' ').split('+')[0]
  
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar a data da notícia do Folha de São Paulo: {url_news} | {e}")
+            date = ""    
     #
     #Pick body's news
     #
-    # 
-        body_new = soup.find('section', itemprop='articleBody').text.strip()         
-   
-
+    #
+        try: 
+            body_new = soup.find('section', itemprop='articleBody').text.strip()     
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar o corpo da notícia do Folha de São Paulo: {url_news} | {e}")
+            body_new = ""
 
     # Pick category news
-    #   
+    # 
         category_news = soup.find('div',class_='retracts-tag')
         category_news = str(category_news).split('title="')[1].split('viewbox=')[0].replace('"','').strip()
     
@@ -64,9 +74,12 @@ class ScrappingNewsOPopularService(BaseService):
         #
     # Pick image from news
         #
-        ass = soup.find("meta", property="og:image")
-        image_new = str(ass).split("content=")[1].split(" ")[0].replace('"','').replace(";",'')
-        #
+        try:
+            ass = soup.find("meta", property="og:image")
+            image_new = str(ass).split("content=")[1].split(" ")[0].replace('"','')
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar imagens da notícia do Folha de São Paulo: {url_news} | {e}")     
+            image_new = ""
         #
         domain = url_news.split(".br/")[0]+'.br'
         source = url_news.split("https://")[1].split(".com")[0]    

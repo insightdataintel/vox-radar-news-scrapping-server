@@ -24,7 +24,11 @@ class SelectNewsBrasil247Service(BaseService):
             
         url = "https://www.brasil247.com/ultimas-noticias"
         
-        links_filtered = Utils.extract_links_from_page_brasil247(url)
+        try:
+            links_filtered = Utils.extract_links_from_page_brasil247(url)
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar os Links na página inicial do site Valor Econômico | {e}")
+            return ReturnService(False, "Error")
                     
         print(links_filtered)
         for link in links_filtered:

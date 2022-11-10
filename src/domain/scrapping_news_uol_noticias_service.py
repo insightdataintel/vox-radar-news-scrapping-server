@@ -42,52 +42,59 @@ class ScrappingNewsUolNoticiasService(BaseService):
             pass                 
         #
         #Stardandizing Date
-        date = soup.find("script", type="application/ld+json")
-        date = str(date).split('"datePublished":')[1].split(',')[0].replace('T', ' ').replace('Z', '').replace('"','').strip()
-        date = datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S.%f")
-        delta = datetime.timedelta(hours=3)
-        date = date - delta
-        date = "%s-3:00"%(str(date.strftime('%Y-%m-%d %H:%M:%S')))  
-
+        try:
+            date = soup.find("script", type="application/ld+json")
+            date = str(date).split('"datePublished":')[1].split(',')[0].replace('T', ' ').replace('Z', '').replace('"','').strip()
+            date = datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S.%f")
+            delta = datetime.timedelta(hours=3)
+            date = date - delta
+            date = "%s-3:00"%(str(date.strftime('%Y-%m-%d %H:%M:%S')))  
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar a data da notícia do Folha de São Paulo: {url_news} | {e}")
+            date = ""
         #
         #Pick body's news
-        mode = ['div']
-        classk = ['text','content']
-        paragraf = ['p']
-        body_new = ''
+        try:
+            mode = ['div']
+            classk = ['text','content']
+            paragraf = ['p']
+            body_new = ''
 
-        for i in range(0,len(mode)):
-            for j in range(0,len(classk)):
+            for i in range(0,len(mode)):
+                for j in range(0,len(classk)):
+                    try:
+                        yes = soup.find(mode[i],class_= classk[j])
+                        if(len(yes)>0):
+                            break
+                    except:
+                        None
+
+                        
+
+            for k in range(0,len(paragraf)):
                 try:
-                    yes = soup.find(mode[i],class_= classk[j])
-                    if(len(yes)>0):
+                    body_news = [x.text for x in soup.find(mode[i], class_ = [classk[j],classk[1]]).find_all(paragraf[k]) if len(x.text)>20]
+                    if(len(body_news)>0):
                         break
                 except:
-                    None
-
-                    
-
-        for k in range(0,len(paragraf)):
-            try:
-                body_news = [x.text for x in soup.find(mode[i], class_ = [classk[j],classk[1]]).find_all(paragraf[k]) if len(x.text)>20]
-                if(len(body_news)>0):
-                    break
-            except:
-                body_news = [x.text for x in soup.find(mode[i], id = 'textContent').find_all(paragraf[k]) if len(x.text)>20]
-                if(len(body_news)>0):
-                    break
+                    body_news = [x.text for x in soup.find(mode[i], id = 'textContent').find_all(paragraf[k]) if len(x.text)>20]
+                    if(len(body_news)>0):
+                        break
 
 
 
-        no_text = ['Cartola','Leia outras','podcast','Foto','clique aqui','Assine o Premiere','VÍDEOS:','Li e concordo com os Termos de Uso']
-        for x in body_news:
-            for item in no_text:
-                if item in x:
-                    x = ''
-            if x=='':
-                pass
-            else:
-                body_new = body_new+x+' \n' ##
+            no_text = ['Cartola','Leia outras','podcast','Foto','clique aqui','Assine o Premiere','VÍDEOS:','Li e concordo com os Termos de Uso']
+            for x in body_news:
+                for item in no_text:
+                    if item in x:
+                        x = ''
+                if x=='':
+                    pass
+                else:
+                    body_new = body_new+x+' \n' ##        
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar o corpo da notícia do Folha de São Paulo: {url_news} | {e}")
+            body_new = ""
 
         # Pick category news
         #   
@@ -99,9 +106,12 @@ class ScrappingNewsUolNoticiasService(BaseService):
         #
         # Pick image from news
         #
-        ass = soup.find("meta", property="og:image")
-        image_new = str(ass).split("content=")[1].split(" ")[0].replace('"','')
-        #
+        try:
+            ass = soup.find("meta", property="og:image")
+            image_new = str(ass).split("content=")[1].split(" ")[0].replace('"','')
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar imagens da notícia do Folha de São Paulo: {url_news} | {e}")     
+            image_new = ""
         #
         domain = url_news.split("://")[1].split("/")[0]
         source = url_news.split("://")[1].split(".")[1]

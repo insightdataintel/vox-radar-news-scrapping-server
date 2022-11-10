@@ -34,62 +34,73 @@ class ScrappingNewsEmGeraisService(BaseService):
     #
     #title
     #
-        title = soup.find("meta",property="og:title")
-        title = str(title).split("content=")[1].split("property=")[0].split('itemprop=')[0].replace('- @aredacao','').replace('"','')
+        try:
+            title = soup.find("meta",property="og:title")
+            title = str(title).split("content=")[1].split("property=")[0].split('itemprop=')[0].replace('- @aredacao','').replace('"','')
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar o título da notícia do Em Gerais: {url_news} | {e}")     
+            title = ""
     #
     #Stardandizing Date
     #
-        date = soup.find_all("script")
-        date = str(date).split('"datePublished":')[1].split(',')[0].replace('T', ' ').replace('Z', '').replace('"','').split('+')[0].strip()
-        #
+        try:
+            date = soup.find_all("script")
+            date = str(date).split('"datePublished":')[1].split(',')[0].replace('T', ' ').replace('Z', '').replace('"','').split('+')[0].strip()
+            #
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar a data da notícia do Em Gerais: {url_news} | {e}")
+            date = ""    
     #
     #Pick body's news
     #
     #
+        try:
 
 
 
-        mode = ['div']
-        classk = ['rs_read_this2']
-        paragraf = ['p']
-        body_new = ''
+            mode = ['div']
+            classk = ['rs_read_this2']
+            paragraf = ['p']
+            body_new = ''
 
-        for i in range(0,len(mode)):
-            for j in range(0,len(classk)):
-                try:
-                    yes = soup.find(mode[i],class_= classk[j])
-                    if(len(yes)>0):
-                        break
-                except:
-                    None
+            for i in range(0,len(mode)):
+                for j in range(0,len(classk)):
+                    try:
+                        yes = soup.find(mode[i],class_= classk[j])
+                        if(len(yes)>0):
+                            break
+                    except:
+                        None
 
-                    
+                        
 
-        for k in range(0,len(paragraf)):
-            body_news = [x.text.strip().replace('\xa0', '  ') for x in soup.find(mode[i], id = classk[j]).find_all(paragraf[k]) if len(x.text)>20]
-        body_news_extract = [x.text.strip().replace('\xa0', '  ') for x in soup.find(mode[i], id = classk[j]).find_all('div') if len(x.text)>20]
+            for k in range(0,len(paragraf)):
+                body_news = [x.text.strip().replace('\xa0', '  ') for x in soup.find(mode[i], id = classk[j]).find_all(paragraf[k]) if len(x.text)>20]
+            body_news_extract = [x.text.strip().replace('\xa0', '  ') for x in soup.find(mode[i], id = classk[j]).find_all('div') if len(x.text)>20]
 
-        aux_extract = body_news_extract[1]
-        aux = []
-        for i in range(1,len(body_news)):
-            aux.append(body_news[i].replace(aux_extract,'').strip())
+            aux_extract = body_news_extract[1]
+            aux = []
+            for i in range(1,len(body_news)):
+                aux.append(body_news[i].replace(aux_extract,'').strip())
 
 
-        no_text = ['Cartola','Leia outras','podcast','Foto','clique aqui','Assine o Premiere','VÍDEOS:','LEIA MAIS']
-        space_text = ['  ']
-        for x in aux:
-            if item in space_text:
-                if item in x:
-                    x.replace(item,'\n')    
-            for item in no_text:
-                if item in x:
-                    x = ''
+            no_text = ['Cartola','Leia outras','podcast','Foto','clique aqui','Assine o Premiere','VÍDEOS:','LEIA MAIS']
+            space_text = ['  ']
+            for x in aux:
+                if item in space_text:
+                    if item in x:
+                        x.replace(item,'\n')    
+                for item in no_text:
+                    if item in x:
+                        x = ''
 
-            if x=='':
-                pass
-            else:
-                body_new = body_new+x+' \n' ##
-
+                if x=='':
+                    pass
+                else:
+                    body_new = body_new+x+' \n' ##
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar o corpo da notícia do Em Gerais: {url_news} | {e}")
+            body_new = ""
                 
     # Pick category news
     #   
@@ -104,8 +115,12 @@ class ScrappingNewsEmGeraisService(BaseService):
         #
     # Pick image from news
         #
-        ass = soup.find("meta", property="og:image")
-        image_new = str(ass).split("content=")[1].split(" ")[0].replace('"','').replace(";",'')
+        try:
+            ass = soup.find("meta", property="og:image")
+            image_new = str(ass).split("content=")[1].split(" ")[0].replace('"','').replace(";",'')
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar imagens da notícia do Em Gerais: {url_news} | {e}")     
+            image_new = "" 
         # #
         # #
         domain = url_news.split(".com")[0]+'.com'

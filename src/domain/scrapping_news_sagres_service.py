@@ -35,58 +35,70 @@ class ScrappingNewsSagresService(BaseService):
     #
     #title
     #
-        title = soup.find("meta",attrs={'property':'og:title'})
-        title = str(title).split("meta content=")[1].split("property=")[0].replace('- Sagres Online','').replace('"','').replace("'","")
-            #
+        try:
+            title = soup.find("meta",attrs={'property':'og:title'})
+            title = str(title).split("meta content=")[1].split("property=")[0].replace('- Sagres Online','').replace('"','').replace("'","")
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar o título da notícia do Folha de São Paulo: {url_news} | {e}")     
+            title = ""
+    #
     #Stardandizing Date
     #
-        date = soup.find("meta",attrs={'property': 'article:published_time'})
-        date = str(date).split('meta content=')[1].split('property=')[0].replace('"','')
-        date = date.replace('T',' ').split('+')[0]
-        date = datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S")
-        delta = datetime.timedelta(hours=3)
-        date = date - delta
-        date = "%s-3:00"%(str(date.strftime('%Y-%m-%d %H:%M:%S')))  
+        try:
+            date = soup.find("meta",attrs={'property': 'article:published_time'})
+            date = str(date).split('meta content=')[1].split('property=')[0].replace('"','')
+            date = date.replace('T',' ').split('+')[0]
+            date = datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S")
+            delta = datetime.timedelta(hours=3)
+            date = date - delta
+            date = "%s-3:00"%(str(date.strftime('%Y-%m-%d %H:%M:%S')))  
  
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar a data da notícia do Folha de São Paulo: {url_news} | {e}")
+            date = ""    
     #
     #Pick body's news
     #
-    # 
-        mode = ['div']
-        classk = ['td-ss-main-content']
-        paragraf = ['p']
+    #
+        try: 
+            mode = ['div']
+            classk = ['td-ss-main-content']
+            paragraf = ['p']
 
-        for i in range(0,len(mode)):
-            for j in range(0,len(classk)):
+            for i in range(0,len(mode)):
+                for j in range(0,len(classk)):
+                    try:
+                        yes = soup.find(mode[i],class_= classk[j])
+                        if(len(yes)>0):
+                            break
+                    except:
+                        None
+
+                        
+            for k in range(0,len(paragraf)):
                 try:
-                    yes = soup.find(mode[i],class_= classk[j])
-                    if(len(yes)>0):
+                    body_news = [x.text for x in soup.find(mode[i], class_ = classk[j]).find_all(paragraf[k]) if len(x.text)>20]
+                    if(len(body_news)>0):
                         break
                 except:
                     None
 
-                    
-        for k in range(0,len(paragraf)):
-            try:
-                body_news = [x.text for x in soup.find(mode[i], class_ = classk[j]).find_all(paragraf[k]) if len(x.text)>20]
-                if(len(body_news)>0):
+            body_new = ''
+
+            for x in body_news:
+                if 'Telefone:' in x:
                     break
-            except:
-                None
+                else:
+                    x.replace("\n","")
+                    body_new=body_new+x+' \n '##              
+    
 
-        body_new = ''
-
-        for x in body_news:
-            if 'Telefone:' in x:
-                break
-            else:
-                x.replace("\n","")
-                body_new=body_new+x+' \n '##              
-   
-
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar o corpo da notícia do Folha de São Paulo: {url_news} | {e}")
+            body_new = ""
 
     # Pick category news
-    #   
+    # 
         category = soup.find_all('li',class_='entry-category') 
         category_news = ''
         for categor in category:
@@ -99,9 +111,12 @@ class ScrappingNewsSagresService(BaseService):
         #
     # Pick image from news
         #
-        ass = soup.find("meta", property="og:image")
-        image_new = str(ass).split("content=")[1].split(" ")[0].replace('"','').replace(";",'')
-        #
+        try:
+            ass = soup.find("meta", property="og:image")
+            image_new = str(ass).split("content=")[1].split(" ")[0].replace('"','')
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar imagens da notícia do Folha de São Paulo: {url_news} | {e}")     
+            image_new = ""
         #
         domain = url_news.split(".br/")[0]+'.br'
         source = url_news.split("https://")[1].split(".com")[0]          

@@ -38,7 +38,7 @@ class ScrappingNewsFolhaEmcimadahoraService(BaseService):
         title = str(title).split("content=")[1].split("property=")[0].replace('"','')
         title = title.encode('iso-8859-1').decode('utf-8')
         if (title==""):
-            self.logger.error(f"It is cannot possible to retrieve date from Valor")
+            self.logger.error(f"It is cannot possible to retrieve date from Folha UOL Em Cima da Hora")
             title = " "
             pass                 
         #
@@ -55,9 +55,13 @@ class ScrappingNewsFolhaEmcimadahoraService(BaseService):
                 date = datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%SZ")
                 date = "%s:%.3f-3:00"%(str(date.strftime('%Y-%m-%d %H:%M:%S')),float("%.3f" % (date.second + date.microsecond / 1e6)))
             except:
-                date = soup.find("meta", property="article:published_time")
-                date = str(date).split("content=")[1].split(" property")[0].replace('"','\'').replace("'","")
-                date = date+'-03:00'
+                try:
+                    date = soup.find("meta", property="article:published_time")
+                    date = str(date).split("content=")[1].split(" property")[0].replace('"','\'').replace("'","")
+                    date = date+'-03:00'
+                except Exception as e:
+                    self.logger.error(f"Não foi possível encontrar a data da notícia do Folha UOL Em cima da hora: {url_news} | {e}")
+                    date = ""
         #
         #Pick body's news
 
@@ -75,19 +79,22 @@ class ScrappingNewsFolhaEmcimadahoraService(BaseService):
             
         
         except:
-            body_news = [x.text for x in soup.find("div", class_ = "c-news__content").find_all("p") if len(x.text)>80]
-            body_new = ''
-            for x in body_news:
-                if "assinante da Folha" in x:
-                    break
-                if x.replace(" ","")[-1]==",":
-                    body_new=body_new+x
-                else:
-                    body_new=body_new+x+' \n '##
+            try:
+                body_news = [x.text for x in soup.find("div", class_ = "c-news__content").find_all("p") if len(x.text)>80]
+                body_new = ''
+                for x in body_news:
+                    if "assinante da Folha" in x:
+                        break
+                    if x.replace(" ","")[-1]==",":
+                        body_new=body_new+x
+                    else:
+                        body_new=body_new+x+' \n '##
 
 
-            body_new = body_new.replace('Leia mais','').replace('Continua após a publicidade','').replace('Leia também','').replace('— Foto: Getty Images', '').encode('iso-8859-1').decode('utf-8')
-
+                body_new = body_new.replace('Leia mais','').replace('Continua após a publicidade','').replace('Leia também','').replace('— Foto: Getty Images', '').encode('iso-8859-1').decode('utf-8')
+            except Exception as e:
+                self.logger.error(f"Não foi possível encontrar o corpo da notícia do Folha UOL Em cima da hora: {url_news} | {e}")
+                body_new = ""
         # Pick category news
         #   
         if ('colunas' in url_news):
@@ -107,8 +114,12 @@ class ScrappingNewsFolhaEmcimadahoraService(BaseService):
         #
         # Pick image from news
         #
-        ass = soup.find("meta", property="og:image")
-        image_new = str(ass).split("content=")[1].split(" ")[0].replace('"','')
+        try:
+            ass = soup.find("meta", property="og:image")
+            image_new = str(ass).split("content=")[1].split(" ")[0].replace('"','')
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar imagens da notícia do Folha UOL Em cima da hora: {url_news} | {e}")     
+            image_new = "" 
         #
         #
         domain = url_news.split("://")[1].split("/")[0]

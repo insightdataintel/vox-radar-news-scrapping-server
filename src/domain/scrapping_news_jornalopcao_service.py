@@ -35,56 +35,68 @@ class ScrappingNewsJornalOpcaoService(BaseService):
     #
     #title
     #
-        title = soup.find("meta",attrs={'property': 'og:title'})
-        title = str(title).split("meta content=")[1].split("property=")[0].replace('- Jornal Opção','').replace('"','')
-            #
+        try:
+            title = soup.find("meta",attrs={'property': 'og:title'})
+            title = str(title).split("meta content=")[1].split("property=")[0].replace('- Jornal Opção','').replace('"','')
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar o título da notícia do Jornal Opcao: {url_news} | {e}")     
+            title = ""
+    #
     #Stardandizing Date
     #
-        date = soup.find("p", class_='post-date')
-        date = str(date).split('"post-date">')[1].split("</p>")[0].replace(':"','').replace('"','').split("+")[0].replace('-','').replace('às','')
-        aux = date.split()
-        aux[1] = Utils.month_convert(aux[1])
-        date = aux[0]+'-'+aux[1]+'-'+aux[2]+ ' ' + aux[3].replace('h',':')+':00'+'-03:00'
- 
+        try:
+            date = soup.find("p", class_='post-date')
+            date = str(date).split('"post-date">')[1].split("</p>")[0].replace(':"','').replace('"','').split("+")[0].replace('-','').replace('às','')
+            aux = date.split()
+            aux[1] = Utils.month_convert(aux[1])
+            date = aux[0]+'-'+aux[1]+'-'+aux[2]+ ' ' + aux[3].replace('h',':')+':00'+'-03:00'
+    
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar a data da notícia do Jornal Opcao: {url_news} | {e}")
+            date = ""    
     #
     #Pick body's news
     #
-    # 
-        mode = ['div']
-        classk = ['post-content']
-        paragraf = ['p']
+    #
+        try: 
+            mode = ['div']
+            classk = ['post-content']
+            paragraf = ['p']
 
-        for i in range(0,len(mode)):
-            for j in range(0,len(classk)):
+            for i in range(0,len(mode)):
+                for j in range(0,len(classk)):
+                    try:
+                        yes = soup.find(mode[i],class_= classk[j])
+                        if(len(yes)>0):
+                            break
+                    except:
+                        None
+
+                        
+            for k in range(0,len(paragraf)):
                 try:
-                    yes = soup.find(mode[i],class_= classk[j])
-                    if(len(yes)>0):
+                    body_news = [x.text for x in soup.find(mode[i], class_ = classk[j]).find_all(paragraf[k]) if len(x.text)>20]
+                    if(len(body_news)>0):
                         break
                 except:
                     None
 
-                    
-        for k in range(0,len(paragraf)):
-            try:
-                body_news = [x.text for x in soup.find(mode[i], class_ = classk[j]).find_all(paragraf[k]) if len(x.text)>20]
-                if(len(body_news)>0):
+            body_new = ''
+
+            for x in body_news:
+                if 'Leia também:' in x:
                     break
-            except:
-                None
-
-        body_new = ''
-
-        for x in body_news:
-            if 'Leia também:' in x:
-                break
-            else:
-                x.replace("\n","")
-                body_new=body_new+x+' \n '##                
+                else:
+                    x.replace("\n","")
+                    body_new=body_new+x+' \n '##                
    
 
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar o corpo da notícia do Jornal Opcao: {url_news} | {e}")
+            body_new = ""
 
     # Pick category news
-    #   
+    # 
         category_news = soup.find('span','text')
         category_news = str(category_news).split('text">')[1].split('</span>')[0]
     
@@ -95,8 +107,12 @@ class ScrappingNewsJornalOpcaoService(BaseService):
         #
     # Pick image from news
         #
-        ass = soup.find("meta", property="og:image")
-        image_new = str(ass).split("content=")[1].split(" ")[0].replace('"','').replace(";",'')
+        try:
+            ass = soup.find("meta", property="og:image")
+            image_new = str(ass).split("content=")[1].split(" ")[0].replace('"','').replace(";",'')
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar imagens da notícia do Jornal Opcao: {url_news} | {e}")     
+            image_new = "" 
         #
         #
         domain = url_news.split(".br")[0]+'.br'

@@ -35,56 +35,68 @@ class ScrappingNewsMaisGoiasService(BaseService):
     #
     #title
     #
-        title = soup.find("meta", attrs={'property': 'og:title'})
-        title = str(title).split("content=")[1].split("property=")[0].replace('- @aredacao','').replace('"','')
-            #
+        try:
+            title = soup.find("meta", attrs={'property': 'og:title'})
+            title = str(title).split("content=")[1].split("property=")[0].replace('- @aredacao','').replace('"','')
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar o título da notícia do Folha de São Paulo: {url_news} | {e}")     
+            title = ""
+    #
     #Stardandizing Date
     #
-        date = soup.find("script", type="application/ld+json")
-        date = str(date).split('datePublished":')[1].split(',"dateModified')[0].replace('"','')
-        date = "%s-3:00"%(date)  
- 
+        try:
+            date = soup.find("script", type="application/ld+json")
+            date = str(date).split('datePublished":')[1].split(',"dateModified')[0].replace('"','')
+            date = "%s-3:00"%(date)  
+    
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar a data da notícia do Folha de São Paulo: {url_news} | {e}")
+            date = ""    
     #
     #Pick body's news
     #
-    # 
-        mode = ['article']
-        classk = ['article']
-        paragraf = ['p']
+    #
+        try: 
+            mode = ['article']
+            classk = ['article']
+            paragraf = ['p']
 
-        for i in range(0,len(mode)):
-            for j in range(0,len(classk)):
+            for i in range(0,len(mode)):
+                for j in range(0,len(classk)):
+                    try:
+                        yes = soup.find(mode[i],class_= classk[j])
+                        if(len(yes)>0):
+                            break
+                    except:
+                        None
+
+                        
+            for k in range(0,len(paragraf)):
                 try:
-                    yes = soup.find(mode[i],class_= classk[j])
-                    if(len(yes)>0):
+                    body_news = [x.text for x in soup.find(mode[i], class_ = classk[j]).find_all(paragraf[k]) if len(x.text)>90]
+                    if(len(body_news)>0):
                         break
                 except:
                     None
 
-                    
-        for k in range(0,len(paragraf)):
-            try:
-                body_news = [x.text for x in soup.find(mode[i], class_ = classk[j]).find_all(paragraf[k]) if len(x.text)>90]
-                if(len(body_news)>0):
-                    break
-            except:
-                None
+            body_new = ''
+            jump_text = ('Saiba Mais','Contato: ')
 
-        body_new = ''
-        jump_text = ('Saiba Mais','Contato: ')
-
-        for x in body_news:
-            if 'Clique Aqui' in x:
-                None
-            else:
-                x.replace("\n","")
-                body_new=body_new+x+' \n '##  
-   
+            for x in body_news:
+                if 'Clique Aqui' in x:
+                    None
+                else:
+                    x.replace("\n","")
+                    body_new=body_new+x+' \n '##  
+    
 
 
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar o corpo da notícia do Folha de São Paulo: {url_news} | {e}")
+            body_new = ""
 
     # Pick category news
-    #   
+    # 
         category_news = soup.find_all('script')
         category_news = str(category_news).split('"category":')[1].split(',')[0].replace('"','')
 
@@ -93,8 +105,12 @@ class ScrappingNewsMaisGoiasService(BaseService):
         #
     # Pick image from news
         #
-        ass = soup.find("picture")
-        image_new = str(ass).split("quality=90,format=auto/")[1].split('media=')[0].replace('"','')
+        try:
+            ass = soup.find("picture")
+            image_new = str(ass).split("quality=90,format=auto/")[1].split('media=')[0].replace('"','')
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar imagens da notícia do Folha de São Paulo: {url_news} | {e}")     
+            image_new = "" 
         #
         #
         domain = url_news.split(".br/")[0]+'.br/'

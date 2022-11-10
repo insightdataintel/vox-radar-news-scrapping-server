@@ -25,7 +25,11 @@ class SelectNewsCorreioBrazilienseService(BaseService):
         url = "https://www.correiobraziliense.com.br/ultimas-noticias"
 
         
-        links_filtered = Utils.extract_links_from_page_v3(url)
+        try:
+            links_filtered = Utils.extract_links_from_page_v3(url)
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar os Links na página inicial do site Valor Econômico | {e}")
+            return ReturnService(False, "Error")
                     
         print(links_filtered)
         for link in links_filtered:

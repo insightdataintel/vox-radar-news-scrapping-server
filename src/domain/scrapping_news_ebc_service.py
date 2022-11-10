@@ -34,65 +34,76 @@ class ScrappingNewsEbcService(BaseService):
     #
     #title
     #
-        title = soup.find('meta',property='og:title')
-        title = str(title).split("content=")[1].split("property=")[0].split('itemprop=')[0].split('- ISTOÉ DINHEIRO')[0].replace('- @aredacao','').replace('"','')
+        try:
+            title = soup.find('meta',property='og:title')
+            title = str(title).split("content=")[1].split("property=")[0].split('itemprop=')[0].split('- ISTOÉ DINHEIRO')[0].replace('- @aredacao','').replace('"','')
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar o título da notícia do EBC: {url_news} | {e}")     
+            title = ""
     #
     #Stardandizing Date
     #
+        try:
         
-        date = soup.find("span", property="dc:date")
-        date = str(date).split('content="')[1].split('datatype')[0].split(',')[0].split('<span')[0].replace('T', ' ').replace('Z', '').\
-        replace('"','').replace('h',':').replace('-04:00','').split('+')[0].\
-        replace('min','').strip()
+            date = soup.find("span", property="dc:date")
+            date = str(date).split('content="')[1].split('datatype')[0].split(',')[0].split('<span')[0].replace('T', ' ').replace('Z', '').\
+            replace('"','').replace('h',':').replace('-04:00','').split('+')[0].\
+            replace('min','').strip()
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar a data da notícia do EBC: {url_news} | {e}")
+            date = ""    
     #
     #Pick body's news
     #
     #
-        mode = ['div']
-        classk = ['td-post-content']
-        paragraf = ['p']
-        body_new = ''
+        try:
+            mode = ['div']
+            classk = ['td-post-content']
+            paragraf = ['p']
+            body_new = ''
 
-        for i in range(0,len(mode)):
-            for j in range(0,len(classk)):
+            for i in range(0,len(mode)):
+                for j in range(0,len(classk)):
+                    try:
+                        yes = soup.find('article')
+                        if(len(yes)>0):
+                            break
+                    except:
+                        None
+
+                        
+
+            for k in range(0,len(paragraf)):
                 try:
-                    yes = soup.find('article')
-                    if(len(yes)>0):
+                    body_news = [x.text for x in soup.find('article').find_all(paragraf[k]) if len(x.text)>20]
+                    if(len(body_news)>0):
                         break
                 except:
+                    body_news = [x.text for x in soup.find(mode[i], id = 'textContent').find_all(paragraf[k]) if len(x.text)>20]
+                    if(len(body_news)>0):
+                        break
+
+
+
+            no_text = ['Cartola','Leia outras','podcast','Foto','clique aqui','Assine o Premiere','VÍDEOS:',\
+                        'o app do Yahoo Mail','Assine agora a newsletter','via Getty Images','Fonte: ','O seu endereço de e-mail',\
+                        'email protected','Comunicação Social da Polícia','email','Portal iG','nossas newsletters',\
+                        'WhatsApp:  As regras de privacidade','de 700 caracteres [0]','pic.twitter.com','(@','Leia também',\
+                            '(Reportagem', 'Entre para o grupo do Money Times','Entre agora para o nosso grupo no Telegram!',\
+                                'Ilustração: ','Continue lendo no']
+            for x in body_news:
+                for item in no_text:
+                    if item in x:
+                        x = ''
+                if x=='':
                     None
+                else:
+                    body_new = body_new+x+'\n' ##
 
-                    
-
-        for k in range(0,len(paragraf)):
-            try:
-                body_news = [x.text for x in soup.find('article').find_all(paragraf[k]) if len(x.text)>20]
-                if(len(body_news)>0):
-                    break
-            except:
-                body_news = [x.text for x in soup.find(mode[i], id = 'textContent').find_all(paragraf[k]) if len(x.text)>20]
-                if(len(body_news)>0):
-                    break
-
-
-
-        no_text = ['Cartola','Leia outras','podcast','Foto','clique aqui','Assine o Premiere','VÍDEOS:',\
-                    'o app do Yahoo Mail','Assine agora a newsletter','via Getty Images','Fonte: ','O seu endereço de e-mail',\
-                    'email protected','Comunicação Social da Polícia','email','Portal iG','nossas newsletters',\
-                    'WhatsApp:  As regras de privacidade','de 700 caracteres [0]','pic.twitter.com','(@','Leia também',\
-                        '(Reportagem', 'Entre para o grupo do Money Times','Entre agora para o nosso grupo no Telegram!',\
-                            'Ilustração: ','Continue lendo no']
-        for x in body_news:
-            for item in no_text:
-                if item in x:
-                    x = ''
-            if x=='':
-                None
-            else:
-                body_new = body_new+x+'\n' ##
-
-        body_new = body_new.strip().replace('\n',' ').replace('(Reuters) –', '')
-
+            body_new = body_new.strip().replace('\n',' ').replace('(Reuters) –', '')
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar o corpo da notícia do EBC: {url_news} | {e}")
+            body_new= ""    
     #    
     # Pick category news
     #   
@@ -104,8 +115,12 @@ class ScrappingNewsEbcService(BaseService):
         #
     # Pick image from news
         #
-        ass = soup.find("img", class_='img-responsive full')
-        image_new = str(ass).split("src=")[1].split("title=")[0].replace('"','').replace(";",'')
+        try:
+            ass = soup.find("img", class_='img-responsive full')
+            image_new = str(ass).split("src=")[1].split("title=")[0].replace('"','').replace(";",'')
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar imagens da notícia do EBC: {url_news} | {e}")     
+            image_new = "" 
         # # #
         # #
         domain = url_news.split(".com")[0]+'.com'

@@ -35,60 +35,68 @@ class ScrappingNewsR7TecnologiaecienciaService(BaseService):
     #
     #title
     #
-        title = soup.find("meta", attrs={'property': 'og:title'})
-        title = str(title).split("content=")[1].split("property=")[0].replace('"','')
+        try:
+            title = soup.find("meta", attrs={'property': 'og:title'})
+            title = str(title).split("content=")[1].split("property=")[0].replace('"','')
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar o título da notícia do Folha de São Paulo: {url_news} | {e}")     
+            title = ""
     #
     #Stardandizing Date
     #
         try:
-            date = soup.find("meta", attrs={'property': 'article:published_time'})
-            date = str(date).split('meta content=')[1].split("property=")[0].replace(':"','').replace('"','').split("+")[0]
-            date = date.replace('T', ' ') 
+            try:
+                date = soup.find("meta", attrs={'property': 'article:published_time'})
+                date = str(date).split('meta content=')[1].split("property=")[0].replace(':"','').replace('"','').split("+")[0]
+                date = date.replace('T', ' ') 
 
-        except:
+            except:
 
-            date = soup.find("div", class_= "dataPublicacaoPost float-left mr-5")
-            date = str(date).split('Atualizado em')[1].split("<")[0].replace(':"','').replace('"','').split("+")[0].replace('-','')
-            aux = date.split()
-            aux[1] = Utils.month_convert(aux[1])
-            date = aux[0]+'-'+aux[1]+'-'+aux[2]+ ' ' + aux[3].replace('h',':')+':00'+'-03:00'
+                date = soup.find("div", class_= "dataPublicacaoPost float-left mr-5")
+                date = str(date).split('Atualizado em')[1].split("<")[0].replace(':"','').replace('"','').split("+")[0].replace('-','')
+                aux = date.split()
+                aux[1] = Utils.month_convert(aux[1])
+                date = aux[0]+'-'+aux[1]+'-'+aux[2]+ ' ' + aux[3].replace('h',':')+':00'+'-03:00'
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar a data da notícia do Folha de São Paulo: {url_news} | {e}")
+            date = ""    
     #
     #Pick body's news
     #
-    # 
-        body_new = ''
-        mode = ['article', 'div']
-        classk = ['toolkit-media-content','offset-md-2 col-md-8 postagem','entry-content materia','entry-content','single-container','texto',\
-                'td_block_wrap tdb_single_content tdi_87 td-pb-border-top conteudo-post td_block_template_8 td-post-content tagdiv-type',\
-                'mvp-post-soc-out right relative']
+    #
+        try: 
+            body_new = ''
+            mode = ['article', 'div']
+            classk = ['toolkit-media-content','offset-md-2 col-md-8 postagem','entry-content materia','entry-content','single-container','texto',\
+                    'td_block_wrap tdb_single_content tdi_87 td-pb-border-top conteudo-post td_block_template_8 td-post-content tagdiv-type',\
+                    'mvp-post-soc-out right relative']
 
-        for i in range(0,len(mode)):
-            for j in range(0,len(classk)):
-                try:
-                    yes = soup.find(mode[i],class_= classk[j])
-                    if(len(yes)>0):
-                        break
-                except:
-                    None
+            for i in range(0,len(mode)):
+                for j in range(0,len(classk)):
+                    try:
+                        yes = soup.find(mode[i],class_= classk[j])
+                        if(len(yes)>0):
+                            break
+                    except:
+                        None
 
-                    
-        body_news = [x.text for x in soup.find(mode[i], class_ = classk[j]).find_all("p") if len(x.text)>90]
-        body_new = ''
-        for x in body_news:
-            if x.replace(" ","")[-1]==",":
-                body_new=body_new+x
-            else:
-                body_new=body_new+x+' \n '##
+                        
+            body_news = [x.text for x in soup.find(mode[i], class_ = classk[j]).find_all("p") if len(x.text)>90]
+            body_new = ''
+            for x in body_news:
+                if x.replace(" ","")[-1]==",":
+                    body_new=body_new+x
+                else:
+                    body_new=body_new+x+' \n '##
 
-        body_new = body_new.replace('Leia mais','').replace('Continua após a publicidade','').replace('Leia também','').replace('— Foto: Getty Images', '')
-        body_new = body_new.split('Foto destaque:')[0]
-
-   
-
-
+            body_new = body_new.replace('Leia mais','').replace('Continua após a publicidade','').replace('Leia também','').replace('— Foto: Getty Images', '')
+            body_new = body_new.split('Foto destaque:')[0]
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar o corpo da notícia do Folha de São Paulo: {url_news} | {e}")
+            body_new = ""
 
     # Pick category news
-    #   
+    # 
         category_news = 'tecnologia e ciencia'
 
         #
@@ -96,9 +104,12 @@ class ScrappingNewsR7TecnologiaecienciaService(BaseService):
         #
     # Pick image from news
         #
-        ass = soup.find("meta", property="og:image")
-        image_new = str(ass).split("content=")[1].split(" ")[0].replace('"','')
-        #
+        try:
+            ass = soup.find("meta", property="og:image")
+            image_new = str(ass).split("content=")[1].split(" ")[0].replace('"','')
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar imagens da notícia do Folha de São Paulo: {url_news} | {e}")     
+            image_new = ""
         #
         domain = url_news.split("://")[1].split("/")[0]
         source = domain.split(".")[0]        #

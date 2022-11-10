@@ -24,7 +24,11 @@ class SelectNewsGazetadoPovoService(BaseService):
             
         url = "https://www.gazetadopovo.com.br/ultimas-noticias/"
         
-        links_filtered = Utils.extract_links_from_page_gazeta_do_povo(url)
+        try:
+            links_filtered = Utils.extract_links_from_page_gazeta_do_povo(url)
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar os Links na página inicial do site Valor Econômico | {e}")
+            return ReturnService(False, "Error")
                     
         print(links_filtered)
         for link in links_filtered:

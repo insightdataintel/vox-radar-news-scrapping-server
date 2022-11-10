@@ -34,37 +34,49 @@ class ScrappingNewsGloboValorService(BaseService):
     #
     #title
     #
-        title = soup.find("meta", attrs={'property': 'og:title'})
-        title = str(title).split("content=")[1].split("property=")[0].replace('"','')         
+        try:
+            title = soup.find("meta", attrs={'property': 'og:title'})
+            title = str(title).split("content=")[1].split("property=")[0].replace('"','')         
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar o título da notícia do Valor Econômico: {url_news} | {e}")     
+            title = ""
     #
     #Stardandizing Date
     #
-        date = soup.find("time")
-        date = str(date).split('datetime=')[1].split("Z")[0].replace(':"','').replace('"','')
-        date = date.replace('T', ' ')   
-        date = datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S.%f")
-        delta = datetime.timedelta(hours=3)
-        date = date - delta
-        date = "%s:%.3f-3:00"%(str(date.strftime('%Y-%m-%d %H:%M')),float("%.3f" % (date.second + date.microsecond / 1e6)))  
+        try:
+            date = soup.find("time")
+            date = str(date).split('datetime=')[1].split("Z")[0].replace(':"','').replace('"','')
+            date = date.replace('T', ' ')   
+            date = datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S.%f")
+            delta = datetime.timedelta(hours=3)
+            date = date - delta
+            date = "%s:%.3f-3:00"%(str(date.strftime('%Y-%m-%d %H:%M')),float("%.3f" % (date.second + date.microsecond / 1e6)))  
         #
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar a data da notícia do Valor Econômico: {url_news} | {e}")
+            date = ""    
     #
     #Pick body's news
     #
     #
-        body_news = [x.text for x in soup.find("div", class_ = "mc-article-body").find_all("p") if len(x.text)>90]
-        body_new = ''
-        for x in body_news:
-            if x.replace(" ","")[-1]==",":
-                body_new=body_new+x
-            else:
-                body_new=body_new+x+' \n '##
+        try:
+            body_news = [x.text for x in soup.find("div", class_ = "mc-article-body").find_all("p") if len(x.text)>90]
+            body_new = ''
+            for x in body_news:
+                if x.replace(" ","")[-1]==",":
+                    body_new=body_new+x
+                else:
+                    body_new=body_new+x+' \n '##
 
-        body_new = body_new.replace('Leia mais','').replace('Continua após a publicidade','').replace('Leia também','').replace('— Foto: Getty Images', '')
+            body_new = body_new.replace('Leia mais','').replace('Continua após a publicidade','').replace('Leia também','').replace('— Foto: Getty Images', '')
 
 
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar o corpo da notícia do Valor Econômico: {url_news} | {e}")
+            body_new = ""
 
     # Pick category news
-    #   
+    # 
         # category_news = soup.find_all("script")
         # category_news = str(category_news).split('editoria_path":')[1].split(",")[0].replace(':"','').replace('"','').replace(' ','').replace("\\", "")
         category_news = url_news.replace("www.",'').replace("https://",'')
@@ -77,8 +89,12 @@ class ScrappingNewsGloboValorService(BaseService):
         #
     # Pick image from news
         #
-        ass = soup.find("meta", property="og:image")
-        image_new = str(ass).split("content=")[1].split(" ")[0].replace('"','')
+        try:
+            ass = soup.find("meta", property="og:image")
+            image_new = str(ass).split("content=")[1].split(" ")[0].replace('"','')
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar imagens da notícia do Valor Econômico: {url_news} | {e}")     
+            image_new = "" 
         #
         #
         domain = url_news.split(".com")[0]+'.com'

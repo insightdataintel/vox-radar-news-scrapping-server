@@ -42,9 +42,13 @@ class ScrappingNewsUolEconomiaService(BaseService):
             pass                 
         #
         #Stardandizing Date
-        date = soup.find("script", type="application/ld+json")
-        date = str(date).split('datePublished":')[1].split(",")[0].replace(':"','').replace('"','').replace(' ','')
-        date = date.replace('T', ' ')   
+        try:
+            date = soup.find("script", type="application/ld+json")
+            date = str(date).split('datePublished":')[1].split(",")[0].replace(':"','').replace('"','').replace(' ','')
+            date = date.replace('T', ' ')   
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar a data da notícia do Folha de São Paulo: {url_news} | {e}")
+            date = ""
         #
         #Pick body's news
 
@@ -59,37 +63,39 @@ class ScrappingNewsUolEconomiaService(BaseService):
         # body_new = body_new.replace('Leia mais','').replace('Continua após a publicidade','').replace('Leia também','').replace('— Foto: Getty Images', '')
 
 
+        try:
+            mode = ['div','article']
+            classk = ['n--noticia__content content','fusion-app','pw-container','styles__Container-sc-1ehbu6v-0 cNWinE content',\
+                        'col-lg-7 col-md-10','post-content','text','content-wrapper  news-body content','video-desc','box area-select','c-news__content','mc-article-body','row']
+            body_new = ''
 
-        mode = ['div','article']
-        classk = ['n--noticia__content content','fusion-app','pw-container','styles__Container-sc-1ehbu6v-0 cNWinE content',\
-                    'col-lg-7 col-md-10','post-content','text','content-wrapper  news-body content','video-desc','box area-select','c-news__content','mc-article-body','row']
-        body_new = ''
+            (i,j,classmode,p) = Utils.search_mode_classk(mode,classk,soup)
+            body_news = Utils.creating_body_news(i,j,classmode,p,mode,classk,soup)
 
-        (i,j,classmode,p) = Utils.search_mode_classk(mode,classk,soup)
-        body_news = Utils.creating_body_news(i,j,classmode,p,mode,classk,soup)
+            no_text = ['Cartola','Leia outras','podcast','Foto','clique aqui','Assine o Premiere','VÍDEOS:',\
+                        'o app do Yahoo Mail','Assine agora a newsletter','via Getty Images','Fonte: ','O seu endereço de e-mail',\
+                        'email protected','Comunicação Social da Polícia','email','Portal iG','nossas newsletters',\
+                        'WhatsApp:  As regras de privacidade','de 700 caracteres [0]','pic.twitter.com','(@','Leia também',\
+                        '(Reportagem', 'Entre para o grupo do Money Times','Entre agora para o nosso grupo no Telegram!',\
+                        'Ilustração: ','Continue lendo no','CONTINUA DEPOIS DA PUBLICIDADE','Assine o 247, apoie por Pix','Leia Também',\
+                        'aproveite a tarifa gratuita','Descarregue a nossa App gratuita','Os jogos (e as apostas)',\
+                        'Salve meu nome, e-mail neste navegador para a próxima vez que eu comentar','Redatora do portal, possui ','Continua após a publicidade',\
+                        'Grupo Estado','Os comentários são exclusivos para assinantes do Estadão.']
 
-        no_text = ['Cartola','Leia outras','podcast','Foto','clique aqui','Assine o Premiere','VÍDEOS:',\
-                    'o app do Yahoo Mail','Assine agora a newsletter','via Getty Images','Fonte: ','O seu endereço de e-mail',\
-                    'email protected','Comunicação Social da Polícia','email','Portal iG','nossas newsletters',\
-                    'WhatsApp:  As regras de privacidade','de 700 caracteres [0]','pic.twitter.com','(@','Leia também',\
-                    '(Reportagem', 'Entre para o grupo do Money Times','Entre agora para o nosso grupo no Telegram!',\
-                    'Ilustração: ','Continue lendo no','CONTINUA DEPOIS DA PUBLICIDADE','Assine o 247, apoie por Pix','Leia Também',\
-                    'aproveite a tarifa gratuita','Descarregue a nossa App gratuita','Os jogos (e as apostas)',\
-                    'Salve meu nome, e-mail neste navegador para a próxima vez que eu comentar','Redatora do portal, possui ','Continua após a publicidade',\
-                    'Grupo Estado','Os comentários são exclusivos para assinantes do Estadão.']
+            for x in body_news:
+                for item in no_text:
+                    if item in x:
+                        x = ''
+                if x=='':
+                    None
+                else:
+                    body_new = body_new+x+'\n' ##
 
-        for x in body_news:
-            for item in no_text:
-                if item in x:
-                    x = ''
-            if x=='':
-                None
-            else:
-                body_new = body_new+x+'\n' ##
-
-        body_new = body_new.replace('(Reuters)', '').replace('247 -', '').replace('BRASÍLIA','').replace('  -','')   
-        body_new = body_new.strip()
-
+            body_new = body_new.replace('(Reuters)', '').replace('247 -', '').replace('BRASÍLIA','').replace('  -','')   
+            body_new = body_new.strip()        
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar o corpo da notícia do Folha de São Paulo: {url_news} | {e}")
+            body_new = ""
 
 
 
@@ -105,9 +111,12 @@ class ScrappingNewsUolEconomiaService(BaseService):
         #
         # Pick image from news
         #
-        ass = soup.find("meta", property="og:image")
-        image_new = str(ass).split("content=")[1].split(" ")[0].replace('"','')
-        #
+        try:
+            ass = soup.find("meta", property="og:image")
+            image_new = str(ass).split("content=")[1].split(" ")[0].replace('"','')
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar imagens da notícia do Folha de São Paulo: {url_news} | {e}")     
+            image_new = ""
         #
         domain = url_news.split("://")[1].split("/")[0]
         source = url_news.split("://")[1].split(".")[1]

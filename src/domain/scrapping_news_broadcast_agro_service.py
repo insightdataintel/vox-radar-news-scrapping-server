@@ -35,56 +35,66 @@ class ScrappingNewsBroadcastAgroService(BaseService):
     #
     #title
     #
-        title = soup.find("meta", attrs={'property': 'og:title'})
-        title = str(title).split("content=")[1].split("property=")[0].replace('"','').replace(' - Agronegócios','')
+        try:
+            title = soup.find("meta", attrs={'property': 'og:title'})
+            title = str(title).split("content=")[1].split("property=")[0].replace('"','').replace(' - Agronegócios','')
 
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar o título da notícia do Broadcast Agro: {url_news} | {e}")     
+            title = ""
     #
     #Stardandizing Date
     #
-        date = soup.find("div", class_='data_hora')
-        date = str(date).split('"data_hora">')[1].split("</div>")[0].replace(':"','').replace('"','').split("+")[0]
-        date = datetime.datetime.strptime(date, "%d/%m/%Y %H:%M")
-        date = "%s-3:00"%(str(date.strftime('%Y-%m-%d %H:%M:%S')))  
+        try:
+            date = soup.find("div", class_='data_hora')
+            date = str(date).split('"data_hora">')[1].split("</div>")[0].replace(':"','').replace('"','').split("+")[0]
+            date = datetime.datetime.strptime(date, "%d/%m/%Y %H:%M")
+            date = "%s-3:00"%(str(date.strftime('%Y-%m-%d %H:%M:%S')))  
 
-            #
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar a data da notícia do Broadcast Agro: {url_news} | {e}")
+            date = ""    
+    #
     #Pick body's news
     #
 # 
+        try:
+            body_new = ''
+            mode = ['div']
+            classk = ['integra-materia']
+            paragraf = ['br']
 
-        body_new = ''
-        mode = ['div']
-        classk = ['integra-materia']
-        paragraf = ['br']
+            for i in range(0,len(mode)):
+                for j in range(0,len(classk)):
+                    try:
+                        yes = soup.find(mode[i],class_= classk[j])
+                        if(len(yes)>0):
+                            break
+                    except:
+                        None
 
-        for i in range(0,len(mode)):
-            for j in range(0,len(classk)):
+                        
+
+            for k in range(0,len(paragraf)):
                 try:
-                    yes = soup.find(mode[i],class_= classk[j])
-                    if(len(yes)>0):
+                    body_news = [x.text for x in soup.find(mode[i], class_ = classk[j]) if len(x.text)>20]
+                    if(len(body_news)>0):
                         break
                 except:
                     None
 
-                    
+            body_new = ''
+            jump_text = ('Saiba Mais','Contato: ')
 
-        for k in range(0,len(paragraf)):
-            try:
-                body_news = [x.text for x in soup.find(mode[i], class_ = classk[j]) if len(x.text)>20]
-                if(len(body_news)>0):
-                    break
-            except:
-                None
-
-        body_new = ''
-        jump_text = ('Saiba Mais','Contato: ')
-
-        for x in body_news:
-            if 'Contato: ' in x:
-                None
-            else:
-                x.replace("\n","")
-                body_new=body_new+x+' \n '##       
-                
+            for x in body_news:
+                if 'Contato: ' in x:
+                    None
+                else:
+                    x.replace("\n","")
+                    body_new=body_new+x+' \n '##       
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar o corpo da notícia do Broadcast Agro: {url_news} | {e}")
+            body_new = ""    
    
 
 
@@ -100,8 +110,12 @@ class ScrappingNewsBroadcastAgroService(BaseService):
         #
     # Pick image from news
         #
-        ass = soup.find("meta", property="og:image")
-        image_new = str(ass).split("content=")[1].split(" ")[0].replace('"','')
+        try:
+            ass = soup.find("meta", property="og:image")
+            image_new = str(ass).split("content=")[1].split(" ")[0].replace('"','')
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar imagens da notícia do Broadcast Agro: {url_news} | {e}")     
+            image_new = "" 
         #
         #
         domain = url_news.split("://")[1].split("/")[0]

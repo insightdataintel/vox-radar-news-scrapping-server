@@ -25,7 +25,11 @@ class SelectNewsSagresService(BaseService):
         url = "https://sagresonline.com.br/ultimas/"
 
         
-        links_filtered = Utils.extract_links_from_page_sagres(url)
+        try:
+            links_filtered = Utils.extract_links_from_page_sagres(url)
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar os Links na página inicial do site Valor Econômico | {e}")
+            return ReturnService(False, "Error")
                     
         print(links_filtered)
         for link in links_filtered:

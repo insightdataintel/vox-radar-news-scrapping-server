@@ -35,59 +35,67 @@ class ScrappingNewsARedacaoService(BaseService):
     #
     #title
     #
-        title = soup.find("meta", attrs={'property': 'og:title'})
-        title = str(title).split("content=")[1].split("property=")[0].replace('- @aredacao','').replace('"','')
+        try:   
+            title = soup.find("meta", attrs={'property': 'og:title'})
+            title = str(title).split("content=")[1].split("property=")[0].replace('- @aredacao','').replace('"','')
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar o título da notícia do Aredação: {url_news} | {e}")     
+            title = ""
     #
     #Stardandizing Date
     #
-        date = soup.find("span",class_="olho")
-        date = str(date).split('|')[1].split("</")[0].replace(':"','')
-        aux = date.split('-')
-        aux_dia = aux[0].split('.')[0].replace(' ','')
-        aux_mes = aux[0].split('.')[1].replace(' ','')
-        aux_ano = aux[0].split('.')[2].replace(' ','')
-        aux_ano = '20'+aux_ano
-        date = aux_dia+'-' +aux_mes+'-' +aux_ano + aux[1]
-        date = datetime.datetime.strptime(date, "%d-%m-%Y %H:%M")
-        date = "%s-3:00"%(str(date.strftime('%Y-%m-%d %H:%M:%S')))  
+        try:
+            date = soup.find("span",class_="olho")
+            date = str(date).split('|')[1].split("</")[0].replace(':"','')
+            aux = date.split('-')
+            aux_dia = aux[0].split('.')[0].replace(' ','')
+            aux_mes = aux[0].split('.')[1].replace(' ','')
+            aux_ano = aux[0].split('.')[2].replace(' ','')
+            aux_ano = '20'+aux_ano
+            date = aux_dia+'-' +aux_mes+'-' +aux_ano + aux[1]
+            date = datetime.datetime.strptime(date, "%d-%m-%Y %H:%M")
+            date = "%s-3:00"%(str(date.strftime('%Y-%m-%d %H:%M:%S')))  
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar a data da notícia do Aredação: {url_news} | {e}")
+            date = ""  
     #
     #Pick body's news
     #
-    # 
-        mode = ['span']
-        classk = ['convert-emoji text']
-        paragraf = ['p']
+        try:
+            mode = ['span']
+            classk = ['convert-emoji text']
+            paragraf = ['p']
 
-        for i in range(0,len(mode)):
-            for j in range(0,len(classk)):
+            for i in range(0,len(mode)):
+                for j in range(0,len(classk)):
+                    try:
+                        yes = soup.find(mode[i],class_= classk[j])
+                        if(len(yes)>0):
+                            break
+                    except:
+                        None
+
+                        
+            for k in range(0,len(paragraf)):
                 try:
-                    yes = soup.find(mode[i],class_= classk[j])
-                    if(len(yes)>0):
+                    body_news = [x.text for x in soup.find(mode[i], class_ = classk[j]) if len(x.text)>90]
+                    if(len(body_news)>0):
                         break
                 except:
                     None
 
-                    
-        for k in range(0,len(paragraf)):
-            try:
-                body_news = [x.text for x in soup.find(mode[i], class_ = classk[j]) if len(x.text)>90]
-                if(len(body_news)>0):
-                    break
-            except:
-                None
+            body_new = ''
 
-        body_new = ''
+            for x in body_news:
+                if 'Clique Aqui' in x:
+                    None
+                else:
+                    x.replace("\n","")
+                    body_new=body_new+x+' \n '##   
 
-        for x in body_news:
-            if 'Clique Aqui' in x:
-                None
-            else:
-                x.replace("\n","")
-                body_new=body_new+x+' \n '##    
-
-   
-
-
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar o corpo da notícia do Aredação: {url_news} | {e}")
+            body_new = ""
 
     # Pick category news
     #   
@@ -97,9 +105,12 @@ class ScrappingNewsARedacaoService(BaseService):
         #
         #
     # Pick image from news
-        #
-        ass = soup.find("meta", property="og:image")
-        image_new = str(ass).split("content=")[1].split(" ")[0].replace('"','')
+        try:
+            ass = soup.find("meta", property="og:image")
+            image_new = str(ass).split("content=")[1].split(" ")[0].replace('"','')
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar imagens da notícia do Aredação: {url_news} | {e}")     
+            image_new = "" 
         #
         #
         domain = url_news.split(".br/")[0]+'.br/'

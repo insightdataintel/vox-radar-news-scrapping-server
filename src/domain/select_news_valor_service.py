@@ -24,13 +24,57 @@ class SelectNewsValorService(BaseService):
         # self.log(None, f"Iniciando scrapping estado de {sigarp_capture_data_estadao_scrapping_queue_dto.state}, cidade de {sigarp_capture_data_estadao_scrapping_queue_dto.city}, ano {sigarp_capture_data_estadao_scrapping_queue_dto.year}", Log.INFO)
 
             
-        url = "https://valor.globo.com/ultimas-noticias/"
-        
-        links_filtered = Utils.extract_links_from_page_valor(url)
+        url = "https://valor.globo.com/ultimas-noticias/"    
+        soup = Utils.request_link(url)
+        links = soup.find_all('div', class_='feed-post-body')
+        no_text = ['/amp-stories/','/jogo/','/story/', 'noopener','mail','search','rapidnofollow','noopener ','Notícias</a>','Esportes</a>',\
+                'Finanças</a>','Vida e Estilo</a>','Celebridades</a>','Cinema</a>','Mobile</a>','BOVESPA</a>','MERVAL</a>','quote','category/',\
+                '/web-stories/','/enquetes/','instagram/','comscore','gbrcomponentes','instagram.','bit.ly','digitalaudit.ivcbrasil','amazonasdireito.com.br','taxonomy',\
+                    'videojs.com/','turismo-0','facebook.com','campograndenews','https://twitter.com','ultimas-noticias','#',\
+                    'wa.me/','mais-lidas','/ultimas-noticias/tag/','secure.']
+
+
+        links_filteredauxa = []
+        links_filteredauxb  =[]
+        links_filtered = []
+
+        try:
+            for link in links:
+                auxa = link.find('a',href=True)
+                links_filteredauxa.append(str(auxa))
+            links_filteredauxa = list(set(links_filteredauxa))
+
+            # # # # # # # # 
+
+            links_filteredauxa = str(links).split('href=')
+            for i in range(1,len(links_filteredauxa)):
+                auxb = links_filteredauxa[i].split('">')[0].replace('"','').strip()
+                for item in no_text:
+                    if item in links_filteredauxa[i]:
+                        auxb = ''
+                if auxb== '':
+                    None
+                else:
+                    links_filteredauxb.append(auxb)
+
+            temp = ''
+            links_filteredauxb = list(set(links_filteredauxb))
+            for i in range(0,len(links_filteredauxb)):
+                for j in range(1,len(links_filteredauxb)):
+                    if str(links_filteredauxb[i]) in str(links_filteredauxb[j]):
+                        temp = links_filteredauxb[j]
+
+                if temp == '':
+                    None
+                else:            
+                    links_filtered.append(temp)
+
+        except Exception as e:
+            self.logger.error(f"Não foi possível encontrar os Links na página inicial do site Valor Econômico | {e}")
 
         print(links_filtered)
-        # for link in links_filtered:
-        #     self.__send_queue(link)
+        for link in links_filtered:
+            self.__send_queue(link)
 
         return ReturnService(True, 'Sucess')
 

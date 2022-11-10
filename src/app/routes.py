@@ -258,31 +258,31 @@ class RouteApp():
             ExampleService().exec(json.dumps(request.get_json()))
             return "I'm ok"
 
-        @app.route("/select-news-estadao")
+        @app.route("/select-news-estadao")   #DONE
         def select_news_estadao():
             logger.info("/estadao")
             SelectNewsEstadaoService().exec()
             return "I'm ok"
 
-        @app.route("/scrapping-news-estadao",methods=['POST'])
+        @app.route("/scrapping-news-estadao",methods=['POST']) #DONE
         def scrapping_news_estadao():
             logger.info("/estadao")
             ScrappingNewsEstadaoService().exec(json.dumps(request.get_json()))
             return "I'm ok"
 
-        @app.route("/select-news-valor")
+        @app.route("/select-news-valor") #DONE
         def select_news_valor():
             logger.info("/valor")
             SelectNewsValorService().exec()
             return "I'm ok"
 
-        @app.route("/scrapping-news-valor",methods=['POST'])
+        @app.route("/scrapping-news-valor",methods=['POST']) #DONE
         def scrapping_news_valor():
             logger.info("/valor")
             ScrappingNewsValorService().exec(json.dumps(request.get_json()))
             return "I'm ok"
 
-        @app.route("/select-news-folha")
+        @app.route("/select-news-folha") 
         def select_news_folha():
             logger.info("/folha")
             SelectNewsFolhaService().exec()
