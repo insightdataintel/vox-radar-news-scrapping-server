@@ -38,7 +38,7 @@ class ScrappingNewsNoticiasAoMinutoService(BaseService):
             title = soup.find('meta',property='og:title')
             title = str(title).split("content=")[1].split("property=")[0].split('itemprop=')[0].split('- ISTOÉ DINHEIRO')[0].split('| Exame')[0].replace('- @aredacao','').replace('"','')
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar o título da notícia do Folha de São Paulo: {url_news} | {e}")     
+            self.logger.error(f"Não foi possível encontrar o título da notícia do Noticias ao Minuto: {url_news} | {e}")     
             title = ""
     #
     #Stardandizing Date
@@ -50,7 +50,7 @@ class ScrappingNewsNoticiasAoMinutoService(BaseService):
                     replace('"','').replace('h',':').replace('-04:00','').split('+')[0].\
                     replace('min','').strip()
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar a data da notícia do Folha de São Paulo: {url_news} | {e}")
+            self.logger.error(f"Não foi possível encontrar a data da notícia do Noticias ao Minuto: {url_news} | {e}")
             date = ""    
     #
     #Pick body's news
@@ -106,7 +106,7 @@ class ScrappingNewsNoticiasAoMinutoService(BaseService):
 
 
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar o corpo da notícia do Folha de São Paulo: {url_news} | {e}")
+            self.logger.error(f"Não foi possível encontrar o corpo da notícia do Noticias ao Minuto: {url_news} | {e}")
             return ReturnService(False, 'Did not collect the body of the News')    
     #    
     # Pick category news
@@ -123,7 +123,7 @@ class ScrappingNewsNoticiasAoMinutoService(BaseService):
             ass = soup.find("meta", property='og:image')
             image_new = str(ass).split("content=")[1].split("property=")[0].replace('"','').replace(";",'')
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar imagens da notícia do Folha de São Paulo: {url_news} | {e}")     
+            self.logger.error(f"Não foi possível encontrar imagens da notícia do Noticias ao Minuto: {url_news} | {e}")     
             image_new = "" 
         # # #
         # #

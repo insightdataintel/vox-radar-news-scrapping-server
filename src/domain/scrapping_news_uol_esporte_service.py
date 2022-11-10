@@ -38,7 +38,7 @@ class ScrappingNewsUolEsporteService(BaseService):
             title = soup.find("meta",property="og:title")
             title = str(title).split("content=")[1].split("property=")[0].replace('- @aredacao','').replace('"','')
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar o título da notícia do Folha de São Paulo: {url_news} | {e}")     
+            self.logger.error(f"Não foi possível encontrar o título da notícia do Uol Esporte: {url_news} | {e}")     
             title = ""
     #
     #Stardandizing Date
@@ -48,7 +48,7 @@ class ScrappingNewsUolEsporteService(BaseService):
             date = str(date).split('"datePublished":')[1].split(',')[0].replace('T', ' ').replace('Z', '').replace('"','').strip()
             #
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar a data da notícia do Folha de São Paulo: {url_news} | {e}")
+            self.logger.error(f"Não foi possível encontrar a data da notícia do Uol Esporte: {url_news} | {e}")
             date = ""    
     #
     #Pick body's news
@@ -94,10 +94,10 @@ class ScrappingNewsUolEsporteService(BaseService):
                     pass
                 else:
                     body_new = body_new+x+' \n' ##        except Exception as e:
-                self.logger.error(f"Não foi possível encontrar o corpo da notícia do Folha de São Paulo: {url_news} | {e}")
+                self.logger.error(f"Não foi possível encontrar o corpo da notícia do Uol Esporte: {url_news} | {e}")
                 body_new = ""        
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar o corpo da notícia do Folha de São Paulo: {url_news} | {e}")
+            self.logger.error(f"Não foi possível encontrar o corpo da notícia do Uol Esporte: {url_news} | {e}")
             return ReturnService(False, 'Did not collect the body of the News')
 
     # Pick category news
@@ -114,7 +114,7 @@ class ScrappingNewsUolEsporteService(BaseService):
             ass = soup.find("meta", property="og:image")
             image_new = str(ass).split("content=")[1].split(" ")[0].replace('"','')
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar imagens da notícia do Folha de São Paulo: {url_news} | {e}")     
+            self.logger.error(f"Não foi possível encontrar imagens da notícia do Uol Esporte: {url_news} | {e}")     
             image_new = ""
         #
         domain = url_news.split(".com")[0]+'.com'

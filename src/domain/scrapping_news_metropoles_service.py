@@ -40,7 +40,7 @@ class ScrappingNewsMetropolesService(BaseService):
             title = str(title).split("content=")[1].split("property=")[0].replace('"','')
 
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar o título da notícia do Folha de São Paulo: {url_news} | {e}")     
+            self.logger.error(f"Não foi possível encontrar o título da notícia do Metropoles: {url_news} | {e}")     
             title = ""
     #
     #Stardandizing Date
@@ -55,7 +55,7 @@ class ScrappingNewsMetropolesService(BaseService):
             date = "%s-3:00"%(str(date.strftime('%Y-%m-%d %H:%M:%S'))) 
 
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar a data da notícia do Folha de São Paulo: {url_news} | {e}")
+            self.logger.error(f"Não foi possível encontrar a data da notícia do Metropoles: {url_news} | {e}")
             date = ""    
     #
     #Pick body's news
@@ -105,7 +105,7 @@ class ScrappingNewsMetropolesService(BaseService):
 
 
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar o corpo da notícia do Folha de São Paulo: {url_news} | {e}")
+            self.logger.error(f"Não foi possível encontrar o corpo da notícia do Metropoles: {url_news} | {e}")
             return ReturnService(False, 'Did not collect the body of the News')
 
     # Pick category news
@@ -124,7 +124,7 @@ class ScrappingNewsMetropolesService(BaseService):
             ass = soup.find("meta", property="og:image")
             image_new = str(ass).split("content=")[1].split(" ")[0].replace('"','')
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar imagens da notícia do Folha de São Paulo: {url_news} | {e}")     
+            self.logger.error(f"Não foi possível encontrar imagens da notícia do Metropoles: {url_news} | {e}")     
             image_new = "" 
         #
         #

@@ -38,7 +38,7 @@ class ScrappingNewsYahooEsportesService(BaseService):
             title = soup.find("meta",property="og:title")
             title = str(title).split("content=")[1].split("property=")[0].split('itemprop=')[0].replace('- @aredacao','').replace('"','')
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar o título da notícia do Folha de São Paulo: {url_news} | {e}")     
+            self.logger.error(f"Não foi possível encontrar o título da notícia do Yahoo Esportes: {url_news} | {e}")     
             title = ""
     #
     #Stardandizing Date
@@ -52,7 +52,7 @@ class ScrappingNewsYahooEsportesService(BaseService):
             date = "%s-3:00"%(str(date.strftime('%Y-%m-%d %H:%M:%S')))  
             #
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar a data da notícia do Folha de São Paulo: {url_news} | {e}")
+            self.logger.error(f"Não foi possível encontrar a data da notícia do Yahoo Esportes: {url_news} | {e}")
             date = ""    
     #
     #Pick body's news
@@ -102,7 +102,7 @@ class ScrappingNewsYahooEsportesService(BaseService):
 
 
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar o corpo da notícia do Folha de São Paulo: {url_news} | {e}")
+            self.logger.error(f"Não foi possível encontrar o corpo da notícia do Yahoo Esportes: {url_news} | {e}")
             return ReturnService(False, 'Did not collect the body of the News')
                 
 
@@ -124,7 +124,7 @@ class ScrappingNewsYahooEsportesService(BaseService):
             ass = soup.find("meta", property="og:image")
             image_new = str(ass).split("content=")[1].split(" ")[0].replace('"','')
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar imagens da notícia do Folha de São Paulo: {url_news} | {e}")     
+            self.logger.error(f"Não foi possível encontrar imagens da notícia do Yahoo Esportes: {url_news} | {e}")     
             image_new = "" #
         # #
         domain = url_news.split(".com")[0]+'.com'

@@ -39,7 +39,7 @@ class ScrappingNewsOPopularService(BaseService):
             title = soup.find("title")
             title = str(title).split("<title>")[1].split("</title")[0].replace('- @aredacao','').replace('"','')
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar o título da notícia do Folha de São Paulo: {url_news} | {e}")     
+            self.logger.error(f"Não foi possível encontrar o título da notícia do O Popular: {url_news} | {e}")     
             title = ""
     #
     #Stardandizing Date
@@ -50,7 +50,7 @@ class ScrappingNewsOPopularService(BaseService):
             date = date.replace('T',' ').split('+')[0]
  
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar a data da notícia do Folha de São Paulo: {url_news} | {e}")
+            self.logger.error(f"Não foi possível encontrar a data da notícia do O Popular: {url_news} | {e}")
             date = ""    
     #
     #Pick body's news
@@ -59,7 +59,7 @@ class ScrappingNewsOPopularService(BaseService):
         try: 
             body_new = soup.find('section', itemprop='articleBody').text.strip()     
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar o corpo da notícia do Folha de São Paulo: {url_news} | {e}")
+            self.logger.error(f"Não foi possível encontrar o corpo da notícia do O Popular: {url_news} | {e}")
             return ReturnService(False, 'Did not collect the body of the News')
 
     # Pick category news
@@ -78,7 +78,7 @@ class ScrappingNewsOPopularService(BaseService):
             ass = soup.find("meta", property="og:image")
             image_new = str(ass).split("content=")[1].split(" ")[0].replace('"','')
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar imagens da notícia do Folha de São Paulo: {url_news} | {e}")     
+            self.logger.error(f"Não foi possível encontrar imagens da notícia do O Popular: {url_news} | {e}")     
             image_new = ""
         #
         domain = url_news.split(".br/")[0]+'.br'

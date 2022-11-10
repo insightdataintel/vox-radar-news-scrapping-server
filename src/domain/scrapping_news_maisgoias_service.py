@@ -39,7 +39,7 @@ class ScrappingNewsMaisGoiasService(BaseService):
             title = soup.find("meta", attrs={'property': 'og:title'})
             title = str(title).split("content=")[1].split("property=")[0].replace('- @aredacao','').replace('"','')
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar o título da notícia do Folha de São Paulo: {url_news} | {e}")     
+            self.logger.error(f"Não foi possível encontrar o título da notícia do Mais Goias: {url_news} | {e}")     
             title = ""
     #
     #Stardandizing Date
@@ -50,7 +50,7 @@ class ScrappingNewsMaisGoiasService(BaseService):
             date = "%s-3:00"%(date)  
     
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar a data da notícia do Folha de São Paulo: {url_news} | {e}")
+            self.logger.error(f"Não foi possível encontrar a data da notícia do Mais Goias: {url_news} | {e}")
             date = ""    
     #
     #Pick body's news
@@ -92,7 +92,7 @@ class ScrappingNewsMaisGoiasService(BaseService):
 
 
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar o corpo da notícia do Folha de São Paulo: {url_news} | {e}")
+            self.logger.error(f"Não foi possível encontrar o corpo da notícia do Mais Goias: {url_news} | {e}")
             return ReturnService(False, 'Did not collect the body of the News')
 
     # Pick category news
@@ -109,7 +109,7 @@ class ScrappingNewsMaisGoiasService(BaseService):
             ass = soup.find("picture")
             image_new = str(ass).split("quality=90,format=auto/")[1].split('media=')[0].replace('"','')
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar imagens da notícia do Folha de São Paulo: {url_news} | {e}")     
+            self.logger.error(f"Não foi possível encontrar imagens da notícia do Mais Goias: {url_news} | {e}")     
             image_new = "" 
         #
         #

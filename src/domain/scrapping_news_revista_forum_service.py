@@ -40,7 +40,7 @@ class ScrappingNewsRevistaForumService(BaseService):
             aux = title.encode('iso-8859-1', 'ignore').decode("utf-8",'ignore')
             title = aux
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar o título da notícia do Folha de São Paulo: {url_news} | {e}")     
+            self.logger.error(f"Não foi possível encontrar o título da notícia do Revista Forum: {url_news} | {e}")     
             title = ""
     #
     #Stardandizing Date
@@ -50,7 +50,7 @@ class ScrappingNewsRevistaForumService(BaseService):
             date = str(date).split('datetime="')[1].split('itemprop=')[0].replace('T', ' ').replace('Z', '').replace('"','').split('+')[0].strip()
             date = date + '-3:00'
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar a data da notícia do Folha de São Paulo: {url_news} | {e}")
+            self.logger.error(f"Não foi possível encontrar a data da notícia do Revista Forum: {url_news} | {e}")
             date = ""    
     #
     #Pick body's news
@@ -101,7 +101,7 @@ class ScrappingNewsRevistaForumService(BaseService):
             aux_body = body_new.encode('latin-1', 'ignore').decode("utf-8",'ignore')
             body_new = aux_body
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar o corpo da notícia do Folha de São Paulo: {url_news} | {e}")
+            self.logger.error(f"Não foi possível encontrar o corpo da notícia do Revista Forum: {url_news} | {e}")
             return ReturnService(False, 'Did not collect the body of the News')
 
     # Pick category news
@@ -118,7 +118,7 @@ class ScrappingNewsRevistaForumService(BaseService):
             ass = soup.find("meta", property="og:image")
             image_new = str(ass).split("content=")[1].split(" ")[0].replace('"','')
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar imagens da notícia do Folha de São Paulo: {url_news} | {e}")     
+            self.logger.error(f"Não foi possível encontrar imagens da notícia do Revista Forum: {url_news} | {e}")     
             image_new = "" #
         # #
         domain = url_news.split(".com")[0]+'.com'

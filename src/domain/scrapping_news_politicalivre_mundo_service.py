@@ -38,7 +38,7 @@ class ScrappingNewsPoliticalivreMundoService(BaseService):
             title = soup.find('meta', property='og:title')
             title = str(title).split('content="')[1].split('" property="')[0]
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar o título da notícia do Folha de São Paulo: {url_news} | {e}")     
+            self.logger.error(f"Não foi possível encontrar o título da notícia do Politica Livre Mundo: {url_news} | {e}")     
             title = ""
     #
     #Stardandizing Date
@@ -58,7 +58,7 @@ class ScrappingNewsPoliticalivreMundoService(BaseService):
             date = ano+'-'+mes+'-'+dia
             date = date + ' ' + hora + ':00'+'-3:00'
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar a data da notícia do Folha de São Paulo: {url_news} | {e}")
+            self.logger.error(f"Não foi possível encontrar a data da notícia do Politica Livre Mundo: {url_news} | {e}")
             date = ""    
     #
     #Pick body's news
@@ -114,7 +114,7 @@ class ScrappingNewsPoliticalivreMundoService(BaseService):
                     body_new = body_new+x+'\n' ##
 
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar o corpo da notícia do Folha de São Paulo: {url_news} | {e}")
+            self.logger.error(f"Não foi possível encontrar o corpo da notícia do Politica Livre Mundo: {url_news} | {e}")
             return ReturnService(False, 'Did not collect the body of the News')    
     #    
     # Pick category news

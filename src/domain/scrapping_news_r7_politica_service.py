@@ -38,7 +38,7 @@ class ScrappingNewsR7PoliticaService(BaseService):
             title = soup.find("meta", attrs={'property': 'og:title'})
             title = str(title).split("content=")[1].split("property=")[0].replace('"','')      
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar o título da notícia do Folha de São Paulo: {url_news} | {e}")     
+            self.logger.error(f"Não foi possível encontrar o título da notícia do R7 politica: {url_news} | {e}")     
             title = ""
     #
     #Stardandizing Date
@@ -50,7 +50,7 @@ class ScrappingNewsR7PoliticaService(BaseService):
             date = datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S")
             date = "%s:%.3f-3:00"%(str(date.strftime('%Y-%m-%d %H:%M')),float("%.3f" % (date.second + date.microsecond / 1e6)))  
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar a data da notícia do Folha de São Paulo: {url_news} | {e}")
+            self.logger.error(f"Não foi possível encontrar a data da notícia do R7 politica: {url_news} | {e}")
             date = ""    
     #
     #Pick body's news
@@ -79,7 +79,7 @@ class ScrappingNewsR7PoliticaService(BaseService):
 
                 body_new = body_new.replace('Leia mais','').replace('Continua após a publicidade','').replace('Leia também','').replace('— Foto: Getty Images', '')    
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar o corpo da notícia do Folha de São Paulo: {url_news} | {e}")
+            self.logger.error(f"Não foi possível encontrar o corpo da notícia do R7 politica: {url_news} | {e}")
             return ReturnService(False, 'Did not collect the body of the News')
 
     # Pick category news
@@ -103,7 +103,7 @@ class ScrappingNewsR7PoliticaService(BaseService):
             ass = soup.find("meta", property="og:image")
             image_new = str(ass).split("content=")[1].split(" ")[0].replace('"','')
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar imagens da notícia do Folha de São Paulo: {url_news} | {e}")     
+            self.logger.error(f"Não foi possível encontrar imagens da notícia do R7 politica: {url_news} | {e}")     
             image_new = ""
         #
         domain = url_news.split("://")[1].split("/")[0]

@@ -38,7 +38,7 @@ class ScrappingNewsJovemPanService(BaseService):
             title = soup.find("meta",property="og:title")
             title = str(title).split("content=")[1].split("property=")[0].split('itemprop=')[0].split('– Jovem Pan')[0].replace('- @aredacao','').replace('"','')
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar o título da notícia do Folha de São Paulo: {url_news} | {e}")     
+            self.logger.error(f"Não foi possível encontrar o título da notícia do Jovem Pan: {url_news} | {e}")     
             title = ""
     #
     #Stardandizing Date
@@ -47,7 +47,7 @@ class ScrappingNewsJovemPanService(BaseService):
             date = soup.find("script",type="application/ld+json")
             date = str(date).split('datePublished":')[1].split(',"description"')[0].split(',')[0].split('<span')[0].replace('T', ' ').replace('Z', '').replace('"','').replace('h',':').split('+')[0].strip()
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar a data da notícia do Folha de São Paulo: {url_news} | {e}")
+            self.logger.error(f"Não foi possível encontrar a data da notícia do Jovem Pan: {url_news} | {e}")
             date = ""    
     #
     #Pick body's news
@@ -97,7 +97,7 @@ class ScrappingNewsJovemPanService(BaseService):
 
             body_new = body_new.strip().replace('\n',' ')
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar o corpo da notícia do Folha de São Paulo: {url_news} | {e}")
+            self.logger.error(f"Não foi possível encontrar o corpo da notícia do Jovem Pan: {url_news} | {e}")
             return ReturnService(False, 'Did not collect the body of the News')    
     #    
     # Pick category news
@@ -113,7 +113,7 @@ class ScrappingNewsJovemPanService(BaseService):
             ass = soup.find("meta", property="og:image")
             image_new = str(ass).split("content=")[1].split(" ")[0].replace('"','').replace(";",'')
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar imagens da notícia do Folha de São Paulo: {url_news} | {e}")     
+            self.logger.error(f"Não foi possível encontrar imagens da notícia do Jovem Pan: {url_news} | {e}")     
             image_new = "" 
         # #
         # #

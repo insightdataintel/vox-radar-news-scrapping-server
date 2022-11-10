@@ -38,7 +38,7 @@ class ScrappingNewsPrimeiroJornalService(BaseService):
             title = soup.find('meta', property='og:title')
             title = str(title).split('content="')[1].split('- PrimeiroJornal')[0]
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar o título da notícia do Folha de São Paulo: {url_news} | {e}")     
+            self.logger.error(f"Não foi possível encontrar o título da notícia do Primeiro Jornal: {url_news} | {e}")     
             title = ""
     #
     #Stardandizing Date
@@ -50,7 +50,7 @@ class ScrappingNewsPrimeiroJornalService(BaseService):
                     replace('"','').replace('h',':').replace('-04:00','').split('+')[0].\
                     replace('min','').strip()
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar a data da notícia do Folha de São Paulo: {url_news} | {e}")
+            self.logger.error(f"Não foi possível encontrar a data da notícia do Primeiro Jornal: {url_news} | {e}")
             date = ""    
     #
     #Pick body's news
@@ -84,7 +84,7 @@ class ScrappingNewsPrimeiroJornalService(BaseService):
 
 
         except Exception as e:
-            self.logger.error(f"Não foi possível encontrar o corpo da notícia do Folha de São Paulo: {url_news} | {e}")
+            self.logger.error(f"Não foi possível encontrar o corpo da notícia do Primeiro Jornal: {url_news} | {e}")
             return ReturnService(False, 'Did not collect the body of the News')    
     #    
     # Pick category news
