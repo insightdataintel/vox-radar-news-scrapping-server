@@ -1,1 +1,1 @@
-# voxradar-news-scrapping-server
+news-scrapping-server
